@@ -31,6 +31,7 @@ export const authorizedRoutes = [
     name: '帳務',
     icon: <DesktopOutlined />,
   },
+
   {
     path: '/admin',
     exact: true,
