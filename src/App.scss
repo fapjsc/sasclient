@@ -1,0 +1,19 @@
+@import '~antd/dist/antd.dark.css';
+
+/* Layout */
+.logo {
+  height: 32px;
+  margin: 16px;
+  background: rgba(255, 255, 255, 0.2);
+}
+.site-layout .site-layout-background {
+  //   background: grey;
+}
+
+.ant-page-header-content {
+  padding: 0;
+}
+
+.ant-layout-sider-children {
+  height: 100vh !important;
+}

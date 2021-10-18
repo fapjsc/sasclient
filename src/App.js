@@ -1,25 +1,52 @@
-import logo from './logo.svg';
-import './App.css';
+import { useEffect } from 'react';
 
-function App() {
+// Router
+import { BrowserRouter as Router } from 'react-router-dom';
+
+// Routes
+import PermissionRoute from './components/PermissionRoute';
+
+// Redux
+import { useDispatch } from 'react-redux';
+
+// Actions
+import { setUserInfo } from './store/actions/userActions';
+
+// Helpers
+import { _getToken } from './lib/helper';
+
+// import HomeScreen from './pages/HomeScreen';
+// import AccountScreen from './pages/AccountScreen';
+// import AdminScreen from './pages/AdminScreen';
+// import AuthLayout from './layout/AuthLayout';
+
+// Style
+import './App.scss';
+
+const App = () => {
+  // Redux
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const userInfo = _getToken('token');
+
+    if (userInfo) {
+      dispatch(setUserInfo(userInfo));
+    }
+  }, [dispatch]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <PermissionRoute />
+      {/* <Switch>
+        <AuthLayout>
+          <Route path="/home" component={HomeScreen} />
+          <Route path="/account" component={AccountScreen} />
+          <Route path="/admin" component={AdminScreen} />
+        </AuthLayout>
+      </Switch> */}
+    </Router>
   );
-}
+};
 
 export default App;

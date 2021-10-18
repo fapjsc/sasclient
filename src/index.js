@@ -4,9 +4,20 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
+// Toastify
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+// Redux
+import { Provider } from 'react-redux';
+import store from './store/store';
+
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <Provider store={store}>
+      <ToastContainer theme="colored" />
+      <App />
+    </Provider>
   </React.StrictMode>,
   document.getElementById('root')
 );
