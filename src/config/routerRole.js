@@ -1,10 +1,11 @@
 // @see https://github.com/AlanWei/react-acl-router
-import { PieChartOutlined, DesktopOutlined, HomeOutlined } from '@ant-design/icons';
+import { DollarOutlined, HomeOutlined, ToolOutlined } from '@ant-design/icons';
 
 //** Authorized Pages */
-import HomeScreen from '../pages/HomeScreen';
-import AccountScreen from '../pages/AccountScreen';
+import DashboardScreen from '../pages/DashboardScreen';
+import CashierScreen from '../pages/CashierScreen';
 import AdminScreen from '../pages/AdminScreen';
+import OperatorScreen from '../pages/OperatorScreen';
 
 //** unAuthorized Pages */
 import Login from '../pages/Login';
@@ -12,24 +13,34 @@ import AccessDenied from '../pages/AccessDenied';
 
 export const authorizedRoutes = [
   {
-    path: '/home',
+    path: '/dashboard',
     exact: true,
     permissions: ['admin', 'op'],
     redirect: '/access-denied',
-    component: HomeScreen,
-    alias: 'home',
-    name: '主頁',
-    icon: <PieChartOutlined />,
+    component: DashboardScreen,
+    alias: 'dashboard',
+    name: '儀錶板',
+    icon: <HomeOutlined />,
   },
   {
-    path: '/account',
+    path: '/operator',
     exact: true,
     permissions: ['admin', 'op'],
     redirect: '/access-denied',
-    component: AccountScreen,
-    alias: 'account',
-    name: '帳務',
-    icon: <DesktopOutlined />,
+    component: OperatorScreen,
+    alias: 'operator',
+    name: '櫃檯值班',
+    icon: <DollarOutlined />,
+  },
+  {
+    path: '/cashier',
+    exact: true,
+    permissions: ['admin', 'op'],
+    redirect: '/access-denied',
+    component: CashierScreen,
+    alias: 'cashier',
+    name: '櫃檯接班明細',
+    icon: <DollarOutlined />,
   },
 
   {
@@ -40,7 +51,7 @@ export const authorizedRoutes = [
     component: AdminScreen,
     alias: 'admin',
     name: '管理介面',
-    icon: <HomeOutlined />,
+    icon: <ToolOutlined />,
   },
 ];
 

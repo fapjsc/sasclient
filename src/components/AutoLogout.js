@@ -36,7 +36,9 @@ const AutoLogout = () => {
     };
   }, []);
 
-  return <Statistic.Countdown onFinish={onFinishHandler} value={deadLine} />;
+  return (
+    <Statistic.Countdown style={{ display: 'none' }} onFinish={onFinishHandler} value={deadLine} />
+  );
 };
 
 export default AutoLogout;

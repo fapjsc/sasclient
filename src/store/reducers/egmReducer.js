@@ -33,26 +33,13 @@ export const egmCashInOutReducer = (state = cashInOutInitialState, action) => {
   }
 };
 
-const egmStatusInitState = {
-  statusData: [],
-};
+const egmStatusInitState = [];
 
 export const egmStatus = (state = egmStatusInitState, action) => {
   switch (action.type) {
     case SET_EGM_STATUS:
-      const item = action.egmStatus;
-      const existsItem = state.statusData.find(el => el.EGMnum === item.EGMnum);
-      if (existsItem) {
-        return {
-          ...state,
-          statusData: state.statusData.map(el => (el.EGMnum === item.EGMnum ? item : el)),
-        };
-      } else {
-        return {
-          ...state,
-          statusData: [...state.statusData, item],
-        };
-      }
+      let statusArr = Object.values(action.egmStatus);
+      return [...statusArr];
 
     default:
       return state;

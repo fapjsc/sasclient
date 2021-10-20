@@ -13,7 +13,7 @@ import { _resetAllReducer } from '../lib/helper';
 import { authorizedRoutes } from '../config/routerRole';
 
 // Icon
-import { PieChartOutlined } from '@ant-design/icons';
+import { LogoutOutlined } from '@ant-design/icons';
 
 // Style
 import { Layout, Menu } from 'antd';
@@ -27,7 +27,6 @@ const SideNav = () => {
   // Router
   const history = useHistory();
   const location = useLocation();
-  console.log(location);
 
   // Redux
   const { user } = useSelector(state => state);
@@ -63,8 +62,8 @@ const SideNav = () => {
 
       <Menu theme="dark" mode="inline" defaultSelectedKeys={['home']} selectedKeys={[currentPath]}>
         {menuItem}
-        <Menu.Item key="logout" icon={<PieChartOutlined />} onClick={logoutHandler}>
-          登出
+        <Menu.Item key="logout" icon={<LogoutOutlined />} onClick={logoutHandler}>
+          離開系統
         </Menu.Item>
       </Menu>
     </Sider>

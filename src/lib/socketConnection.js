@@ -10,9 +10,7 @@ const SERVER = 'http://192.168.10.119:3030';
 
 let socket;
 
-let tmp;
-
-let egmStatusArr = [];
+let egmStatusTmp;
 
 export const connectWithSocket = () => {
   socket = io(SERVER);
@@ -22,10 +20,9 @@ export const connectWithSocket = () => {
   });
 
   socket.on('status', status => {
-    if (status.Resp) return;
-    if (tmp && tmp.EGMnum === status.EGMnum && tmp.excCode === status.excCode) return;
-    tmp = status;
-    egmStatusArr.push(status);
+    if (JSON.stringify(egmStatusTmp) === JSON.stringify(status)) return;
+    egmStatusTmp = status;
+    console.log(status);
     store.dispatch(setEgmStatus(status));
   });
 

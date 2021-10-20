@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 
 // Actions
-import { setUserInfo, userLogout } from '../store/actions/userActions';
+import { setUserInfo } from '../store/actions/userActions';
 
 // Hooks
 import useHttp from '../hooks/useHttp';
@@ -17,6 +17,9 @@ import { _setToken } from '../lib/helper';
 
 // Components
 import CenterCard from '../components/ui/CenterCard';
+
+// Config
+import { authorizedRoutes } from '../config/routerRole';
 
 // Style
 import { Form, Input, Button } from 'antd';
@@ -72,7 +75,7 @@ const Login = ({ history }) => {
       );
 
       _setToken('token', loginData.jwt, loginInfo);
-      history.push('/home');
+      history.push(authorizedRoutes[0].path);
     }
   }, [loginError, loginData, loginStatus, dispatch, history]);
 

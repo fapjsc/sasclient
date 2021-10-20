@@ -6,19 +6,10 @@ import { connectWithSocket } from '../lib/socketConnection';
 // Components
 import MachineList from '../components/gameMachine/MachineList';
 
-// Helper
-import { _getUserRole } from '../lib/helper';
-
-const HomeScreen = ({ history }) => {
+const HomeScreen = () => {
   useEffect(() => {
     connectWithSocket();
   }, []);
-
-  // useEffect(() => {
-  //   const role = _getUserRole();
-
-  //   if (!role) history.replace('/login');
-  // }, [history]);
 
   return (
     <div>

@@ -9,34 +9,31 @@ import { setEgmCashInOut } from '../../store/actions/egmActions';
 // Components
 import CashInAndOut from '../cashInAndOut/CashInAndOut';
 
-// Hooks
-import useHttp from '../../hooks/useHttp';
-
-// Apis
-import { getEgmList } from '../../lib/api';
-
-// Helpers
-import { _getToken } from '../../lib/helper';
-
-// Toast
-import { toast } from 'react-toastify';
+// Config
+import { egmGpLpCode } from '../../config/egmStatus';
 
 // Icons
-import { DesktopOutlined } from '@ant-design/icons';
+import {} from '@ant-design/icons';
+
+// Toastify
+import { toast } from 'react-toastify';
+
+// Style
+import classes from './MachineList.module.scss';
 
 // Antd
-import { Tabs, Badge, Dropdown, Button, Menu, Space, Result, Spin } from 'antd';
+import { Tabs, Badge, Dropdown, Menu, Space } from 'antd';
 
 const { TabPane } = Tabs;
 
 //** All Menu */
 const AllMenu = ({ item }) => {
   return (
-    <Menu key={item.uiNo}>
+    <Menu key={item.EGMnum}>
       <Menu.Item key="machineNo">機台編號：{item.EGMnum}</Menu.Item>
       <Menu.Item key="memberNo">會員編號：{null}</Menu.Item>
       <Menu.Item key="credit">積分：{item.creditInCent}</Menu.Item>
-      <Menu.Item key="machineStatus">狀態：{item.excCode}</Menu.Item>
+      <Menu.Item key="machineStatus">狀態：{egmGpLpCode(item.excCode).text}</Menu.Item>
     </Menu>
   );
 };
@@ -49,73 +46,53 @@ const MachineList = () => {
 
   // Redux
   const dispatch = useDispatch();
-  const { statusData } = useSelector(state => state.egmStatus);
-
-  // Http hook
-  const {
-    status: getEgmListStatus,
-    error: getEgmListError,
-    data: egmListData,
-    sendRequest: getEgmListReq,
-  } = useHttp(getEgmList);
+  const { egmStatus } = useSelector(state => state);
+  console.log(egmStatus);
 
   const onChangeHandler = e => {
     console.log(e);
   };
-
-  //** 發送get egm list 請求 */
-  useEffect(() => {
-    if (!_getToken('token')) return;
-    const { token } = _getToken('token');
-    getEgmListReq(token);
-  }, [getEgmListReq]);
-
-  //** 監聽 get egm list錯誤 */
-  useEffect(() => {
-    if (getEgmListError) {
-      toast.error(getEgmListError);
-      return;
-    }
-    console.log(egmListData);
-  }, [getEgmListError, egmListData]);
 
   const onClickHandler = machineNumber => {
     setShowCashInAndOut(true);
     dispatch(setEgmCashInOut({ machineNumber }));
   };
 
-  //** ALL */
-  // const allDropdownEl =
-  //   egmListData &&
-  //   egmListData.map(el => (
-  //     <Dropdown key={el.uiNo} overlay={<AllMenu item={el} />} placement="bottomCenter" arrow>
-  //       <Button
-  //         onClick={() => onClickHandler(el.uiNo)}
-  //         type="ghost"
-  //         shape="circle"
-  //         size="large"
-  //         style={{ backgroundColor: 'green' }}
-  //       >
-  //         {el.uiNo}
-  //       </Button>
-  //     </Dropdown>
-  //   ));
+  useEffect(() => {
+    egmStatus.forEach(el => {
+      if (el.excCode && el.excCode !== '0x00') {
+        const { EGMnum } = el;
+        const { text } = egmGpLpCode(el.excCode);
 
+        toast.error(`${EGMnum} : ${text}`);
+      }
+    });
+  }, [egmStatus]);
+
+  //** ALL */
   const allDropdownEl =
-    statusData &&
-    statusData.map(el => (
-      <Dropdown key={el.EGMnum} overlay={<AllMenu item={el} />} placement="bottomCenter" arrow>
-        <Button
-          onClick={() => onClickHandler(el.EGMnum)}
-          type="ghost"
-          shape="circle"
-          size="large"
-          style={{ backgroundColor: el.excCode === '0x00' ? 'green' : 'red' }}
-        >
-          {el.EGMnum}
-        </Button>
-      </Dropdown>
-    ));
+    egmStatus &&
+    egmStatus.map((el, index) => {
+      const { color } = egmGpLpCode(el.excCode);
+      return (
+        <Dropdown key={index} arrow overlay={<AllMenu item={el} />}>
+          <div
+            onClick={() => onClickHandler(el.EGMnum)}
+            className={`${classes['drum-pad']} ${
+              color === 'success'
+                ? classes.success
+                : color === 'danger'
+                ? classes.danger
+                : color === 'warning'
+                ? classes.warning
+                : null
+            }`}
+          >
+            {(el.EGMnum && el.EGMnum.slice(0, 4)) || '未知'}
+          </div>
+        </Dropdown>
+      );
+    });
 
   return (
     <>
@@ -127,34 +104,22 @@ const MachineList = () => {
         tabBarGutter={80}
         tabPosition={tabPosition}
         size="lg"
-        tabBarExtraContent="數量: 23"
+        tabBarExtraContent={`數量: ${egmStatus.length}`}
+        style={{ padding: '12px' }}
       >
         {/* ALL */}
         <TabPane tab={<div>所有機台</div>} key="all">
-          {/* ALL - Loading */}
-          {getEgmListStatus === 'pending' && (
-            <div style={loadingBox}>
-              <Spin size="large" />
-            </div>
-          )}
-
-          {/* ALL - Success */}
           <Space size={[32, 24]} wrap>
-            {!getEgmListError && getEgmListStatus === 'completed' && allDropdownEl}
+            {allDropdownEl}
           </Space>
-
-          {/* ALL - Error */}
-          {getEgmListError && getEgmListStatus === 'completed' && (
-            <Result title="無法獲取EGM清單" status="warning" />
-          )}
         </TabPane>
 
         <TabPane tab={<div>連線正常</div>} key="connection">
-          連線正常
+          連線正常Screen
         </TabPane>
 
         <TabPane tab={<div>遊戲中</div>} key="isPlaying">
-          遊戲中
+          遊戲中Screen
         </TabPane>
 
         {/* 連線異常 */}
@@ -169,20 +134,11 @@ const MachineList = () => {
           }
           key="connError"
         >
-          連線異常
+          連線異常Screen
         </TabPane>
       </Tabs>
     </>
   );
-};
-
-const loadingBox = {
-  margin: '8rem 0',
-  marginBottom: '20px',
-  padding: '30px 50px',
-  textAlign: 'center',
-  background: 'rgba(0, 0, 0, 0.05)',
-  borderRadius: '4px',
 };
 
 export default MachineList;
