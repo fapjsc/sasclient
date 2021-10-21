@@ -23,7 +23,6 @@ import classes from './MachineList.module.scss';
 
 // Antd
 import { Tabs, Badge, Dropdown, Menu, Space } from 'antd';
-
 const { TabPane } = Tabs;
 
 //** All Menu */
@@ -73,11 +72,15 @@ const MachineList = () => {
   const allDropdownEl =
     egmStatus &&
     egmStatus.map((el, index) => {
-      const { color } = egmGpLpCode(el.excCode);
+      const { color, text } = egmGpLpCode(el.excCode);
       return (
         <Dropdown key={index} arrow overlay={<AllMenu item={el} />}>
           <div
-            onClick={() => onClickHandler(el.EGMnum)}
+            onClick={() =>
+              color === 'success'
+                ? onClickHandler(el.EGMnum)
+                : toast.error(`${el.EGMnum} : ${text}`)
+            }
             className={`${classes['drum-pad']} ${
               color === 'success'
                 ? classes.success
@@ -107,7 +110,6 @@ const MachineList = () => {
         tabBarExtraContent={`數量: ${egmStatus.length}`}
         style={{ padding: '12px' }}
       >
-        {/* ALL */}
         <TabPane tab={<div>所有機台</div>} key="all">
           <Space size={[32, 24]} wrap>
             {allDropdownEl}
@@ -122,7 +124,6 @@ const MachineList = () => {
           遊戲中Screen
         </TabPane>
 
-        {/* 連線異常 */}
         <TabPane
           tab={
             <div>

@@ -6,6 +6,7 @@ import DashboardScreen from '../pages/DashboardScreen';
 import CashierScreen from '../pages/CashierScreen';
 import AdminScreen from '../pages/AdminScreen';
 import OperatorScreen from '../pages/OperatorScreen';
+import MemberScreen from '../pages/MemberScreen';
 
 //** unAuthorized Pages */
 import Login from '../pages/Login';
@@ -20,6 +21,16 @@ export const authorizedRoutes = [
     component: DashboardScreen,
     alias: 'dashboard',
     name: '儀錶板',
+    icon: <HomeOutlined />,
+  },
+  {
+    path: '/member',
+    exact: true,
+    permissions: ['admin', 'op'],
+    redirect: '/access-denied',
+    component: MemberScreen,
+    alias: 'member',
+    name: '會員',
     icon: <HomeOutlined />,
   },
   {

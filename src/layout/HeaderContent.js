@@ -1,6 +1,6 @@
-import React from 'react';
 import AutoLogout from '../components/AutoLogout';
 import Avatar from '../components/avatar/AvatarDropdown';
+import DateDisplay from '../components/DateDisplay';
 
 import { Space } from 'antd';
 
