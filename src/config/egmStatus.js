@@ -1,8 +1,10 @@
 const success = 'success';
 const danger = 'danger';
-const warning = 'warning';
+// const warning = 'warning';
 
-export const egmGpLpCode = str => {
+export const temp = () => {};
+
+export const egmGpLpCode = (str) => {
   switch (str) {
     //** GP */
     case '0x00':

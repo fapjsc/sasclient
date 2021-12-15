@@ -1,31 +1,30 @@
+import CryptoJS from 'crypto-js';
 import store from '../store/store';
 
 // Actions
 import { restEgmCashInOut } from '../store/actions/egmActions';
 import { userLogout } from '../store/actions/userActions';
 
-import CryptoJS from 'crypto-js';
-
 const key = CryptoJS.enc.Utf8.parse('N2841A3412APCD6F'); // 16位進制key
 const iv = CryptoJS.enc.Utf8.parse('AUCDTF12H41P34Y2'); //  16位進制key的偏移量
 
 // /** 解密*/
-export const _decrypt = word => {
-  let encryptedHexStr = CryptoJS.enc.Hex.parse(word);
-  let srcs = CryptoJS.enc.Base64.stringify(encryptedHexStr);
-  let decrypt = CryptoJS.AES.decrypt(srcs, key, {
+export const _decrypt = (word) => {
+  const encryptedHexStr = CryptoJS.enc.Hex.parse(word);
+  const srcs = CryptoJS.enc.Base64.stringify(encryptedHexStr);
+  const decrypt = CryptoJS.AES.decrypt(srcs, key, {
     iv: iv,
     mode: CryptoJS.mode.CBC,
     padding: CryptoJS.pad.Pkcs7,
   });
-  let decryptedStr = decrypt.toString(CryptoJS.enc.Utf8);
+  const decryptedStr = decrypt.toString(CryptoJS.enc.Utf8);
   return decryptedStr.toString();
 };
 
 // /** 加密*/
-export const _encrypt = word => {
-  let srcs = CryptoJS.enc.Utf8.parse(word);
-  let encrypted = CryptoJS.AES.encrypt(srcs, key, {
+export const _encrypt = (word) => {
+  const srcs = CryptoJS.enc.Utf8.parse(word);
+  const encrypted = CryptoJS.AES.encrypt(srcs, key, {
     iv: iv,
     mode: CryptoJS.mode.CBC,
     padding: CryptoJS.pad.Pkcs7,
@@ -34,14 +33,14 @@ export const _encrypt = word => {
 };
 
 // /** 存入本地*/
-export const _setToken = (key, stringVal, loginInfo) => {
+export const _setToken = (setKey, stringVal, loginInfo) => {
   try {
     if (!localStorage) {
       return false;
     }
-    let tem = new Date() - 1; // 當前的時間戳
-    let ZeroTime = new Date(new Date().toLocaleDateString()).getTime(); // 今天0點的時間戳
-    let time = ZeroTime + 12 * 60 * 60 * 1000; // 中午12點的時間戳
+    const tem = new Date() - 1; // 當前的時間戳
+    const ZeroTime = new Date(new Date().toLocaleDateString()).getTime(); // 今天0點的時間戳
+    const time = ZeroTime + 12 * 60 * 60 * 1000; // 中午12點的時間戳
 
     let cacheExpireDate; // 過期時間
 
@@ -58,13 +57,19 @@ export const _setToken = (key, stringVal, loginInfo) => {
   }
 };
 
+// 清除緩存,一般不手動調用
+const _removeLocalStorage = (remoteKey) => {
+  if (!localStorage) return false;
+  localStorage.removeItem(remoteKey);
+};
+
 // /** 取Token*/
-export const _getToken = key => {
+export const _getToken = (getKey) => {
   if (!localStorage) return false;
 
   try {
-    let cacheVal = localStorage.getItem(_encrypt(key));
-    let result = JSON.parse(_decrypt(cacheVal));
+    const cacheVal = localStorage.getItem(_encrypt(getKey));
+    const result = JSON.parse(_decrypt(cacheVal));
 
     if (!result) return null;
 
@@ -91,15 +96,8 @@ export const _getUserRole = () => {
   const userInfo = _getToken('token');
   if (userInfo) {
     return userInfo.loginInfo.account;
-  } else {
-    return '';
   }
-};
-
-// /** 清除緩存,一般不手動調用*/
-const _removeLocalStorage = key => {
-  if (!localStorage) return false;
-  localStorage.removeItem(key);
+  return '';
 };
 
 //==== Redux Helper

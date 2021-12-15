@@ -2,7 +2,9 @@ import { SET_USER_INFO, USER_LOGOUT } from '../types/userType';
 
 const initialState = {
   token: '',
-  loginInfo: {},
+  loginInfo: {
+    account: 'admin',
+  },
 };
 
 export const userReducer = (state = initialState, action) => {
@@ -21,3 +23,5 @@ export const userReducer = (state = initialState, action) => {
       return state;
   }
 };
+
+export const temp = () => {};

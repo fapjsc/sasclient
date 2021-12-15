@@ -11,7 +11,7 @@ const getHeaders = (token = null) => {
 };
 
 //** Auth */
-export const userLogin = async loginData => {
+export const userLogin = async (loginData) => {
   const url = `${localServer}/SignApi`;
   const headers = getHeaders();
 
@@ -28,17 +28,15 @@ export const userLogin = async loginData => {
   return data;
 };
 
-//** EGM */
+//** EGM */s
 // EGM List
-export const getEgmList = async token => {
+export const getEgmList = async (token) => {
   const url = `${localServer}/EgmApi`;
   const headers = getHeaders(token);
 
   const response = await fetch(url, { headers });
 
   const data = await response.json();
-
-  console.log(data);
 
   if (!response.ok) throw new Error(data.msg || 'Could Not Fetch Egm List.');
 

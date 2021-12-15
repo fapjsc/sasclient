@@ -1,18 +1,19 @@
-@import '~antd/dist/antd.dark.css';
+@import "~antd/dist/antd.dark.css";
 
 /* Layout */
 .logo {
   height: 32px;
   margin: 16px;
-  background: rgba(255, 255, 255, 0.2);
-  background-image: url(./asset/logo-e.png);
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
+  background: rgb(255 255 255 / 20%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
+
+/*
 .site-layout .site-layout-background {
-  //   background: grey;
 }
+*/
 
 .ant-page-header-content {
   padding: 0;
@@ -20,4 +21,27 @@
 
 .ant-layout-sider-children {
   height: 100vh !important;
+}
+
+.ant-pro-table-list-toolbar {
+  .ant-pro-table-list-toolbar-container {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 1rem 0;
+  }
+
+  .ant-pro-table-list-toolbar-right {
+    margin-left: auto !important;
+  }
+
+  .ant-pro-table-list-toolbar-title {
+    margin-right: auto !important;
+  }
+}
+
+.cancel-icon {
+  .anticon-info-circle {
+    display: none;
+  }
 }

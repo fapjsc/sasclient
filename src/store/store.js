@@ -2,8 +2,8 @@ import { createStore, combineReducers } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 
 // Reducer
-import { userReducer } from '../store/reducers/userReducers';
-import { egmCashInOutReducer, egmStatus } from '../store/reducers/egmReducer';
+import { userReducer } from './reducers/userReducers';
+import { egmCashInOutReducer, egmStatus } from './reducers/egmReducer';
 
 const reducer = combineReducers({
   user: userReducer,
