@@ -6,6 +6,10 @@ import { ToastContainer } from 'react-toastify';
 import zhCN from 'antd/lib/locale/zh_TW';
 import { ConfigProvider } from 'antd';
 
+// Moment
+import moment from 'moment';
+import 'moment/locale/zh-tw';
+
 // Redux
 import { Provider } from 'react-redux';
 
@@ -15,6 +19,8 @@ import reportWebVitals from './reportWebVitals';
 import 'react-toastify/dist/ReactToastify.css';
 
 import store from './store/store';
+
+moment.locale = 'zh_TW';
 
 ReactDOM.render(
   <React.StrictMode>

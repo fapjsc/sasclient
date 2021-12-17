@@ -26,16 +26,16 @@ const AdminScreen = () => {
         <EgmSetting />
       </TabPane>
 
+      <TabPane tab="Jackpot設定" key="jackpot-setting">
+        <JackpotSetting />
+      </TabPane>
+
       <TabPane tab="中獎清單" key="jackpot-win-record">
         <JackpotWinRecord />
       </TabPane>
 
       <TabPane tab="Meter紀錄" key="meter-record">
         <MeterRecord />
-      </TabPane>
-
-      <TabPane tab="Jackpot設定" key="jackpot-setting">
-        <JackpotSetting />
       </TabPane>
 
     </Tabs>

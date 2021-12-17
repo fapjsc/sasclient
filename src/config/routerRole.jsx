@@ -1,5 +1,6 @@
-import React from 'react';
 // @see https://github.com/AlanWei/react-acl-router
+
+import React from 'react';
 import { DollarOutlined, HomeOutlined, ToolOutlined } from '@ant-design/icons';
 
 //** Authorized Pages */

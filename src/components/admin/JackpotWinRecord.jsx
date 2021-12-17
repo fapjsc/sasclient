@@ -1,44 +1,16 @@
-import React from 'react';
-import ProTable from '@ant-design/pro-table';
+import React, { useState } from 'react';
 import moment from 'moment';
 
+// Antd
+import ProTable from '@ant-design/pro-table';
+
+// Apis
+import { getJackpotWinRecord } from '../../lib/api';
+
+let data;
+
 const JackpotWinRecord = () => {
-  const tableListDataSource = [];
-
-  const ipList = [
-    '192.168.10.74',
-    '192.168.10.73',
-    '192.168.10.113',
-    '192.168.10.76',
-  ];
-
-  const levelList = ['JP1', 'JP2', 'JP3', 'JP4', 'JP5', 'JP6'];
-
-  const placeList = ['location1', 'location2', 'location3', 'location4'];
-
-  const memberList = ['Jack', 'Pizza', 'Cool', 'Beer'];
-
-  const statusList = ['success', 'pending', 'fail', 'success'];
-
-  // const winList = [
-  //   1, -1, 1, -1,
-  // ];
-
-  for (let i = 0; i < 10; i += 1) {
-    tableListDataSource.push({
-      key: i,
-      id: i + 1,
-      place: placeList[Math.floor(Math.random() * 4)],
-      ip: ipList[Math.floor(Math.random() * 4)],
-      level: levelList[Math.floor(Math.random() * 4)],
-      amount: Math.floor(Math.random() * 100000),
-      member: memberList[Math.floor(Math.random() * 4)],
-      status: statusList[Math.floor(Math.random() * 4)],
-      time: moment(Date.now() - Math.floor(Math.random() * 1000000)).format(
-        'lll',
-      ),
-    });
-  }
+  const [isSort, setIsSort] = useState(false);
 
   const columns = [
     {
@@ -52,28 +24,26 @@ const JackpotWinRecord = () => {
       key: 'place',
       dataIndex: 'place',
       hideInSearch: true,
-      filters: true,
-      onFilter: true,
-      valueType: 'select',
-      valueEnum: {
-        location1: {
-          text: '場地1',
-        },
-        location2: {
-          text: '場地2',
-        },
-        location3: {
-          text: '場地3',
-        },
-        location4: {
-          text: '場地4',
-        },
-      },
+      // valueType: 'select',
+      // valueEnum: {
+      //   location1: {
+      //     text: '場地1',
+      //   },
+      //   location2: {
+      //     text: '場地2',
+      //   },
+      //   location3: {
+      //     text: '場地3',
+      //   },
+      //   location4: {
+      //     text: '場地4',
+      //   },
+      // },
     },
     {
       title: 'IP',
-      key: 'ip',
-      dataIndex: 'ip',
+      key: 'egm_ip',
+      dataIndex: 'egm_ip',
       copyable: true,
     },
 
@@ -86,34 +56,41 @@ const JackpotWinRecord = () => {
       onFilter: true,
       valueType: 'select',
       valueEnum: {
-        JP1: {
+        jackpot: {
           text: 'JP1',
         },
-        JP2: {
+        secondPrize: {
           text: 'JP2',
         },
-        JP3: {
+        thirdPrize: {
           text: 'JP3',
         },
-        JP4: {
+        fourthPrize: {
           text: 'JP4',
+        },
+        fifthPrize: {
+          text: 'JP5',
+        },
+        sixthPrize: {
+          text: 'JP6',
         },
       },
     },
     {
       title: 'Amount',
-      key: 'amount',
-      dataIndex: 'amount',
+      key: 'jackpot',
+      dataIndex: 'jackpot',
       hideInSearch: true,
-      sorter: (a, b) => a.amount - b.amount,
+      sorter: (a, b) => a.jackpot - b.jackpot,
       render: (text) => [
-        `$${text.toFixed(2).replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',')}`,
+        `$${text.toFixed(0).replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',')}`,
       ],
     },
     {
-      title: 'Member',
-      key: 'member',
-      dataIndex: 'member',
+      title: 'Egm',
+      key: 'name',
+      dataIndex: 'name',
+      copyable: true,
     },
     {
       title: 'Status',
@@ -142,78 +119,116 @@ const JackpotWinRecord = () => {
     },
     {
       title: 'Time',
-      key: 'time',
-      dataIndex: 'time',
-      sorter: (a, b) => moment(a.time).format('x') - moment(b.time).format('x'),
-      valueType: 'dateTime',
-      tip: '搜尋結果為輸入時間之後的Meter紀錄',
+      key: 'created',
+      dataIndex: 'created',
+      sorter: (a, b) => {
+        const aTime = new Date(a.created).getTime();
+        const bTime = new Date(b.created).getTime();
+        return aTime - bTime;
+      },
+      valueType: 'dateTimeRange',
       className: 'cancel-icon',
+      render: (e) => moment(e.props.text).format('YYYY-MM-DD HH:mm:ss'),
     },
   ];
 
-  const requestPromise = (params) => Promise.resolve({
-    success: true,
-    data: tableListDataSource.filter((item) => {
-      // 沒有搜尋條件
-      if (!params?.ip && !params?.time && !params?.member) {
-        return true;
-      }
+  const requestPromise = async (params) => {
+    let startTime;
+    let endTime;
 
-      const paramsTime = moment(params?.time).format('x');
-      const itemTime = moment(item?.time).format('x');
+    if (!isSort) {
+      data = await getJackpotWinRecord();
+    }
 
-      //** Three Params */
-      // 1) IP && Time && Member
-      if (params?.ip && params?.time && params?.member) {
-        return paramsTime < itemTime
-        && item.ip.includes(params?.ip)
-        && item?.member === params?.member;
-      }
+    setTimeout(() => {
+      if (isSort) setIsSort(false);
+    }, 0);
 
-      //** Two Params */
-      // 2) IP && Time
-      if (params?.ip && params?.time && !params?.member) {
-        return paramsTime < itemTime && item.ip.includes(params?.ip);
-      }
+    if (params?.created) {
+      startTime = new Date(params.created[0]).getTime();
+      endTime = new Date(params.created[1]).getTime();
+    }
 
-      // 3) IP && Member
-      if (params?.ip && params?.member && !params?.time) {
-        return item.ip.includes(params?.ip) && params.member === item.member;
-      }
+    if (data.status === 'error') {
+      return Promise.resolve({
+        success: true,
+        data: data,
+      });
+    }
 
-      // 4) Time && Member
-      if (params?.time && params?.member && !params?.time) {
-        return paramsTime < itemTime && params.member === item.member;
-      }
+    return Promise.resolve({
+      success: true,
+      data: data
+        .filter((item) => {
+          // 1) 沒有搜尋條件
+          if (!params?.egm_ip && !params?.created && !params?.name) {
+            return true;
+          }
 
-      //** One Params */
-      // 5) Member
-      if (params?.member && !params?.ip && !params?.time) {
-        return params.member === item.member;
-      }
+          // 2) IP
+          if (params?.egm_ip && !params?.created && !params?.name) {
+          // return item.ip.includes(params?.ip);
+            return item.egm_ip.includes(params?.egm_ip);
+          }
 
-      // 6) Time
-      if (params?.time && !params?.ip && !params?.member) {
-        return paramsTime < itemTime;
-      }
+          // 3) Created
+          if (!params?.egm_ip && params?.created && !params?.name) {
+            const itemTime = new Date(item.created).getTime();
+            return itemTime >= startTime && itemTime <= endTime;
+          }
 
-      // 7) IP
-      if (params?.ip && !params?.time && !params?.member) {
-        return item.ip.includes(params?.ip);
-      }
+          // 4) Name
+          if (!params?.egm_ip && !params?.created && params?.name) {
+            return params.name === item.name;
+          }
 
-      return false;
-    }),
-  });
+          // 5) IP and Created
+          if (params?.egm_ip && params?.created && !params?.name) {
+            const itemTime = new Date(item.created).getTime();
+            return item.egm_ip.includes(params?.egm_ip)
+            && itemTime >= startTime && itemTime <= endTime;
+          }
+
+          // 6) IP and Name
+          if (params?.egm_ip && !params?.created && params?.name) {
+            return item.egm_ip.includes(params?.egm_ip)
+            && params.name === item.name;
+          }
+
+          // 7) Created and Name
+          if (!params?.egm_ip && params?.created && params?.name) {
+            const itemTime = new Date(item.created).getTime();
+            return itemTime >= startTime && itemTime <= endTime
+            && params.name === item.name;
+          }
+
+          // 8) IP and Created and Name
+          if (params?.egm_ip && params?.created && params?.name) {
+            const itemTime = new Date(item.created).getTime();
+            return item.egm_ip.includes(params?.egm_ip)
+            && itemTime >= startTime && itemTime <= endTime
+            && params.name === item.name;
+          }
+
+          return false;
+        }),
+    });
+  };
 
   return (
     <ProTable
       columns={columns}
+      debounceTime={300}
       rowKey="key"
       dateFormatter="string"
       headerTitle="Jackpot win record"
       request={requestPromise}
-      // search={false}
+      onRequestError={(error) => {
+        console.log(error);
+      }}
+      onChange={(pagination, filters, sorter, extra) => {
+        if (extra.action === 'sort') setIsSort(true);
+      }}
       search={{
         layout: 'vertical',
         defaultCollapsed: false,

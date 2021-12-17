@@ -1,5 +1,8 @@
 // Local Server
 const localServer = 'http://192.168.10.60/api';
+const AGENT_URL = 'http://192.168.10.200:3030';
+const METER_RECORD = 'sasClient/meterRecord';
+const JACKPOT_WIN_RECORD = 'sasClient/jackpotRecord';
 
 // Get Headers
 const getHeaders = (token = null) => {
@@ -43,4 +46,59 @@ export const getEgmList = async (token) => {
   if (data.code !== 10) throw new Error(data.msg || 'Request Reject');
 
   return data.egmList;
+};
+
+//** Meter  */
+export const getMeterRecord = async (params) => {
+  const { created, ip } = params || {};
+  // const url = `${AGENT_URL}/${METER_RECORD}`;
+
+  let url;
+  // 1) 沒有參數
+  if (!created && !ip) url = `${AGENT_URL}/${METER_RECORD}`;
+
+  // 2) Create (time)
+  if (created && !ip) { url = `${AGENT_URL}/${METER_RECORD}?startTime=${created[0]}&endTime=${created[1]}`; }
+
+  // 3) IP
+  if (!created && ip) { url = `${AGENT_URL}/${METER_RECORD}?ip=${ip}`; }
+
+  // 4) Create and IP
+  if (created && ip) { url = `${AGENT_URL}/${METER_RECORD}?ip=${ip}&startTime=${created[0]}&endTime=${created[1]}`; }
+
+  try {
+    const headers = getHeaders();
+
+    const response = await fetch(url, { headers });
+    const data = await response.json();
+
+    if (!response.ok) throw new Error(data.message || 'Could not fetch meter record');
+    if (data.status !== 200) throw new Error(data.message || 'Fetch meter record fail');
+    return data.result;
+  } catch (error) {
+    return error.message || 'Something went wrong';
+  }
+};
+
+//** Jackpot win record */
+export const getJackpotWinRecord = async () => {
+  const url = `${AGENT_URL}/${JACKPOT_WIN_RECORD}`;
+
+  try {
+    const headers = getHeaders();
+
+    const response = await fetch(url, { headers });
+
+    const data = await response.json();
+
+    if (!response.ok) throw new Error(data.message || 'Could not fetch jackpot win record');
+    if (data.status !== 200) throw new Error(data.message || 'Fetch jackpot win record fail');
+
+    return data.result;
+  } catch (error) {
+    return {
+      status: 'error',
+      message: error.message,
+    } || 'Something went wrong';
+  }
 };

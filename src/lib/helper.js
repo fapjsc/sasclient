@@ -108,3 +108,7 @@ export const _resetAllReducer = (clearStorage = null) => {
   store.dispatch(restEgmCashInOut());
   if (clearStorage) localStorage.clear();
 };
+
+export const isEmptyObj = (obj) => (Object.keys(obj).length === 0);
+
+export const thousandsFormat = (text) => text.toFixed(0).replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',');
