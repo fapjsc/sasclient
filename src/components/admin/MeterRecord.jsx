@@ -1,128 +1,124 @@
-import React from 'react';
+import React, { useState } from 'react';
 import moment from 'moment';
+
 import ProTable from '@ant-design/pro-table';
 
-const tableListDataSource = [];
+// Apis
+import { getMeterRecord } from '../../lib/api';
 
-const ipList = [
-  '192.168.10.74',
-  '192.168.10.73',
-  '192.168.10.113',
-  '192.168.10.76',
-];
+// Helpers
+import { thousandsFormat } from '../../lib/helper';
 
-for (let i = 0; i < 1000; i += 1) {
-  tableListDataSource.push({
-    key: i,
-    id: i + 1,
-    ip: ipList[Math.floor(Math.random() * 4)],
-    session: Math.floor(Math.random() * 10000),
-    coin: Math.floor(Math.random() * 100000),
-    win: Math.floor(Math.random() * 100000),
-    promote: Math.floor(Math.random() * 100000),
-    time: moment(Date.now() - Math.floor(Math.random() * 1000000)).format('lll'),
-  });
-}
+let data;
 
-const columns = [
-  {
-    title: 'ID',
-    key: 'id',
-    dataIndex: 'id',
-    hideInSearch: true,
-  },
-  {
-    title: 'IP',
-    key: 'ip',
-    dataIndex: 'ip',
-    copyable: true,
-  },
-  {
-    title: 'Session',
-    key: 'session',
-    dataIndex: 'session',
-    sorter: (a, b) => a.session - b.session,
-    hideInSearch: true,
-  },
-  {
-    title: 'Total Coin in',
-    key: 'coin',
-    dataIndex: 'coin',
-    sorter: (a, b) => a.coin - b.coin,
-    hideInSearch: true,
-  },
-  {
-    title: 'Total Win',
-    key: 'win',
-    dataIndex: 'win',
-    sorter: (a, b) => a.win - b.win,
-    hideInSearch: true,
-  },
-  {
-    title: 'Promote',
-    key: 'promote',
-    dataIndex: 'promote',
-    sorter: (a, b) => a.promote - b.promote,
-    hideInSearch: true,
-  },
-  {
-    title: 'Time',
-    key: 'time',
-    dataIndex: 'time',
-    sorter: (a, b) => moment(a.time).format('x') - moment(b.time).format('x'),
-    valueType: 'dateTime',
-    tip: '搜尋結果為輸入時間之後的Meter紀錄',
-    className: 'cancel-icon',
-  },
-];
+const MeterRecord = () => {
+  const [isSort, setIsSort] = useState(false);
 
-const requestPromise = (params) => Promise.resolve({
-  success: true,
-  data: tableListDataSource.filter((item) => {
-    // 沒有搜尋條件
-    if (!params?.ip && !params?.time) {
-      return true;
+  const columns = [
+    {
+      title: 'ID',
+      key: 'id',
+      dataIndex: 'id',
+      hideInSearch: true,
+
+    },
+    {
+      title: 'IP',
+      key: 'ip',
+      dataIndex: 'ip',
+      copyable: true,
+    },
+    {
+      title: 'Session',
+      key: 'session',
+      dataIndex: 'session',
+      sorter: (a, b) => a.session - b.session,
+      hideInSearch: true,
+
+    },
+    {
+      title: 'Total Coin in',
+      key: 'total_coin_in',
+      dataIndex: 'total_coin_in',
+      sorter: (a, b) => a.total_coin_in - b.total_coin_in,
+      hideInSearch: true,
+      render: (text) => [`${thousandsFormat(text)}`],
+    },
+    {
+      title: 'Total Win',
+      key: 'total_win',
+      dataIndex: 'total_win',
+      sorter: (a, b) => a.total_win - b.total_win,
+      hideInSearch: true,
+      render: (text) => [`${thousandsFormat(text)}`],
+    },
+    {
+      title: 'Promote',
+      key: 'promote_credit',
+      dataIndex: 'promote_credit',
+      sorter: (a, b) => a.promote_credit - b.promote_credit,
+      hideInSearch: true,
+      render: (text) => [`${thousandsFormat(text)}`],
+    },
+    {
+      title: 'Credit',
+      key: 'credit',
+      dataIndex: 'credit',
+      sorter: (a, b) => a.credit - b.credit,
+      hideInSearch: true,
+      render: (text) => [`${thousandsFormat(text)}`],
+    },
+    {
+      title: 'Time',
+      key: 'created',
+      dataIndex: 'created',
+      sorter: (a, b) => {
+        const aTime = new Date(a.created).getTime();
+        const bTime = new Date(b.created).getTime();
+        return aTime - bTime;
+      },
+      valueType: 'dateTimeRange',
+      className: 'cancel-icon',
+      render: (e) => moment(e.props.text).format('YYYY-MM-DD HH:mm:ss'),
+    },
+  ];
+
+  const requestPromise = async (params) => {
+    if (!isSort) {
+      data = await getMeterRecord(params);
     }
+    setTimeout(() => {
+      if (isSort) setIsSort(false);
+    }, 0);
 
-    const paramsTime = moment(params?.time).format('x');
-    const itemTime = moment(item?.time).format('x');
+    return Promise.resolve({
+      success: true,
+      data: data,
+    });
+  };
 
-    // 同時有ip及Time
-    if (params.ip && params.time) {
-      return paramsTime < itemTime && item?.ip.includes(params?.ip);
-    }
-
-    // 只有time
-    if (!params?.ip && params?.time) {
-      return paramsTime < itemTime;
-    }
-
-    // 只有IP
-    if (params?.ip && !params?.time) {
-      return item.ip.includes(params?.ip);
-    }
-
-    return false;
-  }),
-});
-
-const MeterRecord = () => (
-  <ProTable
-    columns={columns}
-    rowKey="key"
-    // search={false}
-    dateFormatter="string"
-    headerTitle="Meter Record"
-    request={requestPromise}
-    search={{
-      layout: 'vertical',
-      defaultCollapsed: false,
-    }}
-    pagination={{
-      defaultPageSize: 10,
-      showQuickJumper: true,
-    }}
-  />
-);
+  return (
+    <ProTable
+      columns={columns}
+      debounceTime={300}
+      rowKey="key"
+      dateFormatter="string"
+      headerTitle="Meter Record"
+      request={requestPromise}
+      onRequestError={(error) => console.log(error)}
+      onChange={(pagination, filters, sorter, extra) => {
+        if (extra.action === 'sort') setIsSort(true);
+      }}
+      search={{
+        layout: 'vertical',
+        defaultCollapsed: false,
+      }}
+      pagination={{
+        defaultPageSize: 10,
+        showQuickJumper: true,
+      }}
+    />
+  );
+};
 
 export default MeterRecord;
