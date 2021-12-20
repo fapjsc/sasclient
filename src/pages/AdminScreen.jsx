@@ -1,7 +1,6 @@
 import React from 'react';
 
 // Antd
-//
 import { Tabs } from 'antd';
 
 // Components
@@ -9,6 +8,7 @@ import MeterRecord from '../components/admin/MeterRecord';
 import JackpotWinRecord from '../components/admin/JackpotWinRecord';
 import JackpotSetting from '../components/admin/JackpotSetting';
 import EgmSetting from '../components/admin/EgmSetting';
+import EventRecord from '../components/admin/EventRecord';
 
 const { TabPane } = Tabs;
 
@@ -20,7 +20,7 @@ const AdminScreen = () => {
 
   return (
 
-    <Tabs tabBarGutter={60} defaultActiveKey="jackpot-win-record" onChange={callback}>
+    <Tabs tabBarGutter={60} defaultActiveKey="jackpot-setting" onChange={callback}>
 
       <TabPane tab="EGM設定" key="egm-setting">
         <EgmSetting />
@@ -30,12 +30,16 @@ const AdminScreen = () => {
         <JackpotSetting />
       </TabPane>
 
-      <TabPane tab="中獎清單" key="jackpot-win-record">
+      <TabPane tab="中獎紀錄" key="jackpot-win-record">
         <JackpotWinRecord />
       </TabPane>
 
       <TabPane tab="Meter紀錄" key="meter-record">
         <MeterRecord />
+      </TabPane>
+
+      <TabPane tab="事件紀錄" key="event-record">
+        <EventRecord />
       </TabPane>
 
     </Tabs>

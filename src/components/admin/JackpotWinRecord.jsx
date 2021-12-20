@@ -24,21 +24,6 @@ const JackpotWinRecord = () => {
       key: 'place',
       dataIndex: 'place',
       hideInSearch: true,
-      // valueType: 'select',
-      // valueEnum: {
-      //   location1: {
-      //     text: '場地1',
-      //   },
-      //   location2: {
-      //     text: '場地2',
-      //   },
-      //   location3: {
-      //     text: '場地3',
-      //   },
-      //   location4: {
-      //     text: '場地4',
-      //   },
-      // },
     },
     {
       title: 'IP',
@@ -231,7 +216,7 @@ const JackpotWinRecord = () => {
       }}
       search={{
         layout: 'vertical',
-        defaultCollapsed: false,
+        defaultCollapsed: true,
       }}
       pagination={{
         defaultPageSize: 10,

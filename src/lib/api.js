@@ -1,8 +1,9 @@
 // Local Server
 const localServer = 'http://192.168.10.60/api';
-const AGENT_URL = 'http://192.168.10.200:3030';
+const AGENT_URL = 'http://192.168.10.119:3030';
 const METER_RECORD = 'sasClient/meterRecord';
 const JACKPOT_WIN_RECORD = 'sasClient/jackpotRecord';
+const EVENT_RECORD = 'sasClient/eventRecord';
 
 // Get Headers
 const getHeaders = (token = null) => {
@@ -31,7 +32,7 @@ export const userLogin = async (loginData) => {
   return data;
 };
 
-//** EGM */s
+//** EGM fetch */
 // EGM List
 export const getEgmList = async (token) => {
   const url = `${localServer}/EgmApi`;
@@ -80,7 +81,7 @@ export const getMeterRecord = async (params) => {
   }
 };
 
-//** Jackpot win record */
+//** Jackpot win record fetch */
 export const getJackpotWinRecord = async () => {
   const url = `${AGENT_URL}/${JACKPOT_WIN_RECORD}`;
 
@@ -100,5 +101,37 @@ export const getJackpotWinRecord = async () => {
       status: 'error',
       message: error.message,
     } || 'Something went wrong';
+  }
+};
+
+//** Event Fetch */
+export const getEventRecord = async (params) => {
+  const { created, ip } = params || {};
+  // const url = `${AGENT_URL}/${METER_RECORD}`;
+
+  let url;
+  // 1) 沒有參數
+  if (!created && !ip) url = `${AGENT_URL}/${EVENT_RECORD}`;
+
+  // 2) Create (time)
+  if (created && !ip) { url = `${AGENT_URL}/${EVENT_RECORD}?startTime=${created[0]}&endTime=${created[1]}`; }
+
+  // 3) IP
+  if (!created && ip) { url = `${AGENT_URL}/${EVENT_RECORD}?ip=${ip}`; }
+
+  // 4) Create and IP
+  if (created && ip) { url = `${AGENT_URL}/${EVENT_RECORD}?ip=${ip}&startTime=${created[0]}&endTime=${created[1]}`; }
+
+  try {
+    const headers = getHeaders();
+
+    const response = await fetch(url, { headers });
+    const data = await response.json();
+
+    if (!response.ok) throw new Error(data.message || 'Could not fetch meter record');
+    if (data.status !== 200) throw new Error(data.message || 'Fetch meter record fail');
+    return data.result;
+  } catch (error) {
+    return error.message || 'Something went wrong';
   }
 };

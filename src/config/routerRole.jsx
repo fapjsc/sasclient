@@ -1,7 +1,15 @@
 // @see https://github.com/AlanWei/react-acl-router
 
 import React from 'react';
-import { DollarOutlined, HomeOutlined, ToolOutlined } from '@ant-design/icons';
+import {
+  DollarOutlined,
+  UserOutlined,
+  SettingOutlined,
+  FileZipOutlined,
+  DashboardOutlined,
+  // HomeOutlined,
+  // ToolOutlined,
+} from '@ant-design/icons';
 
 //** Authorized Pages */
 import DashboardScreen from '../pages/DashboardScreen';
@@ -9,6 +17,11 @@ import CashierScreen from '../pages/CashierScreen';
 import AdminScreen from '../pages/AdminScreen';
 import OperatorScreen from '../pages/OperatorScreen';
 import MemberScreen from '../pages/MemberScreen';
+
+// Admin Page
+import EgmSettingScreen from '../pages/admin/EgmSettingScreen';
+import JackpotSettingScreen from '../pages/admin/JackpotSettingScreen';
+import HistoryRecordScreen from '../pages/admin/historyRecordScreen';
 
 //** unAuthorized Pages */
 import Login from '../pages/Login';
@@ -23,7 +36,8 @@ export const authorizedRoutes = [
     component: DashboardScreen,
     alias: 'dashboard',
     name: '儀錶板',
-    icon: <HomeOutlined />,
+    icon: <DashboardOutlined />,
+    isMain: true,
   },
   {
     path: '/member',
@@ -33,7 +47,9 @@ export const authorizedRoutes = [
     component: MemberScreen,
     alias: 'member',
     name: '會員',
-    icon: <HomeOutlined />,
+    icon: <UserOutlined />,
+    isMain: true,
+
   },
   {
     path: '/operator',
@@ -44,6 +60,8 @@ export const authorizedRoutes = [
     alias: 'operator',
     name: '櫃檯值班',
     icon: <DollarOutlined />,
+    isMain: true,
+
   },
   {
     path: '/cashier',
@@ -53,7 +71,9 @@ export const authorizedRoutes = [
     component: CashierScreen,
     alias: 'cashier',
     name: '櫃檯接班明細',
-    icon: <DollarOutlined />,
+    icon: <FileZipOutlined />,
+    isMain: true,
+
   },
 
   {
@@ -64,8 +84,53 @@ export const authorizedRoutes = [
     component: AdminScreen,
     alias: 'admin',
     name: '管理介面',
-    icon: <ToolOutlined />,
+    icon: <SettingOutlined />,
+    isMain: true,
+
+    subRoutes: [
+      {
+        path: '/admin/egm-setting',
+        alias: 'egm-setting',
+        name: 'EGM系統',
+      },
+      {
+        path: '/admin/jackpot-setting',
+        alias: 'jackpot-setting',
+        name: '彩金系統',
+      },
+      {
+        path: '/admin/history-record',
+        alias: 'history-record',
+        name: '歷史紀錄',
+      },
+
+    ],
   },
+  {
+    path: '/admin/egm-setting',
+    exact: true,
+    permissions: ['admin'],
+    redirect: '/access-denied',
+    component: EgmSettingScreen,
+    isMain: false,
+  },
+  {
+    path: '/admin/jackpot-setting',
+    exact: true,
+    permissions: ['admin'],
+    redirect: '/access-denied',
+    component: JackpotSettingScreen,
+    isMain: false,
+  },
+  {
+    path: '/admin/history-record',
+    exact: true,
+    permissions: ['admin'],
+    redirect: '/access-denied',
+    component: HistoryRecordScreen,
+    isMain: false,
+  },
+
 ];
 
 export const unAuthorizedRoutes = [

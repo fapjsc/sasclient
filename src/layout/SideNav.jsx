@@ -17,6 +17,7 @@ import { _resetAllReducer } from '../lib/helper';
 import { authorizedRoutes } from '../config/routerRole';
 
 const { Sider } = Layout;
+const { SubMenu } = Menu;
 
 const SideNav = () => {
   // Init State
@@ -48,20 +49,38 @@ const SideNav = () => {
   }, [location.pathname]);
 
   const menuItem = authorizedRoutes
-    .filter((menu) => menu.permissions.includes(account))
-    .map((menu) => (
+    .filter((menu) => menu.permissions.includes(account) && menu.isMain)
+    .map((menu) => (menu.alias === 'admin' ? (
+      <SubMenu key="sub1" icon={menu.icon} title={menu.name}>
+        {menu.subRoutes.map((subMenu) => (
+          <Menu.Item key={subMenu.alias}>
+            <Link to={subMenu.path}>{subMenu.name}</Link>
+          </Menu.Item>
+        ))}
+      </SubMenu>
+    ) : (
       <Menu.Item key={menu.alias} icon={menu.icon}>
         <Link to={menu.path}>{menu.name}</Link>
       </Menu.Item>
-    ));
+    )));
 
   return (
     <Sider collapsible collapsed={collapsed} onCollapse={toggle}>
       <div className="logo">LOGO</div>
 
-      <Menu theme="dark" mode="inline" defaultSelectedKeys={['home']} selectedKeys={[currentPath]}>
+      <Menu
+        theme="dark"
+        mode="inline"
+        defaultSelectedKeys={['home']}
+        selectedKeys={[currentPath]}
+      >
         {menuItem}
-        <Menu.Item key="logout" icon={<LogoutOutlined />} onClick={logoutHandler}>
+
+        <Menu.Item
+          key="logout"
+          icon={<LogoutOutlined />}
+          onClick={logoutHandler}
+        >
           離開系統
         </Menu.Item>
       </Menu>

@@ -1,10 +1,10 @@
 import React from 'react';
 
 const EgmSetting = () => {
-  console.log('tet');
+  console.log('hi');
   return (
     <div>
-      <h1>EGM Setting</h1>
+      <h1>EgmSetting</h1>
     </div>
   );
 };

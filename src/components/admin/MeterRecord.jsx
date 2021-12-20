@@ -111,7 +111,7 @@ const MeterRecord = () => {
       }}
       search={{
         layout: 'vertical',
-        defaultCollapsed: false,
+        defaultCollapsed: true,
       }}
       pagination={{
         defaultPageSize: 10,

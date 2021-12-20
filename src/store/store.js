@@ -8,14 +8,12 @@ import thunk from 'redux-thunk';
 // Reducer
 import { userReducer } from './reducers/userReducers';
 import { egmCashInOutReducer, egmStatus } from './reducers/egmReducer';
-// import { meterDataReducer } from './reducers/meterReducer';
 
 const reducer = combineReducers({
   user: userReducer,
   egmCashInOutData: egmCashInOutReducer,
   egmStatus,
-  // meter: meterReducers,
-  // meter: meterDataReducer,
+
 });
 
 const middleware = [thunk];

@@ -1,3 +1,4 @@
+@import "@ant-design/pro-card/dist/card.css";
 @import "~antd/dist/antd.dark.css";
 
 /* Layout */
@@ -48,4 +49,21 @@
 
 .anticon-reload {
   cursor: pointer !important;
+}
+
+.ant-pro-card-title {
+  color: #c8c5be;
+}
+
+.ant-pro-card-header {
+  background-color: #000;
+  padding-left: 0;
+  padding-right: 0;
+  border-color: #c8c5be;
+}
+
+.ant-pro-card-body {
+  background-color: #000;
+  padding-left: 0;
+  padding-right: 0;
 }
