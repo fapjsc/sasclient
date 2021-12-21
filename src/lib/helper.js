@@ -112,3 +112,10 @@ export const _resetAllReducer = (clearStorage = null) => {
 export const isEmptyObj = (obj) => (Object.keys(obj).length === 0);
 
 export const thousandsFormat = (text) => text.toFixed(0).replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',');
+
+// for test
+export const waitTime = (time) => new Promise((resolve) => {
+  setTimeout(() => {
+    resolve(true);
+  }, time);
+});

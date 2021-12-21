@@ -1,6 +1,6 @@
 // Local Server
 const localServer = 'http://192.168.10.60/api';
-const AGENT_URL = 'http://192.168.10.119:3030';
+const AGENT_URL = 'http://192.168.10.105:3030';
 const METER_RECORD = 'sasClient/meterRecord';
 const JACKPOT_WIN_RECORD = 'sasClient/jackpotRecord';
 const EVENT_RECORD = 'sasClient/eventRecord';
@@ -106,9 +106,8 @@ export const getJackpotWinRecord = async () => {
 
 //** Event Fetch */
 export const getEventRecord = async (params) => {
-  const { created, ip } = params || {};
+  const { created, event_character: ip } = params || {};
   // const url = `${AGENT_URL}/${METER_RECORD}`;
-
   let url;
   // 1) 沒有參數
   if (!created && !ip) url = `${AGENT_URL}/${EVENT_RECORD}`;
@@ -130,6 +129,7 @@ export const getEventRecord = async (params) => {
 
     if (!response.ok) throw new Error(data.message || 'Could not fetch meter record');
     if (data.status !== 200) throw new Error(data.message || 'Fetch meter record fail');
+    console.log(data);
     return data.result;
   } catch (error) {
     return error.message || 'Something went wrong';

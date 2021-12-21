@@ -9,6 +9,17 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.logo-short {
+  background-image: url("./asset/logo-short.png");
+}
+
+.logo-rectangle {
+  background-image: url("./asset/logo.png");
 }
 
 /*

@@ -1,9 +1,14 @@
 import React, { useRef, useState } from 'react';
+
+// Antd
 import { EditableProTable } from '@ant-design/pro-table';
 import ProForm, { ProFormRadio, ProFormDependency, ProFormField } from '@ant-design/pro-form';
 import ProCard from '@ant-design/pro-card';
+
+// uuid
 import { v4 as uuid } from 'uuid';
 
+// helpers
 import { isEmptyObj } from '../../lib/helper';
 
 const defaultData = [
@@ -55,7 +60,6 @@ const defaultData = [
     max_value: 200,
     ratio: 0.006,
   },
-
 ];
 export default () => {
   const [editableKeys, setEditableRowKeys] = useState(() => []);

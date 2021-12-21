@@ -101,11 +101,11 @@ const MeterRecord = () => {
     <ProTable
       columns={columns}
       debounceTime={300}
-      rowKey="key"
+      rowKey="id"
       dateFormatter="string"
       headerTitle="Meter Record"
       request={requestPromise}
-      onRequestError={(error) => console.log(error)}
+      // onRequestError={(error) => console.log(error)}
       onChange={(pagination, filters, sorter, extra) => {
         if (extra.action === 'sort') setIsSort(true);
       }}

@@ -7,6 +7,7 @@ import { Tabs } from 'antd';
 import JackpotWinRecord from '../../components/admin/JackpotWinRecord';
 import MeterRecord from '../../components/admin/MeterRecord';
 import EventRecord from '../../components/admin/EventRecord';
+import SystemLog from '../../components/admin/SystemLog';
 
 const { TabPane } = Tabs;
 
@@ -25,8 +26,12 @@ const historyRecord = () => {
         <MeterRecord />
       </TabPane>
 
-      <TabPane tab="事件紀錄" key="event-record">
+      <TabPane tab="EGM事件" key="event-record">
         <EventRecord />
+      </TabPane>
+
+      <TabPane tab="系統日誌" key="system-log">
+        <SystemLog />
       </TabPane>
 
     </Tabs>

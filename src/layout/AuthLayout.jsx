@@ -18,7 +18,10 @@ const TheLayout = ({ children }) => {
       <Layout style={{ minHeight: '100vh' }}>
         <SideNav />
         <Layout className="site-layout">
-          <Header style={{ display: 'flex', alignItems: 'center' }}>
+          <Header style={{
+            padding: 0,
+          }}
+          >
             <HeaderContent />
           </Header>
           <Content style={{ margin: '0 16px' }}>

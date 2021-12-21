@@ -23,9 +23,18 @@ const EventRecord = () => {
 
     {
       title: 'IP',
-      key: 'egm_ip',
-      dataIndex: 'egm_ip',
+      key: 'event_character',
+      dataIndex: 'event_character',
       copyable: true,
+    },
+
+    {
+      title: 'Event',
+      key: 'event',
+      dataIndex: 'event',
+      copyable: true,
+      width: '50%',
+      hideInSearch: true,
     },
 
     {
@@ -60,7 +69,7 @@ const EventRecord = () => {
     <ProTable
       columns={columns}
       debounceTime={300}
-      rowKey="key"
+      rowKey="id"
       dateFormatter="string"
       headerTitle="Event Record"
       request={requestPromise}

@@ -51,7 +51,7 @@ const SideNav = () => {
   const menuItem = authorizedRoutes
     .filter((menu) => menu.permissions.includes(account) && menu.isMain)
     .map((menu) => (menu.alias === 'admin' ? (
-      <SubMenu key="sub1" icon={menu.icon} title={menu.name}>
+      <SubMenu key={menu.alias} icon={menu.icon} title={menu.name}>
         {menu.subRoutes.map((subMenu) => (
           <Menu.Item key={subMenu.alias}>
             <Link to={subMenu.path}>{subMenu.name}</Link>
@@ -66,7 +66,7 @@ const SideNav = () => {
 
   return (
     <Sider collapsible collapsed={collapsed} onCollapse={toggle}>
-      <div className="logo">LOGO</div>
+      <div className={collapsed ? 'logo logo-short' : 'logo logo-rectangle'} />
 
       <Menu
         theme="dark"

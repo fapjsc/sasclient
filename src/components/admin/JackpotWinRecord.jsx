@@ -42,22 +42,22 @@ const JackpotWinRecord = () => {
       valueType: 'select',
       valueEnum: {
         jackpot: {
-          text: 'JP1',
+          text: 'JP-1',
         },
         secondPrize: {
-          text: 'JP2',
+          text: 'JP-2',
         },
         thirdPrize: {
-          text: 'JP3',
+          text: 'JP-3',
         },
         fourthPrize: {
-          text: 'JP4',
+          text: 'JP-4',
         },
         fifthPrize: {
-          text: 'JP5',
+          text: 'JP-5',
         },
         sixthPrize: {
-          text: 'JP6',
+          text: 'JP-6',
         },
       },
     },
@@ -204,7 +204,7 @@ const JackpotWinRecord = () => {
     <ProTable
       columns={columns}
       debounceTime={300}
-      rowKey="key"
+      rowKey="id"
       dateFormatter="string"
       headerTitle="Jackpot win record"
       request={requestPromise}

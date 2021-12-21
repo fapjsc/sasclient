@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import { ToastContainer } from 'react-toastify';
 
+// import enUS from 'antd/lib/locale/en_US';
 import zhCN from 'antd/lib/locale/zh_TW';
 import { ConfigProvider } from 'antd';
 
