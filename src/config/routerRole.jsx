@@ -2,13 +2,16 @@
 
 import React from 'react';
 import {
-  DollarOutlined,
+  DesktopOutlined,
   UserOutlined,
   SettingOutlined,
-  FileZipOutlined,
+  FileTextOutlined,
   DashboardOutlined,
+  // DollarOutlined,
   // HomeOutlined,
   // ToolOutlined,
+  // FileZipOutlined,
+
 } from '@ant-design/icons';
 
 //** Authorized Pages */
@@ -59,7 +62,7 @@ export const authorizedRoutes = [
     component: OperatorScreen,
     alias: 'operator',
     name: '櫃檯值班',
-    icon: <DollarOutlined />,
+    icon: <DesktopOutlined />,
     isMain: true,
 
   },
@@ -71,7 +74,7 @@ export const authorizedRoutes = [
     component: CashierScreen,
     alias: 'cashier',
     name: '櫃檯接班明細',
-    icon: <FileZipOutlined />,
+    icon: <FileTextOutlined />,
     isMain: true,
 
   },

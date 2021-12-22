@@ -134,7 +134,7 @@ const JackpotWinRecord = () => {
       endTime = new Date(params.created[1]).getTime();
     }
 
-    if (data.status === 'error') {
+    if (data.status === 400) {
       return Promise.resolve({
         success: true,
         data: data,
@@ -208,9 +208,9 @@ const JackpotWinRecord = () => {
       dateFormatter="string"
       headerTitle="Jackpot win record"
       request={requestPromise}
-      onRequestError={(error) => {
-        console.log(error);
-      }}
+      // onRequestError={(error) => {
+      //   console.log(error);
+      // }}
       onChange={(pagination, filters, sorter, extra) => {
         if (extra.action === 'sort') setIsSort(true);
       }}

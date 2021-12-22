@@ -73,7 +73,7 @@ const EventRecord = () => {
       dateFormatter="string"
       headerTitle="Event Record"
       request={requestPromise}
-      onRequestError={(error) => console.log(error)}
+      // onRequestError={(error) => console.log(error)}
       pagination={{
         defaultPageSize: 10,
         showQuickJumper: true,

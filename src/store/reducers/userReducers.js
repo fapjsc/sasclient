@@ -1,7 +1,11 @@
-import { SET_USER_INFO, USER_LOGOUT } from '../types/userType';
+import {
+  SET_USER_INFO,
+  USER_LOGOUT,
+} from '../types/userType';
 
 const initialState = {
   token: '',
+  language: 'zh_TW',
   loginInfo: {
     account: 'admin',
   },

@@ -9,6 +9,7 @@ const { TabPane } = Tabs;
 
 const JackpotSettingScreen = () => {
   const callback = (key) => {
+    // eslint-disable-next-line
     console.log(key);
   };
   return (

@@ -11,6 +11,7 @@ const { TabPane } = Tabs;
 const EgmSettingScreen = () => {
   //** All Menu */
   const callback = (key) => {
+    // eslint-disable-next-line
     console.log(key);
   };
 

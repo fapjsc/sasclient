@@ -10,6 +10,9 @@ import { useSelector } from 'react-redux';
 import { LogoutOutlined } from '@ant-design/icons';
 import { Layout, Menu } from 'antd';
 
+// Hooks
+import { useI18n } from '../i18n';
+
 // Helpers
 import { _resetAllReducer } from '../lib/helper';
 
@@ -23,6 +26,9 @@ const SideNav = () => {
   // Init State
   const [collapsed, setCollapsed] = useState(false);
   const [currentPath, setCurrentPath] = useState('');
+
+  // I18n
+  const { t } = useI18n();
 
   // Router
   const history = useHistory();
@@ -48,10 +54,32 @@ const SideNav = () => {
     setCurrentPath(path);
   }, [location.pathname]);
 
+  const handleSideMenuName = (name) => {
+    if (name === '儀錶板') {
+      return t('side_nav_dashboard');
+    }
+
+    if (name === '會員') {
+      return t('side_nav_member');
+    }
+
+    if (name === '櫃檯值班') {
+      return t('side_nav_shift');
+    }
+
+    if (name === '櫃檯接班明細') {
+      return t('side_nav_shift_detail');
+    }
+    if (name === '管理介面') {
+      return t('side_nav_admin');
+    }
+    return name;
+  };
+
   const menuItem = authorizedRoutes
     .filter((menu) => menu.permissions.includes(account) && menu.isMain)
     .map((menu) => (menu.alias === 'admin' ? (
-      <SubMenu key={menu.alias} icon={menu.icon} title={menu.name}>
+      <SubMenu key={menu.alias} icon={menu.icon} title={handleSideMenuName(menu.name)}>
         {menu.subRoutes.map((subMenu) => (
           <Menu.Item key={subMenu.alias}>
             <Link to={subMenu.path}>{subMenu.name}</Link>
@@ -60,7 +88,7 @@ const SideNav = () => {
       </SubMenu>
     ) : (
       <Menu.Item key={menu.alias} icon={menu.icon}>
-        <Link to={menu.path}>{menu.name}</Link>
+        <Link to={menu.path}>{handleSideMenuName(menu.name)}</Link>
       </Menu.Item>
     )));
 
@@ -81,7 +109,7 @@ const SideNav = () => {
           icon={<LogoutOutlined />}
           onClick={logoutHandler}
         >
-          離開系統
+          {t('side_nav_logout')}
         </Menu.Item>
       </Menu>
     </Sider>

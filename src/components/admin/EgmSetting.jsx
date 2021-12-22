@@ -63,16 +63,14 @@ const EgmSetting = () => {
 
   // Update/create
   const handleSubmit = async (value) => {
-    console.log(value);
     await waitTime(2000);
-    console.log('update success', value);
     setModalFormDone(true);
   };
 
   // 刪除
+  // eslint-disable-next-line
   const deleteItem = async (id) => {
     await waitTime(2000);
-    console.log('delete success', id);
   };
 
   // Show create/update egm modal
@@ -101,7 +99,7 @@ const EgmSetting = () => {
 
   // eslint-disable-next-line no-unused-vars
   const requestPromise = async (params) => {
-    console.log('call request');
+    // console.log('call request');
     data = tableListDataSource;
 
     // TODO:fetch data action
@@ -244,7 +242,7 @@ const EgmSetting = () => {
           }}
           type="button"
           onClick={() => {
-            console.log('pre-delete', record);
+            // console.log('pre-delete', record);
             showDeleteModal(record.id, record.number);
           }}
         >

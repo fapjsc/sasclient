@@ -1,4 +1,7 @@
-import { SET_USER_INFO, USER_LOGOUT } from '../types/userType';
+import {
+  SET_USER_INFO,
+  USER_LOGOUT,
+} from '../types/userType';
 
 export const setUserInfo = (userInfo) => ({
   type: SET_USER_INFO,

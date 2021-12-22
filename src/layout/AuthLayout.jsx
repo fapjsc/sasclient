@@ -12,6 +12,7 @@ import HeaderContent from './HeaderContent';
 const { Header, Content } = Layout;
 
 const TheLayout = ({ children }) => {
+  // eslint-disable-next-line
   console.log('auth layout');
   return (
     <>

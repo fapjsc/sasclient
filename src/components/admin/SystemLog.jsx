@@ -1,6 +1,7 @@
 import React from 'react';
 
 const SystemLog = () => {
+  // eslint-disable-next-line
   console.log('system log');
   return (
     <div>

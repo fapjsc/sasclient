@@ -1,17 +1,29 @@
 import React from 'react';
+
+// Antd
 import { Space, Menu, Dropdown } from 'antd';
-
-// import classes from '../components/avatar/AvatarDropdown.module.scss';
-
 import { GlobalOutlined } from '@ant-design/icons';
-// import { DownOutlined } from '@ant-design/icons';
 
+// Hooks
+import { useI18n } from '../i18n';
+
+// Components
 import AutoLogout from '../components/AutoLogout';
 
 const HeaderContent = () => {
+  const { setLocale } = useI18n();
+
+  const handleSelectLanguage = (item) => {
+    setLocale(item.key);
+  };
+
   const menu = (
-    <Menu>
-      <Menu.Item key="0">
+    <Menu
+      onClick={(e) => {
+        handleSelectLanguage(e);
+      }}
+    >
+      <Menu.Item key="zh_TW">
         <Space>
           <p>
             🇹🇼
@@ -21,7 +33,7 @@ const HeaderContent = () => {
           </p>
         </Space>
       </Menu.Item>
-      <Menu.Item key="1">
+      <Menu.Item key="ja_JP">
         <Space>
           <p>
             🇯🇵
@@ -31,7 +43,7 @@ const HeaderContent = () => {
           </p>
         </Space>
       </Menu.Item>
-      <Menu.Item key="2">
+      <Menu.Item key="en_US">
         <Space>
           <p>
             🇺🇸
@@ -41,7 +53,7 @@ const HeaderContent = () => {
           </p>
         </Space>
       </Menu.Item>
-      <Menu.Item key="3">
+      <Menu.Item key="zh_CN">
         <Space>
           <p>
             🇨🇳
@@ -51,6 +63,7 @@ const HeaderContent = () => {
           </p>
         </Space>
       </Menu.Item>
+
     </Menu>
   );
   return (

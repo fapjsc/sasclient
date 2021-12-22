@@ -53,6 +53,7 @@ export const _setToken = (setKey, stringVal, loginInfo) => {
     const cacheVal = { val: stringVal, exp: cacheExpireDate, loginInfo };
     localStorage.setItem(_encrypt(key), _encrypt(JSON.stringify(cacheVal))); // 存入缓存值
   } catch (e) {
+    // eslint-disable-next-line
     console.log(e);
   }
 };

@@ -1,9 +1,13 @@
+import { v4 as uuid } from 'uuid';
+
 // Local Server
 const localServer = 'http://192.168.10.60/api';
-const AGENT_URL = 'http://192.168.10.105:3030';
+const AGENT_URL = 'http://192.168.10.102:3030';
 const METER_RECORD = 'sasClient/meterRecord';
 const JACKPOT_WIN_RECORD = 'sasClient/jackpotRecord';
 const EVENT_RECORD = 'sasClient/eventRecord';
+// const GET_JACKPOT_LIST = 'sasClient/jackpot';
+const JACKPOT_SETTING = 'sasClient/jackpotSetting';
 
 // Get Headers
 const getHeaders = (token = null) => {
@@ -94,11 +98,10 @@ export const getJackpotWinRecord = async () => {
 
     if (!response.ok) throw new Error(data.message || 'Could not fetch jackpot win record');
     if (data.status !== 200) throw new Error(data.message || 'Fetch jackpot win record fail');
-
     return data.result;
   } catch (error) {
     return {
-      status: 'error',
+      status: 400,
       message: error.message,
     } || 'Something went wrong';
   }
@@ -129,9 +132,93 @@ export const getEventRecord = async (params) => {
 
     if (!response.ok) throw new Error(data.message || 'Could not fetch meter record');
     if (data.status !== 200) throw new Error(data.message || 'Fetch meter record fail');
-    console.log(data);
     return data.result;
   } catch (error) {
     return error.message || 'Something went wrong';
+  }
+};
+
+//** Get jackpot list */
+export const getJackpotList = async () => {
+  const url = `${AGENT_URL}/${JACKPOT_SETTING}`;
+  try {
+    const headers = getHeaders();
+    const response = await fetch(url, { headers });
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.message || 'Could not fetch jackpot list');
+
+    if (data.status !== 200) throw new Error(data.message || 'fetch jackpot list fail');
+
+    // console.log(data, 'get jackpot list');
+
+    const formatData = data.result.map((el) => ({
+      ...el,
+      id: uuid(),
+      key: uuid(),
+    }));
+
+    return formatData;
+  } catch (error) {
+    return error.message || 'Something went wrong';
+  }
+};
+
+//** Jackpot settings */
+export const jackpotSetting = async (reqData) => {
+  reqData.forEach((el) => {
+    if (el.index) delete el.index;
+  });
+
+  // console.log(reqData, 'setting jackpot');
+
+  const url = `${AGENT_URL}/${JACKPOT_SETTING}`;
+  try {
+    const headers = getHeaders();
+
+    const response = await fetch(url, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify(reqData),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) throw new Error(data.message || 'Could not setting jackpot');
+
+    if (data.status !== 200) throw new Error(data.message || 'jackpot set fail');
+
+    return data;
+  } catch (error) {
+    return {
+      status: 400,
+      message: error.message || 'Something went wrong',
+    };
+  }
+};
+
+//** Jackpot Delete */
+export const jackpotDelete = async (level) => {
+  const url = `${AGENT_URL}/${JACKPOT_SETTING}`;
+  try {
+    const headers = getHeaders();
+
+    const response = await fetch(url, {
+      method: 'DELETE',
+      headers,
+      body: JSON.stringify({ level }),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) throw new Error(data.message || 'Could not delete jackpot');
+
+    if (data.status !== 200) throw new Error(data.message || 'jackpot delete fail');
+    // console.log(data, 'delete jackpot');
+    return data;
+  } catch (error) {
+    return {
+      status: 400,
+      message: error.message || 'Something went wrong',
+    };
   }
 };

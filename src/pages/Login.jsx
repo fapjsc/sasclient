@@ -44,7 +44,7 @@ const Login = () => {
   } = useHttp(userLogin);
 
   const onFinish = (values) => {
-    console.log('Success:', values);
+    // console.log('Success:', values);
 
     const { username, password } = values;
 
@@ -57,6 +57,7 @@ const Login = () => {
   };
 
   const onFinishFailed = (errorInfo) => {
+    // eslint-disable-next-line
     console.log('Failed:', errorInfo);
   };
 

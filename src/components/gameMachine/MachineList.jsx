@@ -67,6 +67,7 @@ const MachineList = () => {
   const { egmStatus } = useSelector((state) => state);
 
   const onChangeHandler = (e) => {
+    // eslint-disable-next-line
     console.log(e);
   };
 

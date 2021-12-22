@@ -13,6 +13,7 @@ const { TabPane } = Tabs;
 
 const historyRecord = () => {
   const callback = (key) => {
+    // eslint-disable-next-line
     console.log(key);
   };
   return (

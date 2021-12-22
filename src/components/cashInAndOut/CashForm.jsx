@@ -288,14 +288,15 @@ const CashForm = ({
               style={{ marginTop: '1.5rem' }}
               formRef={formRef}
               title="設定"
-              onValuesChange={(e) => {
-                console.log(e);
-                // for (const key in e) {
-                //   dispatch(setEgmCashInOut({ [key]: e[key] }));
-                // }
-              }}
+              // onValuesChange={(e) => {
+              //   console.log(e);
+              //   // for (const key in e) {
+              //   //   dispatch(setEgmCashInOut({ [key]: e[key] }));
+              //   // }
+              // }}
+              // eslint-disable-next-line
               onFinish={(values) => {
-                console.log(values, 'values');
+                // console.log(values, 'values');
                 return true;
               }}
             >
