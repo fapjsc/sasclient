@@ -1,16 +1,32 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import moment from 'moment';
+
+// Print
+import { useReactToPrint } from 'react-to-print';
 
 // Antd
 import ProTable from '@ant-design/pro-table';
+import { PrinterOutlined } from '@ant-design/icons';
+import { Button } from 'antd';
 
 // Apis
-import { getJackpotWinRecord } from '../../lib/api';
+// import { getJackpotWinRecord } from '../../lib/api';
+import { getJackpotWinRecord } from '../../lib/api-store';
+
+// helper
+import { getPrintPageStyle } from '../../lib/helper';
 
 let data;
 
 const JackpotWinRecord = () => {
   const [isSort, setIsSort] = useState(false);
+
+  const printRef = useRef();
+
+  const handlePrint = useReactToPrint({
+    content: () => printRef.current,
+    pageStyle: getPrintPageStyle(),
+  });
 
   const columns = [
     {
@@ -201,28 +217,45 @@ const JackpotWinRecord = () => {
   };
 
   return (
-    <ProTable
-      columns={columns}
-      debounceTime={300}
-      rowKey="id"
-      dateFormatter="string"
-      headerTitle="Jackpot win record"
-      request={requestPromise}
+    <>
+      <ProTable
+        className="jackpot-win-record"
+        columns={columns}
+        debounceTime={300}
+        rowKey="id"
+        dateFormatter="string"
+        headerTitle="Jackpot Record"
+        request={requestPromise}
       // onRequestError={(error) => {
       //   console.log(error);
       // }}
-      onChange={(pagination, filters, sorter, extra) => {
-        if (extra.action === 'sort') setIsSort(true);
-      }}
-      search={{
-        layout: 'vertical',
-        defaultCollapsed: true,
-      }}
-      pagination={{
-        defaultPageSize: 10,
-        showQuickJumper: true,
-      }}
-    />
+        onChange={(pagination, filters, sorter, extra) => {
+          if (extra.action === 'sort') setIsSort(true);
+        }}
+        search={{
+          layout: 'vertical',
+          defaultCollapsed: true,
+        }}
+        pagination={{
+          defaultPageSize: 10,
+          showQuickJumper: true,
+        }}
+        toolBarRender={() => [
+          <Button
+            key="button"
+            icon={<PrinterOutlined />}
+            onClick={() => {
+              const tableBodyEl = document.querySelector('.jackpot-win-record .ant-card-body');
+              printRef.current = tableBodyEl;
+              handlePrint();
+            }}
+            type="primary"
+          >
+            列印
+          </Button>,
+        ]}
+      />
+    </>
   );
 };
 

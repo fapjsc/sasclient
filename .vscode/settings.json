@@ -9,5 +9,6 @@
         "ciphertext",
         "rolebased",
         "srcs"
-    ]
+    ],
+    "explorer.compactFolders": false
 }

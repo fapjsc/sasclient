@@ -4,53 +4,21 @@ import React, { useRef, useState } from 'react';
 import moment from 'moment';
 
 // Antd
+import ProTable from '@ant-design/pro-table';
 import {
-  PlusOutlined,
-} from '@ant-design/icons';
-
-import {
-  Button,
   Tag,
   Space,
   Modal,
+  message,
 } from 'antd';
-
-import ProTable from '@ant-design/pro-table';
 
 // Components
 import EgmUpdateForm from './form/EgmSettingForm';
 
-// helpers
-import { waitTime } from '../../lib/helper';
+// Apis
+import { adminGetEgmList, adminEgmSetting, adminEgmDelete } from '../../lib/api-store';
 
 let data;
-
-const tableListDataSource = [];
-
-const ipList = ['192.168.10.73', '192.168.10.74', '192.168.10.113', '192.168.10.63'];
-const numList = ['5號', '7號', '12號', '2號'];
-const denoList = [50, 100, 500, 1000];
-const lab1 = [{ name: 'jackpot' }, { name: 'on-line' }];
-const lab2 = [{ name: 'jackpot' }];
-const lab3 = [{ name: 'on-line' }];
-
-for (let i = 0; i < 106; i += 1) {
-  tableListDataSource.push({
-    key: i,
-    id: Math.floor(Math.random() * 1000),
-    ip: ipList[Math.floor(Math.random() * 4)],
-    number: numList[Math.floor(Math.random() * 4)],
-    denomination: denoList[Math.floor(Math.random() * 4)],
-    updated: Date.now() - Math.floor(Math.random() * 100000),
-    created: Date.now() - Math.floor(Math.random() * 100000),
-
-    // eslint-disable-next-line no-nested-ternary
-    labels: Math.floor(Math.random() * 100) > 70
-    // eslint-disable-next-line no-nested-ternary
-      ? lab1 : Math.floor(Math.random() * 100) < 20
-        ? lab2 : Math.floor(Math.random() * 100) < 40 ? lab3 : null,
-  });
-}
 
 const EgmSetting = () => {
   const actionRef = useRef();
@@ -61,51 +29,10 @@ const EgmSetting = () => {
   const [modalFormDone, setModalFormDone] = useState(false);
   const [current, setCurrent] = useState(undefined);
 
-  // Update/create
-  const handleSubmit = async (value) => {
-    await waitTime(2000);
-    setModalFormDone(true);
-  };
-
-  // 刪除
-  // eslint-disable-next-line
-  const deleteItem = async (id) => {
-    await waitTime(2000);
-  };
-
-  // Show create/update egm modal
-  const showEditModal = (item) => {
-    setCurrent(item);
-    setEgmModalForm(true);
-  };
-
-  // Show delete egm modal
-  const showDeleteModal = (id, number) => {
-    Modal.confirm({
-      title: `刪除EGM ( ID： ${id} )`,
-      content: `确定從系統刪除 ${number} EGM嗎？`,
-      okText: '確定',
-      cancelText: '取消',
-      onOk: () => deleteItem(id),
-    });
-  };
-
-  // 設定結束參數復歸
-  const handleDone = () => {
-    setModalFormDone(false);
-    setEgmModalForm(false);
-    setCurrent({});
-  };
-
   // eslint-disable-next-line no-unused-vars
-  const requestPromise = async (params) => {
-    // console.log('call request');
-    data = tableListDataSource;
-
-    // TODO:fetch data action
+  const requestPromise = async (params, sort, filter) => {
     if (!isSort) {
-      // data = await getMeterRecord(params);
-      // console.log(data, params);
+      data = await adminGetEgmList(params);
     }
 
     setTimeout(() => {
@@ -118,18 +45,70 @@ const EgmSetting = () => {
     });
   };
 
+  // Update/create
+  const handleSubmit = async (value) => {
+    const result = await adminEgmSetting(value);
+
+    if (result.status === 200) {
+      setModalFormDone(true);
+    } else {
+      message.error(result.message);
+    }
+  };
+
+  // 刪除
+  const deleteItem = async (id) => {
+    const result = await adminEgmDelete(id);
+    if (result.status === 200) {
+      message.success('EGM已經刪除');
+      actionRef.current.reload();
+    } else {
+      message.error(result.message);
+    }
+  };
+
+  // Show create/update egm modal
+  const showEditModal = (item) => {
+    setCurrent(item);
+    setEgmModalForm(true);
+  };
+
+  // Show delete egm modal
+  const showDeleteModal = (id, number) => {
+    Modal.confirm({
+      title: '刪除EGM',
+      content: (
+        <Space>
+          <span>確定刪除EGM</span>
+          <Tag style={{ margin: 0 }} color="gold">{`${number}號`}</Tag>
+          <span>嗎？</span>
+        </Space>
+      ),
+      okText: '確定',
+      cancelText: '取消',
+      onOk: () => deleteItem(id),
+    });
+  };
+
+  // 設定結束參數復歸
+  const handleDone = () => {
+    setModalFormDone(false);
+    setEgmModalForm(false);
+    setCurrent({});
+    actionRef.current.reload();
+  };
+
   const columns = [
     // {
     //   dataIndex: 'index',
     //   valueType: 'indexBorder',
     //   width: 48,
     // },
-    {
-      title: 'ID',
-      key: 'id',
-      dataIndex: 'id',
-      hideInSearch: true,
-    },
+    // {
+    //   title: 'ID',
+    //   key: 'id',
+    //   dataIndex: 'id',
+    // },
     {
       title: 'IP',
       key: 'ip',
@@ -141,19 +120,19 @@ const EgmSetting = () => {
       title: 'Number',
       key: 'number',
       dataIndex: 'number',
-      copyable: true,
+      sorter: (a, b) => a.number - b.number,
     },
     {
       title: 'DE',
       key: 'denomination',
       dataIndex: 'denomination',
-      hideInSearch: true,
-
+      copyable: true,
     },
     {
       title: 'Updated',
       key: 'updated',
       dataIndex: 'updated',
+      hideInSearch: true,
       sorter: (a, b) => {
         const aTime = new Date(a.created).getTime();
         const bTime = new Date(b.created).getTime();
@@ -167,6 +146,7 @@ const EgmSetting = () => {
       title: 'Created',
       key: 'created',
       dataIndex: 'created',
+      hideInSearch: true,
       sorter: (a, b) => {
         const aTime = new Date(a.created).getTime();
         const bTime = new Date(b.created).getTime();
@@ -185,13 +165,13 @@ const EgmSetting = () => {
       render: (_, record) => (
         <Space>
           {record.labels?.length ? (
-            record.labels?.map(({ name }) => (
-              <Tag color={name === 'jackpot' ? 'cyan' : 'magenta'} key={name}>
-                {name}
+            record.labels?.map((type) => (
+              <Tag color={type === 'jackpot' ? 'cyan' : 'magenta'} key={type}>
+                {type}
               </Tag>
             ))
           ) : (
-            <Space>
+            <Space key="none">
               <span>-</span>
             </Space>
           )}
@@ -204,13 +184,14 @@ const EgmSetting = () => {
       // eslint-disable-next-line no-unused-vars
       render: (text, record, _, action) => [
         <button
+          key="edit"
+          type="button"
           style={{
             backgroundColor: 'transparent',
             border: 'none',
             color: '#177dee',
             cursor: 'pointer',
           }}
-          type="button"
           onClick={() => {
             const {
               id, ip, number, labels, denomination,
@@ -234,13 +215,14 @@ const EgmSetting = () => {
           编辑
         </button>,
         <button
+          key="delete"
+          type="button"
           style={{
             backgroundColor: 'transparent',
             border: 'none',
             color: '#177dee',
             cursor: 'pointer',
           }}
-          type="button"
           onClick={() => {
             // console.log('pre-delete', record);
             showDeleteModal(record.id, record.number);
@@ -271,18 +253,9 @@ const EgmSetting = () => {
           defaultPageSize: 10,
           showQuickJumper: true,
         }}
-        toolBarRender={() => [
-          <Button
-            key="button"
-            icon={<PlusOutlined />}
-            onClick={() => {
-              showEditModal(null);
-            }}
-            type="primary"
-          >
-            新增
-          </Button>,
-        ]}
+        onChange={(pagination, filters, sorter, extra) => {
+          if (extra.action === 'sort') setIsSort(true);
+        }}
       />
 
       <EgmUpdateForm
@@ -292,7 +265,6 @@ const EgmSetting = () => {
         onDone={handleDone}
         onSubmit={handleSubmit}
       />
-
     </>
   );
 };

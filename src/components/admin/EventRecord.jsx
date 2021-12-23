@@ -1,18 +1,32 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
+
+// Print
+import { useReactToPrint } from 'react-to-print';
 
 // Antd
 import ProTable from '@ant-design/pro-table';
+import { PrinterOutlined } from '@ant-design/icons';
+import { Button } from 'antd';
 
 // Moment
 import moment from 'moment';
 
 // Apis
-import { getEventRecord } from '../../lib/api';
+// import { getEventRecord } from '../../lib/api';
+import { getEventRecord } from '../../lib/api-store';
+
+// helpers
+import { getPrintPageStyle } from '../../lib/helper';
 
 let data;
 
 const EventRecord = () => {
+  // Init State
   const [isSort, setIsSort] = useState(false);
+
+  // Ref
+  const printRef = useRef();
+
   const columns = [
     {
       title: 'ID',
@@ -52,6 +66,11 @@ const EventRecord = () => {
     },
   ];
 
+  const handlePrint = useReactToPrint({
+    content: () => printRef.current,
+    pageStyle: getPrintPageStyle(),
+  });
+
   const requestPromise = async (params) => {
     if (!isSort) {
       data = await getEventRecord(params);
@@ -67,11 +86,12 @@ const EventRecord = () => {
   };
   return (
     <ProTable
+      className="egm-event-record"
       columns={columns}
       debounceTime={300}
       rowKey="id"
       dateFormatter="string"
-      headerTitle="Event Record"
+      headerTitle="EGM Event Record"
       request={requestPromise}
       // onRequestError={(error) => console.log(error)}
       pagination={{
@@ -85,7 +105,20 @@ const EventRecord = () => {
         layout: 'vertical',
         defaultCollapsed: true,
       }}
-
+      toolBarRender={() => [
+        <Button
+          key="button"
+          icon={<PrinterOutlined />}
+          onClick={() => {
+            const tableBodyEl = document.querySelector('.egm-event-record .ant-card-body');
+            printRef.current = tableBodyEl;
+            handlePrint();
+          }}
+          type="primary"
+        >
+          列印
+        </Button>,
+      ]}
     />
   );
 };

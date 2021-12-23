@@ -2,11 +2,13 @@ import React from 'react';
 
 import PropTypes from 'prop-types';
 
-import {
+import
+ProForm,
+{
   ModalForm,
   ProFormText,
   ProFormCheckbox,
-  // ProFormSelect,
+  ProFormSelect,
   //   ProFormTextArea,
   //   ProFormDateTimePicker,
 } from '@ant-design/pro-form';
@@ -33,7 +35,7 @@ const EgmUpdateForm = (props) => {
     <ModalForm
       visible={visible}
       width={640}
-      title={done ? null : `EGM${current ? `設定： ${current.number}` : '新增'}`}
+      title={done ? null : `EGM${current ? `設定： Number ${current.number}` : '新增'}`}
     //   className={styles.standardListForm}
       onFinish={async (values) => {
         await onSubmit(values);
@@ -56,51 +58,71 @@ const EgmUpdateForm = (props) => {
     >
       {!done ? (
         <>
+          <ProForm.Group style={{ display: 'none' }}>
+            <ProFormText
+              test="id"
+              name="id"
+              label="EGM Id"
+              disabled
+              width="25%"
+              className="test"
+            />
+          </ProForm.Group>
 
-          <ProFormText
-            disabled
-            name="id"
-            label="EGM ID"
-            // rules={[
-            //   {
-            //     required: true,
-            //     message: '請輸入EGM IP',
-            //   },
-            // ]}
-          />
+          <ProForm.Group>
+            <ProFormText
+              name="ip"
+              label="EGM IP"
+              rules={[
+                {
+                  required: true,
+                  message: '請輸入EGM IP',
+                },
+              ]}
+            />
 
-          <ProFormText
-            name="ip"
-            label="EGM IP"
-            rules={[
-              {
-                required: true,
-                message: '請輸入EGM IP',
-              },
-            ]}
-          />
+            <ProFormText
+              name="denomination"
+              label="Denomination"
+              rules={[
+                {
+                  required: true,
+                  message: '請輸入EGM denomination',
+                },
+              ]}
+            />
+          </ProForm.Group>
 
-          <ProFormText
-            name="number"
-            label="EGM Number"
-            rules={[
-              {
-                required: true,
-                message: '請輸入EGM number',
-              },
-            ]}
-          />
+          <ProForm.Group>
+            <ProFormText
+              name="number"
+              label="EGM Number"
+              rules={[
+                {
+                  required: true,
+                  message: '請輸入EGM number',
+                },
+              ]}
+            />
 
-          <ProFormText
-            name="denomination"
-            label="Denomination"
-            rules={[
-              {
-                required: true,
-                message: '請輸入EGM denomination',
-              },
-            ]}
-          />
+            <ProFormSelect
+              width="xs"
+              name="type"
+              tooltip="非必填，默認為交換"
+              label="排列方式"
+              options={[
+                {
+                  value: 'insert',
+                  label: '插入',
+                },
+                {
+                  value: 'replace',
+                  label: '交換',
+                },
+              ]}
+            />
+
+          </ProForm.Group>
 
           <ProFormCheckbox.Group
             name="labels"

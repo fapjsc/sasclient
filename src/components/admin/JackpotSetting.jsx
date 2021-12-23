@@ -14,7 +14,7 @@ import { SmileOutlined } from '@ant-design/icons';
 import { isEmptyObj } from '../../lib/helper';
 
 // Apis
-import { jackpotSetting, getJackpotList, jackpotDelete } from '../../lib/api';
+import { jackpotSetting, getJackpotList, jackpotDelete } from '../../lib/api-store';
 
 let data;
 
@@ -191,9 +191,6 @@ export default () => {
   return (
     <ProForm
       formRef={formRef}
-      // initialValues={{
-      //   table: data,
-      // }}
       onFinish={handleOnFinish}
       // onFinishFailed={(e) => console.log(e)}
     >
@@ -212,7 +209,7 @@ export default () => {
               {
                 level: index + 1,
                 id: uuid(),
-                key: uuid(),
+                // key: uuid(),
               })
             ,
           }

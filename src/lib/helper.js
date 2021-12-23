@@ -120,3 +120,31 @@ export const waitTime = (time) => new Promise((resolve) => {
     resolve(true);
   }, time);
 });
+
+// Print Page Style
+export const getPrintPageStyle = () => `
+@media print {
+  .ant-table-cell, td span {
+    color: black !important;
+  }
+
+  svg {
+    display: none !important;
+  }
+
+  button {
+    display: none !important;
+  }
+}
+`;
+
+/*
+page style note
+
+.ant-card-body {
+    margin-top: 1rem;
+    display: block;
+    page-break-before: auto;
+  }
+
+*/

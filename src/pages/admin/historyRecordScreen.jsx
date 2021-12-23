@@ -9,6 +9,8 @@ import MeterRecord from '../../components/admin/MeterRecord';
 import EventRecord from '../../components/admin/EventRecord';
 import SystemLog from '../../components/admin/SystemLog';
 
+// import Print from '../../components/print/Print';
+
 const { TabPane } = Tabs;
 
 const historyRecord = () => {

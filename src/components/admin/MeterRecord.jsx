@@ -1,18 +1,29 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import moment from 'moment';
 
+// Print
+import { useReactToPrint } from 'react-to-print';
+
+// Antd
 import ProTable from '@ant-design/pro-table';
+import { PrinterOutlined } from '@ant-design/icons';
+import { Button } from 'antd';
 
 // Apis
-import { getMeterRecord } from '../../lib/api';
+// import { getMeterRecord } from '../../lib/api';
+import { getMeterRecord } from '../../lib/api-store';
 
 // Helpers
-import { thousandsFormat } from '../../lib/helper';
+import { thousandsFormat, getPrintPageStyle } from '../../lib/helper';
 
 let data;
 
 const MeterRecord = () => {
+  // Init State
   const [isSort, setIsSort] = useState(false);
+
+  // Ref
+  const printRef = useRef();
 
   const columns = [
     {
@@ -83,6 +94,12 @@ const MeterRecord = () => {
     },
   ];
 
+  const handlePrint = useReactToPrint({
+    content: () => printRef.current,
+    pageStyle: getPrintPageStyle(),
+
+  });
+
   const requestPromise = async (params) => {
     if (!isSort) {
       data = await getMeterRecord(params);
@@ -99,6 +116,7 @@ const MeterRecord = () => {
 
   return (
     <ProTable
+      className="meter-record-table"
       columns={columns}
       debounceTime={300}
       rowKey="id"
@@ -117,6 +135,20 @@ const MeterRecord = () => {
         defaultPageSize: 10,
         showQuickJumper: true,
       }}
+      toolBarRender={() => [
+        <Button
+          key="button"
+          icon={<PrinterOutlined />}
+          onClick={() => {
+            const tableBodyEl = document.querySelector('.meter-record-table .ant-card-body');
+            printRef.current = tableBodyEl;
+            handlePrint();
+          }}
+          type="primary"
+        >
+          列印
+        </Button>,
+      ]}
     />
   );
 };
