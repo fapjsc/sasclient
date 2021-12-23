@@ -3,11 +3,17 @@ import { v4 as uuid } from 'uuid';
 // Local Server
 const localServer = 'http://192.168.10.60/api';
 const AGENT_URL = 'http://192.168.10.102:3030';
+
+// History api
 const METER_RECORD = 'sasClient/meterRecord';
 const JACKPOT_WIN_RECORD = 'sasClient/jackpotRecord';
 const EVENT_RECORD = 'sasClient/eventRecord';
-// const GET_JACKPOT_LIST = 'sasClient/jackpot';
+
+// Jackpot api
 const JACKPOT_SETTING = 'sasClient/jackpotSetting';
+
+// Egm api
+const EGM_SETTING = 'sasClient/egmSetting';
 
 // Get Headers
 const getHeaders = (token = null) => {
@@ -52,6 +58,12 @@ export const getEgmList = async (token) => {
 
   return data.egmList;
 };
+
+/*
+===================
+   Admin - History
+===================
+*/
 
 //** Meter  */
 export const getMeterRecord = async (params) => {
@@ -163,13 +175,16 @@ export const getJackpotList = async () => {
   }
 };
 
+/*
+=====================
+    Admin - Jackpot
+=====================
+*/
 //** Jackpot settings */
 export const jackpotSetting = async (reqData) => {
   reqData.forEach((el) => {
     if (el.index) delete el.index;
   });
-
-  // console.log(reqData, 'setting jackpot');
 
   const url = `${AGENT_URL}/${JACKPOT_SETTING}`;
   try {
@@ -213,6 +228,87 @@ export const jackpotDelete = async (level) => {
     if (!response.ok) throw new Error(data.message || 'Could not delete jackpot');
 
     if (data.status !== 200) throw new Error(data.message || 'jackpot delete fail');
+    // console.log(data, 'delete jackpot');
+    return data;
+  } catch (error) {
+    return {
+      status: 400,
+      message: error.message || 'Something went wrong',
+    };
+  }
+};
+
+/*
+===================
+    Admin - EGM
+===================
+*/
+//** Get EGM */
+export const adminGetEgmList = async () => {
+  const url = `${AGENT_URL}/${EGM_SETTING}`;
+
+  try {
+    const headers = getHeaders();
+
+    const response = await fetch(url, { headers });
+
+    const data = await response.json();
+
+    if (!response.ok) throw new Error(data.message || 'Could not fetch egm list');
+    if (data.status !== 200) throw new Error(data.message || 'Fetch egm list fail');
+    return data.result;
+  } catch (error) {
+    return {
+      status: 400,
+      message: error.message,
+    } || 'Something went wrong';
+  }
+};
+
+//** Egm Setting */
+export const adminEgmSetting = async (reqData) => {
+  const url = `${AGENT_URL}/${EGM_SETTING}`;
+  try {
+    const headers = getHeaders();
+
+    const response = await fetch(url, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify(reqData),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) throw new Error(data.message || 'Could not setting EGM');
+
+    if (data.status !== 200) throw new Error(data.message || 'EGM set fail');
+
+    return data;
+  } catch (error) {
+    return {
+      status: 400,
+      message: error.message || 'Something went wrong',
+    };
+  }
+};
+
+//** Egm Delete */
+export const adminEgmDelete = async (level) => {
+  const url = `${AGENT_URL}/${EGM_SETTING}`;
+  try {
+    const headers = getHeaders();
+
+    const response = await fetch(url, {
+      method: 'DELETE',
+      headers,
+      body: JSON.stringify({ level }),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) throw new Error(data.message || 'Could not delete EGM');
+
+    if (data.status !== 200) throw new Error(data.message || 'EGM delete fail');
     // console.log(data, 'delete jackpot');
     return data;
   } catch (error) {

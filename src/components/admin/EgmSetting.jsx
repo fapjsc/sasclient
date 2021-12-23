@@ -56,7 +56,7 @@ const EgmSetting = () => {
   const actionRef = useRef();
   const [isSort, setIsSort] = useState(false);
 
-  // Update
+  // Update/create
   const [egmModalForm, setEgmModalForm] = useState(false);
   const [modalFormDone, setModalFormDone] = useState(false);
   const [current, setCurrent] = useState(undefined);

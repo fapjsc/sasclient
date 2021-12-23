@@ -5,10 +5,10 @@ import {
 
 const initialState = {
   token: '',
-  language: 'zh_TW',
-  loginInfo: {
-    account: 'admin',
-  },
+  // loginInfo: {
+  //   account: 'admin',
+  // },
+  permission: 'admin',
 };
 
 export const userReducer = (state = initialState, action) => {

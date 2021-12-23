@@ -15,12 +15,12 @@ import NormalLayout from '../layout/NormalLayout';
 import NotFound from '../pages/NotFound';
 
 const PermissionRoute = () => {
-  const { loginInfo } = useSelector((state) => state.user);
-  const { account } = loginInfo;
+  const { permission } = useSelector((state) => state.user);
+  // const { account } = loginInfo;
   let role;
 
-  if (account) {
-    role = account;
+  if (permission) {
+    role = permission;
   } else {
     role = _getUserRole();
   }

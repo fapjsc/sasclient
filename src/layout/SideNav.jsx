@@ -35,10 +35,10 @@ const SideNav = () => {
   const location = useLocation();
 
   // Redux
-  const { user } = useSelector((state) => state);
-  const {
-    loginInfo: { account },
-  } = user;
+  const { permission } = useSelector((state) => state.user);
+  // const {
+  //   loginInfo: { account },
+  // } = user;
 
   const toggle = () => {
     setCollapsed((preState) => !preState);
@@ -55,34 +55,42 @@ const SideNav = () => {
   }, [location.pathname]);
 
   const handleSideMenuName = (name) => {
-    if (name === '儀錶板') {
-      return t('side_nav_dashboard');
-    }
+    switch (name) {
+      case '儀錶板':
+        return t('side_nav_dashboard');
 
-    if (name === '會員') {
-      return t('side_nav_member');
-    }
+      case '會員':
+        return t('side_nav_member');
 
-    if (name === '櫃檯值班') {
-      return t('side_nav_shift');
-    }
+      case '櫃檯值班':
+        return t('side_nav_shift');
 
-    if (name === '櫃檯接班明細') {
-      return t('side_nav_shift_detail');
+      case '櫃檯接班明細':
+        return t('side_nav_shift_detail');
+
+      case '管理介面':
+        return t('side_nav_admin');
+
+      case 'EGM系統':
+        return t('side_nav_egm_system');
+
+      case '彩金系統':
+        return t('side_nav_jackpot_system');
+
+      case '歷史紀錄':
+        return t('side_nav_history');
+      default:
+        return name;
     }
-    if (name === '管理介面') {
-      return t('side_nav_admin');
-    }
-    return name;
   };
 
   const menuItem = authorizedRoutes
-    .filter((menu) => menu.permissions.includes(account) && menu.isMain)
+    .filter((menu) => menu.permissions.includes(permission) && menu.isMain)
     .map((menu) => (menu.alias === 'admin' ? (
       <SubMenu key={menu.alias} icon={menu.icon} title={handleSideMenuName(menu.name)}>
         {menu.subRoutes.map((subMenu) => (
           <Menu.Item key={subMenu.alias}>
-            <Link to={subMenu.path}>{subMenu.name}</Link>
+            <Link to={subMenu.path}>{handleSideMenuName(subMenu.name)}</Link>
           </Menu.Item>
         ))}
       </SubMenu>
