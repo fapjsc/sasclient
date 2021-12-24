@@ -31,8 +31,36 @@ export const getEventRecord = async (params) => {
 };
 
 //** Jackpot win record fetch */
-export const getJackpotWinRecord = async () => {
-  const url = `${AGENT_URL}/${JACKPOT_WIN_RECORD}`;
+// export const getJackpotWinRecord = async () => {
+//   const url = `${AGENT_URL}/${JACKPOT_WIN_RECORD}`;
+
+//   try {
+//     const headers = getHeaders();
+
+//     const response = await fetch(url, { headers });
+
+//     const data = await response.json();
+
+//     if (!response.ok) throw new Error(data.message || 'Could not fetch jackpot win record');
+//     if (data.status !== 200) throw new Error(data.message || 'Fetch jackpot win record fail');
+//     return data.result;
+//   } catch (error) {
+//     return {
+//       status: 400,
+//       message: error.message,
+//     } || 'Something went wrong';
+//   }
+// };
+
+export const getJackpotWinRecord = async (params) => {
+  console.log(params);
+  const { created, egm_ip: ip, name } = params || {};
+
+  const ipStr = ip ? `egm_ip=${ip}&` : '';
+  const nameStr = name ? `name=${name}&` : '';
+  const createdStr = created ? `startTime=${created[0]}&endTime=${created[1]}&` : '';
+
+  const url = `${AGENT_URL}/${JACKPOT_WIN_RECORD}?${ipStr}${nameStr}${createdStr}`;
 
   try {
     const headers = getHeaders();
@@ -40,6 +68,7 @@ export const getJackpotWinRecord = async () => {
     const response = await fetch(url, { headers });
 
     const data = await response.json();
+    console.log(data);
 
     if (!response.ok) throw new Error(data.message || 'Could not fetch jackpot win record');
     if (data.status !== 200) throw new Error(data.message || 'Fetch jackpot win record fail');
@@ -55,10 +84,8 @@ export const getJackpotWinRecord = async () => {
 //** Meter  */
 export const getMeterRecord = async (params) => {
   const { created, ip } = params || {};
-  // const url = `${AGENT_URL}/${METER_RECORD}`;
 
   const ipStr = ip ? `ip=${ip}&` : '';
-
   const createdStr = created ? `startTime=${created[0]}&endTime=${created[1]}&` : '';
 
   const url = `${AGENT_URL}/${METER_RECORD}?${ipStr}${createdStr}`;

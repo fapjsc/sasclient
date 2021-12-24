@@ -121,11 +121,16 @@ export const waitTime = (time) => new Promise((resolve) => {
   }, time);
 });
 
+//** Print Helpers */
 // Print Page Style
 export const getPrintPageStyle = () => `
 @media print {
   .ant-table-cell, td span {
     color: black !important;
+  }
+
+  .ant-picker-input {
+    color: red !important;
   }
 
   svg {
@@ -138,13 +143,15 @@ export const getPrintPageStyle = () => `
 }
 `;
 
-/*
-page style note
+// Get Print Table El
+export const getPrintTableEl = () => document.querySelector('.jackpot-win-record .ant-card-body');
 
-.ant-card-body {
-    margin-top: 1rem;
-    display: block;
-    page-break-before: auto;
-  }
-
-*/
+// Get Print query El
+export const getQueryEl = (searchRef) => {
+  const { egm_ip: ip, name, created } = searchRef.current || {};
+  const searchEl = document.createElement('p');
+  searchEl.innerText = `
+  IP：${ip || '未填寫'} | Number: ${name || '未填寫'} | 開始時間：${created ? created[0] : '未填寫'} | 結束時間：${created ? created[1] : '未填寫'}
+  `;
+  return searchEl;
+};
