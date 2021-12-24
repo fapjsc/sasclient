@@ -122,7 +122,14 @@ const Login = () => {
           }}
         >
           <br />
-          <Button type="primary" htmlType="submit" loading={loginStatus === 'pending'}>
+          <Button
+            onClick={() => {
+              history.push('/dashboard');
+            }}
+            type="primary"
+            htmlType="submit"
+            loading={loginStatus === 'pending'}
+          >
             Submit
           </Button>
         </Form.Item>
