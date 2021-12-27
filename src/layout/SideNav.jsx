@@ -14,7 +14,7 @@ import { Layout, Menu } from 'antd';
 import { useI18n } from '../i18n';
 
 // Helpers
-import { _resetAllReducer } from '../lib/helper';
+import { _logOutHandler } from '../lib/helper';
 
 // Config
 import { authorizedRoutes } from '../config/routerRole';
@@ -45,7 +45,7 @@ const SideNav = () => {
   };
 
   const logoutHandler = () => {
-    _resetAllReducer(true);
+    _logOutHandler(true);
     history.replace('/login');
   };
 

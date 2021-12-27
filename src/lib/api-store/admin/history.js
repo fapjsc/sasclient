@@ -53,7 +53,6 @@ export const getEventRecord = async (params) => {
 // };
 
 export const getJackpotWinRecord = async (params) => {
-  console.log(params);
   const { created, egm_ip: ip, name } = params || {};
 
   const ipStr = ip ? `egm_ip=${ip}&` : '';
@@ -68,7 +67,6 @@ export const getJackpotWinRecord = async (params) => {
     const response = await fetch(url, { headers });
 
     const data = await response.json();
-    console.log(data);
 
     if (!response.ok) throw new Error(data.message || 'Could not fetch jackpot win record');
     if (data.status !== 200) throw new Error(data.message || 'Fetch jackpot win record fail');

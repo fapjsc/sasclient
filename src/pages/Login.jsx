@@ -1,16 +1,22 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+
+// import { JSEncrypt } from 'jsencrypt';
+
+import crypto from 'crypto';
 
 // Router props
 import { useHistory } from 'react-router-dom';
 
-// Redux
+// // Redux
 import { useDispatch } from 'react-redux';
 
 // Antd
-import { Form, Input, Button } from 'antd';
+import {
+  Form, Input, Button, message,
+} from 'antd';
 
 // Toast
-import { toast } from 'react-toastify';
+// import { toast } from 'react-toastify';
 
 // Actions
 import { setUserInfo } from '../store/actions/userActions';
@@ -19,7 +25,7 @@ import { setUserInfo } from '../store/actions/userActions';
 import useHttp from '../hooks/useHttp';
 
 // Apis
-import { userLogin } from '../lib/api';
+import { userLogin, getCryptKey } from '../lib/api-store';
 
 // Helpers
 import { _setToken } from '../lib/helper';
@@ -31,7 +37,13 @@ import CenterCard from '../components/ui/CenterCard';
 import { authorizedRoutes } from '../config/routerRole';
 
 const Login = () => {
+  // Init State
+  const [key, setKey] = useState(null);
+  const [formValue, setFormValue] = useState(null);
+
+  // Router Props
   const history = useHistory();
+
   // Redux
   const dispatch = useDispatch();
 
@@ -43,95 +55,105 @@ const Login = () => {
     sendRequest: loginRequest,
   } = useHttp(userLogin);
 
-  const onFinish = (values) => {
-    // console.log('Success:', values);
+  const {
+    sendRequest: getCryptKeyReq,
+    status: getCryptKeyStatus,
+    data: cryptKey,
+    error: getCryptKeyError,
+  } = useHttp(getCryptKey);
 
-    const { username, password } = values;
+  const onFinish = async (values) => {
+    setFormValue(values);
+    getCryptKeyReq();
+  };
 
-    const reqData = {
-      account: username,
-      pwd: password,
+  // Get CryptKey 監聽
+  useEffect(() => {
+    if (getCryptKeyStatus === 'pending') return;
+
+    if (getCryptKeyError) {
+      message.error(getCryptKeyError);
+    }
+
+    if (cryptKey) {
+      setKey(cryptKey);
+    }
+  }, [getCryptKeyStatus, getCryptKeyError, cryptKey]);
+
+  // 獲取crypt key後發送login 請求
+  useEffect(() => {
+    if (!key || !formValue) return;
+    // const encrypt = new JSEncrypt();
+    // encrypt.setPublicKey(key);
+    // const password = encrypt.encrypt(formValue.password);
+
+    const password = crypto.publicEncrypt(key, Buffer.from(formValue.password));
+
+    const formatValue = {
+      account: formValue.account,
+      password,
     };
 
-    loginRequest(reqData);
-  };
+    loginRequest(formatValue);
+  }, [key, formValue, loginRequest]);
 
-  const onFinishFailed = (errorInfo) => {
-    // eslint-disable-next-line
-    console.log('Failed:', errorInfo);
-  };
-
-  // 發送登入後請求後監聽
+  // 發送登入請求後監聽
   useEffect(() => {
+    if (loginStatus === 'pending') return;
+
     if (loginError) {
-      toast.error(loginError);
+      message.error(loginError);
       return;
     }
 
     if (loginStatus === 'completed' && loginData) {
-      const loginInfo = { ...loginData };
-      delete loginInfo.jwt;
+      dispatch(setUserInfo(loginData));
 
-      dispatch(
-        setUserInfo({
-          token: loginData.jwt,
-          loginInfo,
-        }),
-      );
-
-      _setToken('token', loginData.jwt, loginInfo);
+      _setToken('token',
+        loginData);
       history.push(authorizedRoutes[0].path);
     }
   }, [loginError, loginData, loginStatus, dispatch, history]);
 
+  useEffect(() => {
+    localStorage.clear();
+  }, []);
+
   return (
-    <CenterCard title="Login" style={{ marginTop: '10rem' }}>
-      {/* <Printer /> */}
-      <Form name="basic" onFinish={onFinish} onFinishFailed={onFinishFailed} autoComplete="off">
+    <CenterCard title="Login" style={{ paddingTop: '10rem' }}>
+      <Form
+        name="login"
+        labelCol={{ span: 6 }}
+        wrapperCol={{ span: 18 }}
+        onFinish={onFinish}
+        autoComplete="off"
+        // initialValues={{ remember: true }}
+        // onFinishFailed={onFinishFailed}
+      >
         <Form.Item
-          label="Username"
-          name="username"
-          autoComplete="off"
-          rules={[
-            {
-              required: true,
-              message: 'Please input your username!',
-            },
-          ]}
+          label="帳號"
+          name="account"
+          rules={[{ required: true, message: '請輸入帳號!' }]}
         >
           <Input />
         </Form.Item>
+
         <Form.Item
-          label="Password"
+          label="密碼"
           name="password"
-          autoComplete="off"
-          rules={[
-            {
-              required: true,
-              message: 'Please input your password!',
-            },
-          ]}
+          rules={[{ required: true, message: '請輸入密碼!' }]}
         >
           <Input.Password />
         </Form.Item>
 
-        <Form.Item
-          wrapperCol={{
-            offset: 8,
-            span: 16,
-          }}
-        >
-          <br />
-          <Button
-            onClick={() => {
-              history.push('/dashboard');
-            }}
-            type="primary"
-            htmlType="submit"
-            loading={loginStatus === 'pending'}
-          >
-            Submit
+        <Form.Item wrapperCol={{ offset: 6, span: 18 }}>
+          <Button type="primary" htmlType="submit" loading={loginStatus === 'pending'}>
+            {
+              loginStatus === 'pending' ? 'loading' : '確定'
+            }
+
           </Button>
+
         </Form.Item>
       </Form>
     </CenterCard>

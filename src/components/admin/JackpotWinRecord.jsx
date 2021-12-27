@@ -26,13 +26,11 @@ const JackpotWinRecord = () => {
   const handlePrint = useReactToPrint({
     content: () => printRef.current,
     pageStyle: getPrintPageStyle(),
-    onBeforeGetContent: () => {
-    },
 
   });
 
   const handlePrintClick = () => {
-    const printTableEl = getPrintTableEl();
+    const printTableEl = getPrintTableEl('.jackpot-win-record');
     const printQueryEl = getQueryEl(searchRef);
     printTableEl.prepend(printQueryEl);
     printRef.current = printTableEl;
@@ -44,8 +42,7 @@ const JackpotWinRecord = () => {
     {
       title: '序號',
       dataIndex: 'index',
-      key: 'indexBorder',
-      valueType: 'indexBorder',
+      valueType: 'index',
     },
     {
       title: 'ID',
@@ -54,7 +51,7 @@ const JackpotWinRecord = () => {
       hideInSearch: true,
     },
     {
-      title: 'Place',
+      title: '場地',
       key: 'place',
       dataIndex: 'place',
       hideInSearch: true,
@@ -67,7 +64,7 @@ const JackpotWinRecord = () => {
     },
 
     {
-      title: 'Level',
+      title: '彩金',
       key: 'level',
       dataIndex: 'level',
       hideInSearch: true,
@@ -96,7 +93,7 @@ const JackpotWinRecord = () => {
       },
     },
     {
-      title: 'Amount',
+      title: '金額',
       key: 'jackpot',
       dataIndex: 'jackpot',
       hideInSearch: true,
@@ -112,7 +109,7 @@ const JackpotWinRecord = () => {
       copyable: true,
     },
     {
-      title: 'Status',
+      title: '狀態',
       key: 'status',
       dataIndex: 'status',
       hideInSearch: true,
@@ -120,24 +117,24 @@ const JackpotWinRecord = () => {
       onFilter: true,
       valueType: 'select',
       valueEnum: {
-        all: { text: '全部', status: 'Default' },
+        // all: { text: '全部', status: 'Default' },
         success: {
-          text: 'Success',
+          text: '派彩成功',
           status: 'Success',
         },
         fail: {
-          text: 'Fail',
+          text: '派彩失敗',
           status: 'Error',
           disabled: true,
         },
         pending: {
-          text: 'Pending',
+          text: '派彩中',
           status: 'Processing',
         },
       },
     },
     {
-      title: 'Time',
+      title: '時間',
       key: 'created',
       dataIndex: 'created',
       sorter: (a, b) => {

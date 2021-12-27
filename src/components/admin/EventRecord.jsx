@@ -16,7 +16,7 @@ import moment from 'moment';
 import { getEventRecord } from '../../lib/api-store';
 
 // helpers
-import { getPrintPageStyle } from '../../lib/helper';
+import { getPrintPageStyle, getPrintTableEl, getQueryEl } from '../../lib/helper';
 
 let data;
 
@@ -26,6 +26,7 @@ const EventRecord = () => {
 
   // Ref
   const printRef = useRef();
+  const searchRef = useRef();
 
   const columns = [
     {
@@ -71,6 +72,15 @@ const EventRecord = () => {
     pageStyle: getPrintPageStyle(),
   });
 
+  const handlePrintClick = () => {
+    const printTableEl = getPrintTableEl('.egm-event-record');
+    const printQueryEl = getQueryEl(searchRef);
+    printTableEl.prepend(printQueryEl);
+    printRef.current = printTableEl;
+    handlePrint();
+    printQueryEl.remove();
+  };
+
   const requestPromise = async (params) => {
     if (!isSort) {
       data = await getEventRecord(params);
@@ -93,7 +103,10 @@ const EventRecord = () => {
       dateFormatter="string"
       headerTitle="EGM Event Record"
       request={requestPromise}
-      // onRequestError={(error) => console.log(error)}
+      beforeSearchSubmit={(params) => {
+        searchRef.current = params;
+        return params;
+      }}
       pagination={{
         defaultPageSize: 10,
         showQuickJumper: true,
@@ -109,11 +122,7 @@ const EventRecord = () => {
         <Button
           key="button"
           icon={<PrinterOutlined />}
-          onClick={() => {
-            const tableBodyEl = document.querySelector('.egm-event-record .ant-card-body');
-            printRef.current = tableBodyEl;
-            handlePrint();
-          }}
+          onClick={handlePrintClick}
           type="primary"
         >
           列印

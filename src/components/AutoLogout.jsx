@@ -7,9 +7,10 @@ import { useHistory } from 'react-router-dom';
 import { Statistic } from 'antd';
 
 // Helpers
-import { _resetAllReducer } from '../lib/helper';
+import { _logOutHandler } from '../lib/helper';
 
-const timeRange = 1000 * 1 * 60 * 60;
+const timeRange = 1000 * 1 * 60 * 60; // 一小時
+// const timeRange = 1000 * 1 * 10; // 10秒
 
 const AutoLogout = () => {
   const [deadLine, setDeadLine] = useState(Date.now() + timeRange);
@@ -18,7 +19,7 @@ const AutoLogout = () => {
 
   const onFinishHandler = () => {
     // true代表要清空localStorage
-    _resetAllReducer(true);
+    _logOutHandler(true);
     history.replace('/login');
   };
 

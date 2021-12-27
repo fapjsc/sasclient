@@ -43,7 +43,7 @@ import styles from './CashForm.module.scss';
 
 // lib
 import { getEgmList } from '../../lib/api';
-import { _getToken } from '../../lib/helper';
+import { _getUserToken } from '../../lib/helper';
 
 // Hooks
 import useHttp from '../../hooks/useHttp';
@@ -184,8 +184,8 @@ const CashForm = ({
 
   //==== 發送請求 ====//
   const sendReqHandler = () => {
-    const { token } = _getToken('token');
-    getEgmListReq(token);
+    const token = _getUserToken('token');
+    getEgmListReq(token && token);
   };
 
   const options = [

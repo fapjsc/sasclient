@@ -16,16 +16,8 @@ import NotFound from '../pages/NotFound';
 
 const PermissionRoute = () => {
   const { permission } = useSelector((state) => state.user);
-  // const { account } = loginInfo;
-  let role;
 
-  if (permission) {
-    role = permission;
-  } else {
-    role = _getUserRole();
-  }
-
-  // account ? role = account : role = _getUserRole();
+  const role = permission || _getUserRole() || '';
 
   return (
     <AclRouter

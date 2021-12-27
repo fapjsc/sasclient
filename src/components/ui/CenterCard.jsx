@@ -6,7 +6,7 @@ import { Row, Col, Card } from 'antd';
 
 const CenterCard = ({ children, title, style }) => (
   <Row justify="center" style={style && style}>
-    <Col style={{ backgroundColor: 'black' }}>
+    <Col>
       <Card style={{ maxWidth: 480 }} title={title}>
         {children}
       </Card>

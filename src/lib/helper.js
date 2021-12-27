@@ -2,7 +2,7 @@ import CryptoJS from 'crypto-js';
 import store from '../store/store';
 
 // Actions
-import { restEgmCashInOut } from '../store/actions/egmActions';
+// import { restEgmCashInOut } from '../store/actions/egmActions';
 import { userLogout } from '../store/actions/userActions';
 
 const key = CryptoJS.enc.Utf8.parse('N2841A3412APCD6F'); // 16位進制key
@@ -33,14 +33,15 @@ export const _encrypt = (word) => {
 };
 
 // /** 存入本地*/
-export const _setToken = (setKey, stringVal, loginInfo) => {
+export const _setToken = (setKey, loginData) => {
   try {
     if (!localStorage) {
       return false;
     }
-    const tem = new Date() - 1; // 當前的時間戳
     const ZeroTime = new Date(new Date().toLocaleDateString()).getTime(); // 今天0點的時間戳
+
     const time = ZeroTime + 12 * 60 * 60 * 1000; // 中午12點的時間戳
+    const tem = new Date() - 1; // 當前的時間戳
 
     let cacheExpireDate; // 過期時間
 
@@ -50,8 +51,8 @@ export const _setToken = (setKey, stringVal, loginInfo) => {
     } else {
       cacheExpireDate = time + 24 * 60 * 60 * 1000; // 過期時間
     }
-    const cacheVal = { val: stringVal, exp: cacheExpireDate, loginInfo };
-    localStorage.setItem(_encrypt(key), _encrypt(JSON.stringify(cacheVal))); // 存入缓存值
+    const cacheVal = { exp: cacheExpireDate, loginData };
+    localStorage.setItem(_encrypt(setKey), _encrypt(JSON.stringify(cacheVal))); // 存入缓存值
   } catch (e) {
     // eslint-disable-next-line
     console.log(e);
@@ -65,28 +66,26 @@ const _removeLocalStorage = (remoteKey) => {
 };
 
 // /** 取Token*/
-export const _getToken = (getKey) => {
+export const _getUserData = (getKey) => {
   if (!localStorage) return false;
 
   try {
     const cacheVal = localStorage.getItem(_encrypt(getKey));
+
     const result = JSON.parse(_decrypt(cacheVal));
 
-    if (!result) return null;
+    // if (!result) return null;
 
-    // let now = new Date() - 1; // 當前時間搓
+    // const now = new Date() - 1; // 當前時間搓
 
-    // 緩存過期
+    // //緩存過期
     // if (now > result.exp) {
     //   console.log(_encrypt(key));
     //   _removeLocalStorage(_encrypt(key));
     //   return '';
     // }
 
-    return {
-      token: result.val,
-      loginInfo: result.loginInfo,
-    };
+    return result || null;
   } catch (e) {
     _removeLocalStorage(key);
     return null;
@@ -94,32 +93,36 @@ export const _getToken = (getKey) => {
 };
 
 export const _getUserRole = () => {
-  const userInfo = _getToken('token');
-  if (userInfo) {
-    return userInfo.loginInfo.account;
-  }
-  return '';
+  const userInfo = _getUserData('token');
+  return userInfo?.loginData?.permission || '';
 };
 
-//==== Redux Helper
-//** reset all reducer */
+export const _getUserToken = () => {
+  const userInfo = _getUserData('token');
+  return userInfo?.loginData?.token;
+};
+
+export const _getUserName = () => {
+  const userInfo = _getUserData('token');
+  return userInfo?.loginData?.name;
+};
+
+export const _getUserAccount = () => {
+  const userInfo = _getUserData('token');
+  return userInfo?.loginData?.account;
+};
+
 //第一個參數：決定是不是要清除localStorage, 預設是null
-export const _resetAllReducer = (clearStorage = null) => {
+export const _logOutHandler = (clearStorage = null) => {
   store.dispatch(userLogout());
-  store.dispatch(restEgmCashInOut());
   if (clearStorage) localStorage.clear();
 };
 
+// 判斷是否為空物件
 export const isEmptyObj = (obj) => (Object.keys(obj).length === 0);
 
+// 千分位加上小數點
 export const thousandsFormat = (text) => text.toFixed(0).replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',');
-
-// for test
-export const waitTime = (time) => new Promise((resolve) => {
-  setTimeout(() => {
-    resolve(true);
-  }, time);
-});
 
 //** Print Helpers */
 // Print Page Style
@@ -144,14 +147,23 @@ export const getPrintPageStyle = () => `
 `;
 
 // Get Print Table El
-export const getPrintTableEl = () => document.querySelector('.jackpot-win-record .ant-card-body');
+export const getPrintTableEl = (classNameStr) => document.querySelector(`${classNameStr} .ant-card-body`);
 
 // Get Print query El
 export const getQueryEl = (searchRef) => {
-  const { egm_ip: ip, name, created } = searchRef.current || {};
+  const {
+    egm_ip: egmIP, ip: meterIP, name, created, event_character: eventIP,
+  } = searchRef.current || {};
   const searchEl = document.createElement('p');
   searchEl.innerText = `
-  IP：${ip || '未填寫'} | Number: ${name || '未填寫'} | 開始時間：${created ? created[0] : '未填寫'} | 結束時間：${created ? created[1] : '未填寫'}
+  IP：${egmIP || meterIP || eventIP || '未填寫'} | Number: ${name || '未填寫'} | 開始時間：${created ? created[0] : '未填寫'} | 結束時間：${created ? created[1] : '未填寫'}
   `;
   return searchEl;
 };
+
+//** for test */
+export const waitTime = (time) => new Promise((resolve) => {
+  setTimeout(() => {
+    resolve(true);
+  }, time);
+});

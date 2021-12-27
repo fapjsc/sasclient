@@ -4,20 +4,22 @@ import {
 } from '../types/userType';
 
 const initialState = {
-  token: '',
-  // loginInfo: {
-  //   account: 'admin',
-  // },
-  permission: 'admin',
+  account: null,
+  token: null,
+  permission: null,
+  name: null,
 };
 
+// eslint-disable-next-line
 export const userReducer = (state = initialState, action) => {
   switch (action.type) {
     case SET_USER_INFO:
       return {
         ...state,
         token: action.userInfo.token,
-        loginInfo: action.userInfo.loginInfo,
+        permission: action.userInfo.permission,
+        account: action.userInfo.account,
+        name: action.userInfo.name,
       };
 
     case USER_LOGOUT:
@@ -27,5 +29,3 @@ export const userReducer = (state = initialState, action) => {
       return state;
   }
 };
-
-export const temp = () => {};

@@ -13,7 +13,7 @@ import PermissionRoute from './components/PermissionRoute';
 import { setUserInfo } from './store/actions/userActions';
 
 // Helpers
-import { _getToken } from './lib/helper';
+import { _getUserData } from './lib/helper';
 
 // Style
 import './App.scss';
@@ -23,11 +23,9 @@ const App = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const userInfo = _getToken('token');
+    const userInfo = _getUserData('token');
 
-    if (userInfo) {
-      dispatch(setUserInfo(userInfo));
-    }
+    if (userInfo) { dispatch(setUserInfo(userInfo.loginData)); }
   }, [dispatch]);
 
   return (

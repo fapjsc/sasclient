@@ -14,7 +14,9 @@ import { Button } from 'antd';
 import { getMeterRecord } from '../../lib/api-store';
 
 // Helpers
-import { thousandsFormat, getPrintPageStyle } from '../../lib/helper';
+import {
+  thousandsFormat, getPrintPageStyle, getPrintTableEl, getQueryEl,
+} from '../../lib/helper';
 
 let data;
 
@@ -24,6 +26,7 @@ const MeterRecord = () => {
 
   // Ref
   const printRef = useRef();
+  const searchRef = useRef();
 
   const columns = [
     {
@@ -100,6 +103,15 @@ const MeterRecord = () => {
 
   });
 
+  const handlePrintClick = () => {
+    const printTableEl = getPrintTableEl('.meter-record-table');
+    const printQueryEl = getQueryEl(searchRef);
+    printTableEl.prepend(printQueryEl);
+    printRef.current = printTableEl;
+    handlePrint();
+    printQueryEl.remove();
+  };
+
   const requestPromise = async (params) => {
     if (!isSort) {
       data = await getMeterRecord(params);
@@ -123,7 +135,10 @@ const MeterRecord = () => {
       dateFormatter="string"
       headerTitle="Meter Record"
       request={requestPromise}
-      // onRequestError={(error) => console.log(error)}
+      beforeSearchSubmit={(params) => {
+        searchRef.current = params;
+        return params;
+      }}
       onChange={(pagination, filters, sorter, extra) => {
         if (extra.action === 'sort') setIsSort(true);
       }}
@@ -139,11 +154,7 @@ const MeterRecord = () => {
         <Button
           key="button"
           icon={<PrinterOutlined />}
-          onClick={() => {
-            const tableBodyEl = document.querySelector('.meter-record-table .ant-card-body');
-            printRef.current = tableBodyEl;
-            handlePrint();
-          }}
+          onClick={handlePrintClick}
           type="primary"
         >
           列印

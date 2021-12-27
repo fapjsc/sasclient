@@ -1,11 +1,16 @@
 import React from 'react';
 
 // Antd
-import { Space, Menu, Dropdown } from 'antd';
+import {
+  Space, Menu, Dropdown,
+} from 'antd';
 import { GlobalOutlined } from '@ant-design/icons';
 
 // Hooks
 import { useI18n } from '../i18n';
+
+// Helpers
+// import { _getUserName } from '../lib/helper';
 
 // Components
 import AutoLogout from '../components/AutoLogout';
@@ -66,24 +71,37 @@ const HeaderContent = () => {
 
     </Menu>
   );
-  return (
-    <div style={{
-      padding: '0 2rem',
-      display: 'flex',
-      alignItems: 'stretch',
-      justifyContent: 'flex-end',
-    }}
-    >
-      <Dropdown overlay={menu} style={{ backgroundColor: 'blue' }}>
-        <div>
-          <GlobalOutlined style={{ fontSize: '1.3rem', cursor: 'pointer' }} />
-        </div>
-      </Dropdown>
 
-      <Space>
-        <AutoLogout />
-      </Space>
-    </div>
+  // const menuHeaderDropdown = (
+  //   <Menu>
+  //     <Menu.Item key="logout">
+  //       <LogoutOutlined />
+  //       退出登录
+  //     </Menu.Item>
+  //   </Menu>
+  // );
+
+  return (
+    <>
+      <div style={{
+        padding: '0 2rem',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'flex-end',
+      }}
+      >
+
+        <Space>
+          <Dropdown overlay={menu}>
+            <GlobalOutlined style={{ fontSize: '1.3rem', cursor: 'pointer' }} />
+          </Dropdown>
+        </Space>
+
+      </div>
+
+      <AutoLogout />
+
+    </>
   );
 };
 

@@ -10,22 +10,22 @@ const getHeaders = (token = null) => {
 };
 
 //** Auth */
-export const userLogin = async (loginData) => {
-  const url = `${localServer}/SignApi`;
-  const headers = getHeaders();
+// export const userLogin = async (loginData) => {
+//   const url = `${localServer}/SignApi`;
+//   const headers = getHeaders();
 
-  const response = await fetch(url, {
-    method: 'POST',
-    headers,
-    body: JSON.stringify(loginData),
-  });
+//   const response = await fetch(url, {
+//     method: 'POST',
+//     headers,
+//     body: JSON.stringify(loginData),
+//   });
 
-  const data = await response.json();
+//   const data = await response.json();
 
-  if (!response.ok) throw new Error(data.msg || 'Login failed.');
+//   if (!response.ok) throw new Error(data.msg || 'Login failed.');
 
-  return data;
-};
+//   return data;
+// };
 
 //** Get EGM List */
 // EGM List
@@ -43,3 +43,5 @@ export const getEgmList = async (token) => {
 
   return data.egmList;
 };
+
+export const temp = () => {};

@@ -11,8 +11,8 @@ const AccessDenied = () => {
 
   const onClickHandler = () => {
     const role = _getUserRole();
-    if (role) {
-      history.push('/home');
+    if (role === 'op' || role === 'admin') {
+      history.push('/login');
     } else {
       history.replace('/login');
     }
