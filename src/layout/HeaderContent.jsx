@@ -100,7 +100,8 @@ const HeaderContent = () => {
 
   //** I18N */
   useEffect(() => {
-    localStorage.setItem('locale', getLocale());
+    const locale = getLocale();
+    localStorage.setItem('locale', locale);
   });
 
   return (

@@ -115,7 +115,7 @@ export const _getUserAccount = () => {
 export const _removeLocalStorageExLocale = () => {
   const locale = localStorage.getItem('locale');
   localStorage.clear();
-  localStorage.setItem('locale', locale);
+  localStorage.setItem('locale', locale || 'zh_TW');
 };
 
 //第一個參數：決定是不是要清除localStorage, 預設是null
