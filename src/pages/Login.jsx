@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 
-// import { JSEncrypt } from 'jsencrypt';
+import { gsap } from 'gsap';
 
 import crypto from 'crypto';
 
@@ -12,11 +12,14 @@ import { useDispatch } from 'react-redux';
 
 // Antd
 import {
-  Form, Input, Button, message,
+  // eslint-disable-next-line
+  Form,
+  Input,
+  Button,
+  message,
 } from 'antd';
 
-// Toast
-// import { toast } from 'react-toastify';
+import { CloseCircleOutlined } from '@ant-design/icons';
 
 // Actions
 import { setUserInfo } from '../store/actions/userActions';
@@ -30,16 +33,23 @@ import { userLogin, getCryptKey } from '../lib/api-store';
 // Helpers
 import { _setToken, _removeLocalStorageExLocale } from '../lib/helper';
 
-// Components
-import CenterCard from '../components/ui/CenterCard';
-
 // Config
 import { authorizedRoutes } from '../config/routerRole';
+
+// Styles
+import styles from './Login.module.scss';
+
+const tl = gsap.timeline();
 
 const Login = () => {
   // Init State
   const [key, setKey] = useState(null);
+  const [showForm, setShowForm] = useState(false);
   const [formValue, setFormValue] = useState(null);
+
+  // Ref
+  const formRef = useRef();
+  const landingRef = useRef();
 
   // Router Props
   const history = useHistory();
@@ -56,6 +66,7 @@ const Login = () => {
   } = useHttp(userLogin);
 
   const {
+    // eslint-disable-next-line
     sendRequest: getCryptKeyReq,
     status: getCryptKeyStatus,
     data: cryptKey,
@@ -106,8 +117,7 @@ const Login = () => {
     if (loginStatus === 'completed' && loginData) {
       dispatch(setUserInfo(loginData));
 
-      _setToken('token',
-        loginData);
+      _setToken('token', loginData);
       history.push(authorizedRoutes[0].path);
     }
   }, [loginError, loginData, loginStatus, dispatch, history]);
@@ -116,44 +126,76 @@ const Login = () => {
     _removeLocalStorageExLocale();
   }, []);
 
+  useEffect(() => {
+    if (showForm) {
+      // const from = { opacity: 0, scale: 0, ease: 'ease.out' };
+      tl.to(formRef.current, { duration: 0.3, opacity: 1, scale: 1.1 })
+        .to(formRef.current, { duration: 0.2, opacity: 1, scale: 1 });
+    }
+  }, [showForm]);
+
   return (
-    <CenterCard title="Login" style={{ paddingTop: '10rem' }}>
-      <Form
-        name="login"
-        labelCol={{ span: 6 }}
-        wrapperCol={{ span: 18 }}
-        onFinish={onFinish}
-        autoComplete="off"
-        // initialValues={{ remember: true }}
-        // onFinishFailed={onFinishFailed}
-      >
-        <Form.Item
-          label="帳號"
-          name="account"
-          rules={[{ required: true, message: '請輸入帳號!' }]}
-        >
-          <Input />
-        </Form.Item>
+    <div className={styles['login-page']}>
+      {!showForm ? (
+        <div
+          ref={landingRef}
+          role="presentation"
+          className={styles['login-button']}
+          onClick={() => setShowForm(true)}
+        />
+      ) : (
+        <div className={styles.container} ref={formRef}>
+          <h1>Log In</h1>
+          <div
+            role="presentation"
+            className={styles['close-btn']}
+            onClick={() => setShowForm(false)}
+          >
+            <CloseCircleOutlined />
+          </div>
+          <Form
+            name="login"
+            // labelCol={{ span: 6 }}
+            // wrapperCol={{ span: 18 }}
+            onFinish={onFinish}
+            autoComplete="off"
+          >
+            <Form.Item
+              name="account"
+              rules={[{ required: true, message: '*請輸入帳號!' }]}
+            >
+              <Input
+                placeholder="帳號"
+                className={styles.input}
+                autoFocus
+              />
+            </Form.Item>
 
-        <Form.Item
-          label="密碼"
-          name="password"
-          rules={[{ required: true, message: '請輸入密碼!' }]}
-        >
-          <Input.Password />
-        </Form.Item>
+            <Form.Item
+              name="password"
+              rules={[{ required: true, message: '*請輸入密碼!' }]}
+            >
+              <Input.Password placeholder="密碼" className={styles.input} />
+            </Form.Item>
 
-        <Form.Item wrapperCol={{ offset: 6, span: 18 }}>
-          <Button type="primary" htmlType="submit" loading={loginStatus === 'pending' || getCryptKeyStatus === 'pending'}>
-            {
-              loginStatus === 'pending' || getCryptKeyStatus === 'pending' ? 'loading' : '確定'
-            }
-
-          </Button>
-
-        </Form.Item>
-      </Form>
-    </CenterCard>
+            <Form.Item>
+              <Button
+                className={styles.button}
+                type="primary"
+                htmlType="submit"
+                loading={
+                  loginStatus === 'pending' || getCryptKeyStatus === 'pending'
+                }
+              >
+                {loginStatus === 'pending' || getCryptKeyStatus === 'pending'
+                  ? 'loading'
+                  : '確定'}
+              </Button>
+            </Form.Item>
+          </Form>
+        </div>
+      )}
+    </div>
   );
 };
 

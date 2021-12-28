@@ -39,7 +39,7 @@ const SystemLog = () => {
       key: 'id',
       dataIndex: 'id',
       hideInSearch: true,
-      sorter: (a, b) => a.id - b.id,
+      // sorter: (a, b) => a.id - b.id,
     },
     {
       title: 'Role',
