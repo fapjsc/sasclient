@@ -112,10 +112,16 @@ export const _getUserAccount = () => {
   return userInfo?.loginData?.account;
 };
 
+export const _removeLocalStorageExLocale = () => {
+  const locale = localStorage.getItem('locale');
+  localStorage.clear();
+  localStorage.setItem('locale', locale);
+};
+
 //第一個參數：決定是不是要清除localStorage, 預設是null
 export const _logOutHandler = (clearStorage = null) => {
   store.dispatch(userLogout());
-  if (clearStorage) localStorage.clear();
+  if (clearStorage) _removeLocalStorageExLocale();
 };
 
 // 判斷是否為空物件
@@ -152,12 +158,20 @@ export const getPrintTableEl = (classNameStr) => document.querySelector(`${class
 // Get Print query El
 export const getQueryEl = (searchRef) => {
   const {
-    egm_ip: egmIP, ip: meterIP, name, created, event_character: eventIP,
+    egm_ip: egmIP,
+    ip: meterIP,
+    name,
+    created,
+    event_character: eventIP,
+    admin_id: adminId,
   } = searchRef.current || {};
+
   const searchEl = document.createElement('p');
+
   searchEl.innerText = `
-  IP：${egmIP || meterIP || eventIP || '未填寫'} | Number: ${name || '未填寫'} | 開始時間：${created ? created[0] : '未填寫'} | 結束時間：${created ? created[1] : '未填寫'}
+  adminId: ${adminId || '未填寫'} | IP：${egmIP || meterIP || eventIP || '未填寫'} | Number: ${name || '未填寫'} | 開始時間：${created ? created[0] : '未填寫'} | 結束時間：${created ? created[1] : '未填寫'}
   `;
+
   return searchEl;
 };
 

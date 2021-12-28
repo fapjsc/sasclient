@@ -47,7 +47,7 @@ const EventRecord = () => {
       title: 'Event',
       key: 'event',
       dataIndex: 'event',
-      copyable: true,
+      // copyable: true,
       width: '50%',
       hideInSearch: true,
     },

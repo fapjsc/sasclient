@@ -1,28 +1,40 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+
+// Router Props
+import { useHistory } from 'react-router-dom';
 
 // Antd
 import {
-  Space, Menu, Dropdown,
+  Space, Menu, Dropdown, Avatar,
 } from 'antd';
-import { GlobalOutlined } from '@ant-design/icons';
+import { LogoutOutlined, GlobalOutlined } from '@ant-design/icons';
 
 // Hooks
 import { useI18n } from '../i18n';
 
 // Helpers
-// import { _getUserName } from '../lib/helper';
+import { _getUserName, _logOutHandler } from '../lib/helper';
 
 // Components
 import AutoLogout from '../components/AutoLogout';
+import Clock from '../components/Clock';
 
 const HeaderContent = () => {
-  const { setLocale } = useI18n();
+  // Router Props
+  const history = useHistory();
+
+  const { setLocale, getLocale } = useI18n();
 
   const handleSelectLanguage = (item) => {
     setLocale(item.key);
   };
 
-  const menu = (
+  const logoutHandler = () => {
+    _logOutHandler(true);
+    history.replace('/login');
+  };
+
+  const i18nMenu = (
     <Menu
       onClick={(e) => {
         handleSelectLanguage(e);
@@ -68,36 +80,68 @@ const HeaderContent = () => {
           </p>
         </Space>
       </Menu.Item>
-
     </Menu>
   );
 
-  // const menuHeaderDropdown = (
-  //   <Menu>
-  //     <Menu.Item key="logout">
-  //       <LogoutOutlined />
-  //       退出登录
-  //     </Menu.Item>
-  //   </Menu>
-  // );
+  const avatarMenu = (
+    <Menu>
+      <Menu.Item key="logout" onClick={logoutHandler}>
+        <Space>
+          <p>
+            <LogoutOutlined />
+          </p>
+          <p>
+            離開系統
+          </p>
+        </Space>
+      </Menu.Item>
+    </Menu>
+  );
+
+  //** I18N */
+  useEffect(() => {
+    localStorage.setItem('locale', getLocale());
+  });
 
   return (
     <>
-      <div style={{
-        padding: '0 2rem',
+      <Space>
+        <Clock />
+      </Space>
+      <Space style={{
         display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'flex-end',
+        float: 'right',
+        marginLeft: 'auto',
+        overflow: 'hidden',
+        marginRight: '1rem',
       }}
       >
-
-        <Space>
-          <Dropdown overlay={menu}>
-            <GlobalOutlined style={{ fontSize: '1.3rem', cursor: 'pointer' }} />
+        <Space style={{ marginRight: '3rem' }}>
+          <Dropdown overlay={avatarMenu}>
+            <span style={{ cursor: 'pointer' }}>
+              <Avatar
+                src="https://joeschmoe.io/api/v1/random"
+                size="small"
+                menu={avatarMenu}
+                style={{ backgroundColor: '#91d5ff', marginBottom: '1px' }}
+              />
+              <span style={{ marginLeft: '5px' }}>{_getUserName()?.toUpperCase()}</span>
+            </span>
           </Dropdown>
         </Space>
 
-      </div>
+        <Dropdown overlay={i18nMenu}>
+          <Space style={{ cursor: 'pointer' }}>
+            <Avatar
+              icon={<GlobalOutlined />}
+              size="small"
+              menu={avatarMenu}
+              style={{ fontSize: '1.5rem', color: '#91d5ff' }}
+            />
+          </Space>
+        </Dropdown>
+
+      </Space>
 
       <AutoLogout />
 

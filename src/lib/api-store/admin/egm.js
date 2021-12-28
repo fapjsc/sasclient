@@ -16,16 +16,18 @@ import {
              denomination: <string>
 */
 export const adminGetEgmList = async (params) => {
+  console.log(params);
   const {
-    id, ip, number, denomination,
+    id, ip, number, denomination, created,
   } = params || {};
 
   const idStr = id ? `id=${id}&` : '';
   const ipStr = ip ? `ip=${ip}&` : '';
   const numberStr = number ? `number=${number}&` : '';
   const denominationStr = denomination ? `denomination=${denomination}&` : '';
+  const createdStr = created ? `startTime=${created[0]}&endTime=${created[1]}&` : '';
 
-  const url = `${AGENT_URL}/${EGM_LIST}?${idStr}${ipStr}${numberStr}${denominationStr}`;
+  const url = `${AGENT_URL}/${EGM_LIST}?${idStr}${ipStr}${numberStr}${denominationStr}${createdStr}`;
 
   try {
     const headers = getHeaders();

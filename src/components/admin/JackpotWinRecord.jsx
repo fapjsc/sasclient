@@ -39,11 +39,11 @@ const JackpotWinRecord = () => {
   };
 
   const columns = [
-    {
-      title: '序號',
-      dataIndex: 'index',
-      valueType: 'index',
-    },
+    // {
+    //   title: '序號',
+    //   dataIndex: 'index',
+    //   valueType: 'index',
+    // },
     {
       title: 'ID',
       key: 'id',
@@ -149,12 +149,11 @@ const JackpotWinRecord = () => {
   ];
 
   const requestPromise = async (params) => {
-    // let startTime;
-    // let endTime;
-
     if (!isSort) {
       data = await getJackpotWinRecord(params);
     }
+
+    console.log(data);
 
     setTimeout(() => {
       if (isSort) setIsSort(false);
@@ -164,76 +163,6 @@ const JackpotWinRecord = () => {
       success: true,
       data: data,
     });
-
-    // if (params?.created) {
-    //   startTime = new Date(params.created[0]).getTime();
-    //   endTime = new Date(params.created[1]).getTime();
-    // }
-
-    // if (data.status === 400) {
-    //   return Promise.resolve({
-    //     success: true,
-    //     data: data,
-    //   });
-    // }
-
-    // return Promise.resolve({
-    //   success: true,
-    //   data: data
-    //     .filter((item) => {
-    //       // 1) 沒有搜尋條件
-    //       if (!params?.egm_ip && !params?.created && !params?.name) {
-    //         return true;
-    //       }
-
-    //       // 2) IP
-    //       if (params?.egm_ip && !params?.created && !params?.name) {
-    //       // return item.ip.includes(params?.ip);
-    //         return item.egm_ip.includes(params?.egm_ip);
-    //       }
-
-    //       // 3) Created
-    //       if (!params?.egm_ip && params?.created && !params?.name) {
-    //         const itemTime = new Date(item.created).getTime();
-    //         return itemTime >= startTime && itemTime <= endTime;
-    //       }
-
-    //       // 4) Name
-    //       if (!params?.egm_ip && !params?.created && params?.name) {
-    //         return params.name === item.name;
-    //       }
-
-    //       // 5) IP and Created
-    //       if (params?.egm_ip && params?.created && !params?.name) {
-    //         const itemTime = new Date(item.created).getTime();
-    //         return item.egm_ip.includes(params?.egm_ip)
-    //         && itemTime >= startTime && itemTime <= endTime;
-    //       }
-
-    //       // 6) IP and Name
-    //       if (params?.egm_ip && !params?.created && params?.name) {
-    //         return item.egm_ip.includes(params?.egm_ip)
-    //         && params.name === item.name;
-    //       }
-
-    //       // 7) Created and Name
-    //       if (!params?.egm_ip && params?.created && params?.name) {
-    //         const itemTime = new Date(item.created).getTime();
-    //         return itemTime >= startTime && itemTime <= endTime
-    //         && params.name === item.name;
-    //       }
-
-    //       // 8) IP and Created and Name
-    //       if (params?.egm_ip && params?.created && params?.name) {
-    //         const itemTime = new Date(item.created).getTime();
-    //         return item.egm_ip.includes(params?.egm_ip)
-    //         && itemTime >= startTime && itemTime <= endTime
-    //         && params.name === item.name;
-    //       }
-
-    //       return false;
-    //     }),
-    // });
   };
 
   return (

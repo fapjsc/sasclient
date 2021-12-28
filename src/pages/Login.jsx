@@ -28,7 +28,7 @@ import useHttp from '../hooks/useHttp';
 import { userLogin, getCryptKey } from '../lib/api-store';
 
 // Helpers
-import { _setToken } from '../lib/helper';
+import { _setToken, _removeLocalStorageExLocale } from '../lib/helper';
 
 // Components
 import CenterCard from '../components/ui/CenterCard';
@@ -62,7 +62,7 @@ const Login = () => {
     error: getCryptKeyError,
   } = useHttp(getCryptKey);
 
-  const onFinish = async (values) => {
+  const onFinish = (values) => {
     setFormValue(values);
     getCryptKeyReq();
   };
@@ -83,9 +83,6 @@ const Login = () => {
   // 獲取crypt key後發送login 請求
   useEffect(() => {
     if (!key || !formValue) return;
-    // const encrypt = new JSEncrypt();
-    // encrypt.setPublicKey(key);
-    // const password = encrypt.encrypt(formValue.password);
 
     const password = crypto.publicEncrypt(key, Buffer.from(formValue.password));
 
@@ -116,7 +113,7 @@ const Login = () => {
   }, [loginError, loginData, loginStatus, dispatch, history]);
 
   useEffect(() => {
-    localStorage.clear();
+    _removeLocalStorageExLocale();
   }, []);
 
   return (
@@ -147,9 +144,9 @@ const Login = () => {
         </Form.Item>
 
         <Form.Item wrapperCol={{ offset: 6, span: 18 }}>
-          <Button type="primary" htmlType="submit" loading={loginStatus === 'pending'}>
+          <Button type="primary" htmlType="submit" loading={loginStatus === 'pending' || getCryptKeyStatus === 'pending'}>
             {
-              loginStatus === 'pending' ? 'loading' : '確定'
+              loginStatus === 'pending' || getCryptKeyStatus === 'pending' ? 'loading' : '確定'
             }
 
           </Button>

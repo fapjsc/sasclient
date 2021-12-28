@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import I18nContext from './i18nContext';
 
 const defaultLocale = localStorage.getItem('locale');
@@ -14,9 +14,9 @@ const I18nProvider = (props) => {
     setLocale: (selectLocale) => setLocale(selectLocale),
   };
 
-  useEffect(() => {
-    localStorage.setItem('locale', locale);
-  }, [locale]);
+  // useEffect(() => {
+  //   localStorage.setItem('locale', locale);
+  // }, [locale]);
 
   return <I18nContext.Provider value={i18n}>{children}</I18nContext.Provider>;
 };

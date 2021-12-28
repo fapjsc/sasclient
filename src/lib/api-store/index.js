@@ -11,6 +11,7 @@ export {
   getEventRecord,
   getJackpotWinRecord,
   getMeterRecord,
+  getSysLog,
 } from './admin/history';
 
 // Jackpot sys

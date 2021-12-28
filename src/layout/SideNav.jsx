@@ -1,20 +1,20 @@
 import React, { useState, useEffect } from 'react';
 
 // Router
-import { Link, useHistory, useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 // Redux
 import { useSelector } from 'react-redux';
 
 // Antd
-import { LogoutOutlined } from '@ant-design/icons';
+// import { LogoutOutlined } from '@ant-design/icons';
 import { Layout, Menu } from 'antd';
 
 // Hooks
 import { useI18n } from '../i18n';
 
 // Helpers
-import { _logOutHandler } from '../lib/helper';
+// import { _logOutHandler } from '../lib/helper';
 
 // Config
 import { authorizedRoutes } from '../config/routerRole';
@@ -31,7 +31,7 @@ const SideNav = () => {
   const { t } = useI18n();
 
   // Router
-  const history = useHistory();
+  // const history = useHistory();
   const location = useLocation();
 
   // Redux
@@ -44,10 +44,10 @@ const SideNav = () => {
     setCollapsed((preState) => !preState);
   };
 
-  const logoutHandler = () => {
-    _logOutHandler(true);
-    history.replace('/login');
-  };
+  // const logoutHandler = () => {
+  //   _logOutHandler(true);
+  //   history.replace('/login');
+  // };
 
   useEffect(() => {
     const path = location.pathname.split('/')[1];
@@ -112,13 +112,13 @@ const SideNav = () => {
       >
         {menuItem}
 
-        <Menu.Item
+        {/* <Menu.Item
           key="logout"
           icon={<LogoutOutlined />}
           onClick={logoutHandler}
         >
           {t('side_nav_logout')}
-        </Menu.Item>
+        </Menu.Item> */}
       </Menu>
     </Sider>
   );

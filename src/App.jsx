@@ -19,12 +19,11 @@ import { _getUserData } from './lib/helper';
 import './App.scss';
 
 const App = () => {
-  // Redux
   const dispatch = useDispatch();
 
+  //** Set User Info */
   useEffect(() => {
     const userInfo = _getUserData('token');
-
     if (userInfo) { dispatch(setUserInfo(userInfo.loginData)); }
   }, [dispatch]);
 
