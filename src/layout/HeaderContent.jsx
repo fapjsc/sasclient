@@ -19,6 +19,9 @@ import { _getUserName, _logOutHandler } from '../lib/helper';
 import AutoLogout from '../components/AutoLogout';
 import Clock from '../components/Clock';
 
+// Socket
+// import { connectWithSocket } from '../lib/socketConnection';
+
 const HeaderContent = () => {
   // Router Props
   const history = useHistory();
@@ -103,6 +106,10 @@ const HeaderContent = () => {
     const locale = getLocale();
     localStorage.setItem('locale', locale);
   });
+
+  // useEffect(() => {
+  //   connectWithSocket();
+  // }, []);
 
   return (
     <>

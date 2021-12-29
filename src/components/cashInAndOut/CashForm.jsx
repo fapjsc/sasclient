@@ -1,4 +1,7 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
+
+// Toast
+import { toast } from 'react-toastify';
 
 // Prop types
 import PropTypes from 'prop-types';
@@ -6,19 +9,12 @@ import PropTypes from 'prop-types';
 // Redux
 import { useDispatch, useSelector } from 'react-redux';
 
-// Action
-
 // Antd
 import {
   Cascader,
   Card,
-  // Result,
   Button,
-  // Descriptions,
   Divider,
-  Alert,
-  // Statistic,
-  // Collapse,
 } from 'antd';
 
 // Antd Pro Layout
@@ -36,160 +32,101 @@ import ProForm, {
 import StepDescriptions from './StepDescription';
 import StepResult from './StepResult';
 
-import { restEgmCashInOut } from '../../store/actions/egmActions';
+// Actions
+import { setEgmCashInOut, restEgmCashInOut } from '../../store/actions/egmActions';
 
-// Style
-import styles from './CashForm.module.scss';
+// Apis
+import { egmCashInOut } from '../../lib/api-store';
 
-// lib
-import { getEgmList } from '../../lib/api';
-import { _getUserToken } from '../../lib/helper';
+// Helpers
+import { _getUserName } from '../../lib/helper';
 
 // Hooks
 import useHttp from '../../hooks/useHttp';
 
-// const { Panel } = Collapse;
-
-// const StepDescriptions = ({ bordered }) => {
-//   const {
-//     opName, action, amount, machineNumber,
-//   } = useSelector((state) => state.egmCashInOutData);
-
-//   return (
-//     <Descriptions column={1} bordered={bordered}>
-//       <Descriptions.Item label="操作人員">
-//         {' '}
-//         {opName}
-//       </Descriptions.Item>
-//       <Descriptions.Item label="操作項目">
-//         {' '}
-//         {action === 'cashIn' ? '開分' : '洗分'}
-//       </Descriptions.Item>
-//       <Descriptions.Item label="機器編號">
-//         {' '}
-//         {machineNumber}
-//       </Descriptions.Item>
-//       <Descriptions.Item label="操作金額">
-//         <Statistic
-//           value={amount}
-//           suffix={(
-//             <span
-//               style={{
-//                 fontSize: 14,
-//               }}
-//             >
-//               元
-//             </span>
-//           )}
-//           precision={0}
-//         />
-//       </Descriptions.Item>
-//     </Descriptions>
-//   );
-// };
-
-// StepDescriptions.propTypes = {
-//   bordered: PropTypes.bool,
-// };
-
-// StepDescriptions.defaultProps = {
-//   bordered: false,
-// };
-
-// const StepResult = ({ onFinish, requestErr, children }) => {
-//   const { action } = useSelector((state) => state.egmCashInOutData);
-
-//   const titleText = () => {
-//     if (action === 'cashIn') return '開分';
-//     if (action === 'cashOut') return '洗分';
-//   };
-
-//   const titleResultText = () => {
-//     if (requestErr) return '失敗';
-//     if (!requestErr) return '成功';
-//   };
-
-//   return (
-//     <Result
-//       status={requestErr ? 'error' : 'success'}
-//       title={
-//         titleText() + titleResultText()
-//       }
-//       subTitle=""
-//       extra={(
-//         <>
-//           {/* <Button type="primary" onClick={againClickHandler}>
-//             再來一次
-//           </Button> */}
-//           <Button type="primary" onClick={onFinish}>
-//             關閉
-//           </Button>
-//         </>
-//       )}
-//       className={styles.result}
-//     >
-//       {children}
-//     </Result>
-//   );
-// };
-
-// StepResult.propTypes = {
-//   onFinish: PropTypes.func.isRequired,
-//   requestErr: PropTypes.func.isRequired,
-//   children: PropTypes.oneOfType([
-//     PropTypes.arrayOf(PropTypes.node),
-//     PropTypes.node,
-//   ]).isRequired,
-// };
-
-//===============//
+// import classes from './CashForm.module.scss';
 
 const CashForm = ({
-  setVisible, setCurrent, current, step,
+  setVisible, setCurrent, current,
 }) => {
   // Redux
   const dispatch = useDispatch();
   const { egmCashInOutData } = useSelector((state) => state);
+
   const {
-    machineNumber, opName, action, amount,
+    machineNumber, opName, amount, action,
   } = egmCashInOutData;
+
+  // Ref
   const formRef = useRef();
+  const cascaderRef = useRef();
+
+  // Init State
+  const [showPageContainer, setShowPageContainer] = useState(true);
+  const [cascaderValue] = useState([]);
 
   // Http hook
   const {
-    status: getEgmListStatus,
-    error: getEgmListError,
-    sendRequest: getEgmListReq,
-  } = useHttp(getEgmList);
+    status: cashInOutStatus,
+    error: cashInOutError,
+    sendRequest: cashInOutReq,
+    data: cashInOutData,
+  } = useHttp(egmCashInOut);
 
   //==== Reset Form ====//
   const resetForm = () => {
+    setCurrent(0);
+    dispatch(restEgmCashInOut());
+    setVisible(false);
     formRef.current?.resetFields();
   };
 
-  //** Http狀態監聽 */
   useEffect(() => {
-    // if (getEgmListError) alert('error');
-    if (getEgmListStatus === 'completed' && !getEgmListError) {
-      setCurrent(2);
-    }
-  }, [getEgmListStatus, getEgmListError, setCurrent]);
-
-  //** Rest Form Listen */
-  useEffect(() => {
-    if (!machineNumber && !opName && !action && !amount) {
+    if (!opName && !action && !machineNumber && !amount) {
       resetForm();
     }
-  }, [machineNumber, opName, action, amount]);
+    // eslint-disable-next-line
+  }, [opName, action, machineNumber, amount]);
+
+  //** Http狀態監聽 */
+  useEffect(() => {
+    if (cashInOutError) {
+      toast.error(cashInOutError);
+    }
+
+    if (cashInOutStatus === 'completed'
+    && !cashInOutError
+    && cashInOutData.status === 200) {
+      setCurrent(2);
+    }
+  }, [cashInOutStatus, cashInOutError, cashInOutReq, setCurrent, cashInOutData]);
 
   //==== 發送請求 ====//
   const sendReqHandler = () => {
-    const token = _getUserToken('token');
-    getEgmListReq(token && token);
+    const formData = egmCashInOutData;
+    cashInOutReq(formData);
   };
 
   const options = [
     {
+      name: 'promoIn',
+      value: 'promoIn',
+      label: '招待分',
+      children: [
+        {
+          value: '1000',
+          label: '招1000分',
+          children: [
+            {
+              value: machineNumber,
+              label: machineNumber,
+            },
+          ],
+        },
+      ],
+    },
+    {
+      name: 'cashIn',
       value: 'cashIn',
       label: '開分',
       children: [
@@ -198,8 +135,8 @@ const CashForm = ({
           label: '開1000分',
           children: [
             {
-              value: 'mike',
-              label: 'Mike',
+              value: machineNumber,
+              label: machineNumber,
             },
           ],
         },
@@ -210,12 +147,22 @@ const CashForm = ({
       label: '洗分',
       children: [
         {
-          value: 'nanjing',
+          value: 'h',
           label: '洗到百分位',
           children: [
             {
-              value: 'mike',
-              label: 'Mike',
+              value: machineNumber,
+              label: machineNumber,
+            },
+          ],
+        },
+        {
+          value: 'all',
+          label: '全洗',
+          children: [
+            {
+              value: machineNumber,
+              label: machineNumber,
             },
           ],
         },
@@ -223,21 +170,31 @@ const CashForm = ({
     },
   ];
 
-  //=================//
-
-  const cascaderOnChange = (value) => {};
+  const cascaderOnChange = (value) => {
+    console.log(value);
+    egmCashInOut(value);
+  };
 
   return (
     <>
+      {
+      showPageContainer && (
       <Divider orientation="left" plain>
         常用開 / 洗分
       </Divider>
+      )
+    }
+
       <PageContainer
-        content={(
+        content={showPageContainer && (
           <Cascader
+            ref={cascaderRef}
             options={options}
             onChange={cascaderOnChange}
             placeholder="Please select"
+            value={cascaderValue}
+            dropdownClassName="1234124708"
+
           />
         )}
       >
@@ -246,6 +203,7 @@ const CashForm = ({
         <Divider orientation="left" plain>
           手動開 / 洗分
         </Divider>
+
         <Card
           bordered={false}
           style={{ backgroundColor: '#141414', color: 'rgba(0,0,0,.85)' }}
@@ -253,30 +211,32 @@ const CashForm = ({
           <StepsForm
             current={current}
             onCurrentChange={setCurrent}
+            debounceTime={100000}
             submitter={{
               render: (props, dom) => {
-                //** Step-2 Button */
-                if (step === 1) {
-                  let preBtn;
-                  // dom.forEach((el) => (el.key === 'pre'
-                  // ? (preBtn = { ...el, key: el.key }) : null));
+                if (props.step === 0) {
+                  setShowPageContainer(true);
+                }
 
+                //** Step-2 Button */
+                if (props.step === 1) {
+                  setShowPageContainer(false);
+                  const preBtn = dom.filter((el) => el.key === 'pre');
                   return [
                     preBtn,
                     <Button
                       key="submit"
-                      loading={getEgmListStatus === 'pending'}
+                      loading={cashInOutStatus === 'pending'}
                       onClick={sendReqHandler}
                       type="primary"
                     >
                       確定
-                      {action === 'cashIn' ? '開分' : '洗分'}
                     </Button>,
                   ];
                 }
 
                 //** Step-3 Button */
-                if (step === 2) {
+                if (props.step === 2) {
                   return null;
                 }
                 return dom;
@@ -288,15 +248,8 @@ const CashForm = ({
               style={{ marginTop: '1.5rem' }}
               formRef={formRef}
               title="設定"
-              // onValuesChange={(e) => {
-              //   console.log(e);
-              //   // for (const key in e) {
-              //   //   dispatch(setEgmCashInOut({ [key]: e[key] }));
-              //   // }
-              // }}
-              // eslint-disable-next-line
               onFinish={(values) => {
-                // console.log(values, 'values');
+                dispatch(setEgmCashInOut(values));
                 return true;
               }}
             >
@@ -307,7 +260,6 @@ const CashForm = ({
                       name="action"
                       label="操作項目"
                       width="md"
-                      initialValue={action}
                       rules={[
                         {
                           required: true,
@@ -322,6 +274,10 @@ const CashForm = ({
                         {
                           label: '洗分',
                           value: 'cashOut',
+                        },
+                        {
+                          label: '招待分',
+                          value: 'promoIn',
                         },
                       ]}
                     />
@@ -353,18 +309,12 @@ const CashForm = ({
                       label="操作人員"
                       width="md"
                       name="opName"
-                      value={opName}
-                      placeholder=""
-                      rules={[
-                        {
-                          required: true,
-                          message: '操作人員不得為空',
-                        },
-                      ]}
+                      value={_getUserName()}
+                      disabled
                     />
 
                     <ProFormText
-                      label="機器編號"
+                      label="EGM IP"
                       disabled
                       width="md"
                       name="machineNumber"
@@ -379,21 +329,9 @@ const CashForm = ({
             {/* =======  Step-2  ======== */}
             <StepsForm.StepForm title="確認">
               {current === 1 && (
-                <div className={styles.result}>
-                  <Alert
-                    // closable
-                    showIcon
-                    message="請確認操作項目以及金額是否正確。"
-                    style={{
-                      marginBottom: 24,
-                    }}
-                  />
+                <div>
                   <StepDescriptions bordered />
-                  <Divider
-                    style={{
-                      margin: '24px 0',
-                    }}
-                  />
+                  <br />
                 </div>
               )}
             </StepsForm.StepForm>
@@ -403,28 +341,14 @@ const CashForm = ({
               {current === 2 && (
                 <StepResult
                   setCurrent={setCurrent}
-                  requestErr={getEgmListError}
-                  onFinish={() => {
-                    setCurrent(0);
-                    resetForm();
-                    dispatch(restEgmCashInOut());
-                    setVisible(false);
-                  }}
+                  requestErr={cashInOutError}
+                  onFinish={resetForm}
                 >
                   <StepDescriptions />
                 </StepResult>
               )}
             </StepsForm.StepForm>
           </StepsForm>
-          <Divider
-            style={{
-              margin: '40px 0 24px',
-            }}
-          />
-          <div className={styles.desc}>
-            <h3>说明</h3>
-            <h4>如果需要,這裡可以放一些說明。</h4>
-          </div>
         </Card>
       </PageContainer>
     </>

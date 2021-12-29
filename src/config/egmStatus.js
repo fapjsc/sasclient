@@ -1,10 +1,14 @@
+// import { useI18n } from '../i18n';
+
 const success = 'success';
 const danger = 'danger';
-// const warning = 'warning';
+const warning = 'warning';
 
 export const temp = () => {};
 
-export const egmGpLpCode = (str) => {
+export const EgmGpLpCode = (str) => {
+  // const { t } = useI18n();
+  // console.log(t);
   switch (str) {
     //** GP */
     case '0x00':
@@ -227,6 +231,12 @@ export const egmGpLpCode = (str) => {
       return {
         color: danger,
         text: '投幣鎖定不正常',
+      };
+
+    case '0x7C':
+      return {
+        color: warning,
+        text: '更換打印機色帶',
       };
 
     case '0x80':

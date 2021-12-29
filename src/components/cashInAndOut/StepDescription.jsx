@@ -12,34 +12,46 @@ import {
   Statistic,
 } from 'antd';
 
+// Helper
+import { _getUserName } from '../../lib/helper';
+
 const StepDescriptions = ({ bordered }) => {
   const {
-    opName, action, amount, machineNumber,
+    action, amount, machineNumber,
   } = useSelector((state) => state.egmCashInOutData);
+
+  const actionText = (actionType) => {
+    switch (actionType) {
+      case 'cashIn':
+        return '開分';
+
+      case 'cashOut':
+        return '洗分';
+
+      case 'promoIn':
+        return '招待分';
+      default:
+        return '未知';
+    }
+  };
 
   return (
     <Descriptions column={1} bordered={bordered}>
       <Descriptions.Item label="操作人員">
-        {' '}
-        {opName}
+        {_getUserName()}
       </Descriptions.Item>
       <Descriptions.Item label="操作項目">
-        {' '}
-        {action === 'cashIn' ? '開分' : '洗分'}
+        {actionText(action)}
+
       </Descriptions.Item>
-      <Descriptions.Item label="機器編號">
-        {' '}
+      <Descriptions.Item label="EGM IP">
         {machineNumber}
       </Descriptions.Item>
       <Descriptions.Item label="操作金額">
         <Statistic
           value={amount}
           suffix={(
-            <span
-              style={{
-                fontSize: 14,
-              }}
-            >
+            <span style={{ fontSize: 14 }}>
               元
             </span>
             )}

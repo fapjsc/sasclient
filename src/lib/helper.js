@@ -40,7 +40,8 @@ export const _setToken = (setKey, loginData) => {
     }
     const ZeroTime = new Date(new Date().toLocaleDateString()).getTime(); // 今天0點的時間戳
 
-    const time = ZeroTime + 12 * 60 * 60 * 1000; // 中午12點的時間戳
+    // const time = ZeroTime + 12 * 60 * 60 * 1000; // 中午12點的時間戳
+    const time = ZeroTime;
     const tem = new Date() - 1; // 當前的時間戳
 
     let cacheExpireDate; // 過期時間
@@ -74,16 +75,7 @@ export const _getUserData = (getKey) => {
 
     const result = JSON.parse(_decrypt(cacheVal));
 
-    // if (!result) return null;
-
-    // const now = new Date() - 1; // 當前時間搓
-
-    // //緩存過期
-    // if (now > result.exp) {
-    //   console.log(_encrypt(key));
-    //   _removeLocalStorage(_encrypt(key));
-    //   return '';
-    // }
+    if (!result) return null;
 
     return result || null;
   } catch (e) {
@@ -94,7 +86,7 @@ export const _getUserData = (getKey) => {
 
 export const _getUserRole = () => {
   const userInfo = _getUserData('token');
-  return userInfo?.loginData?.permission || '';
+  return userInfo?.loginData?.permission;
 };
 
 export const _getUserToken = () => {
@@ -104,12 +96,35 @@ export const _getUserToken = () => {
 
 export const _getUserName = () => {
   const userInfo = _getUserData('token');
-  return userInfo?.loginData?.name;
+  return userInfo?.loginData?.name || '未知';
 };
 
 export const _getUserAccount = () => {
   const userInfo = _getUserData('token');
   return userInfo?.loginData?.account;
+};
+
+export const _checkTokenExpire = () => {
+  const result = _getUserData('token');
+  const now = new Date() - 1; // 當前時間搓
+
+  // 沒有token數據
+  if (!result) {
+    return null;
+  }
+
+  //緩存過期
+  if (now > result?.exp) {
+    _removeLocalStorage(_encrypt(key));
+    return {
+      status: 401,
+      message: 'token expire',
+    };
+  }
+  return {
+    status: 200,
+    data: result.exp,
+  };
 };
 
 export const _removeLocalStorageExLocale = () => {
@@ -173,6 +188,11 @@ export const getQueryEl = (searchRef) => {
   `;
 
   return searchEl;
+};
+
+export const egmIsDisconnect = (connectTime) => {
+  if (!connectTime) return true;
+  return new Date() - new Date(connectTime) > (1 * 1000 * 60);
 };
 
 //** for test */

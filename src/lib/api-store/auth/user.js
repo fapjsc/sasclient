@@ -8,7 +8,6 @@ import {
 //** Auth */
 // eslint-disable-next-line
 export const userLogin = async (loginData) => {
-  console.log(loginData);
   const url = `${AGENT_URL}/${USER_LOGIN}`;
   const headers = getHeaders();
 

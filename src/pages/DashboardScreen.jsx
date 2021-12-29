@@ -1,15 +1,18 @@
 import React, { useEffect } from 'react';
 
 // Socket
-// import { connectWithSocket } from '../lib/socketConnection';
+import { connectWithSocket, closeSocketWithAgent } from '../lib/socketConnection';
 
 // Components
 import MachineList from '../components/gameMachine/MachineList';
 
 const HomeScreen = () => {
   useEffect(() => {
-    // connectWithSocket();
-    console.log('dashboard');
+    connectWithSocket();
+
+    return () => {
+      closeSocketWithAgent();
+    };
   }, []);
 
   return (

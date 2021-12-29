@@ -1,6 +1,9 @@
 import {
   AGENT_URL,
   EGM_LIST,
+  CASH_IN,
+  CASH_OUT,
+  PROMO_IN,
   getHeaders,
 } from '../utils';
 
@@ -16,7 +19,6 @@ import {
              denomination: <string>
 */
 export const adminGetEgmList = async (params) => {
-  console.log(params);
   const {
     id, ip, number, denomination, created,
   } = params || {};
@@ -51,7 +53,6 @@ export const adminGetEgmList = async (params) => {
 //** Egm Setting */
 export const adminEgmSetting = async (reqData) => {
   const url = `${AGENT_URL}/${EGM_LIST}`;
-  console.log(reqData);
   try {
     const headers = getHeaders();
 
@@ -101,4 +102,38 @@ export const adminEgmDelete = async (id) => {
       message: error.message || 'Something went wrong',
     };
   }
+};
+
+//** Cash in out */
+// {"ip": "192.168.10.73", "cashAmount": 2000
+export const egmCashInOut = async (params) => {
+  let url;
+
+  if (params?.length) {
+    console.log('快速開分');
+  }
+
+  if (params.action === 'cashIn') url = `${AGENT_URL}/${CASH_IN}`;
+  if (params.action === 'cashOut') url = `${AGENT_URL}/${CASH_OUT}`;
+  if (params.action === 'promoIn') url = `${AGENT_URL}/${PROMO_IN}`;
+
+  const headers = getHeaders();
+
+  const { ip, amount: cashAmount } = params || {};
+
+  const response = await fetch(url, {
+    method: 'POST',
+    headers,
+    body: JSON.stringify({
+      ip,
+      cashAmount,
+    }),
+  });
+
+  const data = await response.json();
+
+  if (!response.ok) throw new Error(data.message || 'Could not operation cash in or cash out');
+  if (data.status !== 200) throw new Error(data.message || 'cash in or cash out fail');
+  console.log(data);
+  return data;
 };

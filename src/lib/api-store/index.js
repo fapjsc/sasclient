@@ -26,4 +26,5 @@ export {
   adminGetEgmList,
   adminEgmSetting,
   adminEgmDelete,
+  egmCashInOut,
 } from './admin/egm';

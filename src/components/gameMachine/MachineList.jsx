@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 // Redux
 import { useDispatch, useSelector } from 'react-redux';
@@ -24,10 +24,13 @@ import { setEgmCashInOut } from '../../store/actions/egmActions';
 import CashInAndOut from '../cashInAndOut/CashInAndOut';
 
 // Config
-import { egmGpLpCode } from '../../config/egmStatus';
+import { EgmGpLpCode } from '../../config/egmStatus';
 
 // Icons
 import {} from '@ant-design/icons';
+
+// Helpers
+// import { egmIsDisconnect } from '../../lib/helper';
 
 // Style
 import classes from './MachineList.module.scss';
@@ -36,10 +39,10 @@ const { TabPane } = Tabs;
 
 //** All Menu */
 const AllMenu = ({ item }) => (
-  <Menu key={item.EGMnum}>
+  <Menu key={item.number}>
     <Menu.Item key="machineNo">
       機台編號：
-      {item.EGMnum}
+      {item.number}
     </Menu.Item>
     <Menu.Item key="memberNo">
       會員編號：
@@ -51,7 +54,7 @@ const AllMenu = ({ item }) => (
     </Menu.Item>
     <Menu.Item key="machineStatus">
       狀態：
-      {egmGpLpCode(item.excCode).text}
+      {EgmGpLpCode(item.status).text}
     </Menu.Item>
   </Menu>
 );
@@ -76,16 +79,18 @@ const MachineList = () => {
     dispatch(setEgmCashInOut({ machineNumber }));
   };
 
-  useEffect(() => {
-    egmStatus.forEach((el) => {
-      if (el.excCode && el.excCode !== '0x00') {
-        const { EGMnum } = el;
-        const { text } = egmGpLpCode(el.excCode);
+  // useEffect(() => {
+  //   egmStatus.forEach((el) => {
+  //     // console.log(el);
 
-        toast.error(`${EGMnum} : ${text}`);
-      }
-    });
-  }, [egmStatus]);
+  //     if (el.status !== '0x00' && false) {
+  //       const { number } = el;
+  //       const { text } = EgmGpLpCode(el.status);
+
+  //       toast.error(`${number} : ${text}`);
+  //     }
+  //   });
+  // }, [egmStatus]);
 
   // const classNameHandler = () => {
   //   if (color === 'success') return classes.success;
@@ -96,17 +101,18 @@ const MachineList = () => {
   //** ALL */
   const allDropdownEl = egmStatus
     && egmStatus.map((el) => {
-      const { color, text } = egmGpLpCode(el.excCode);
+      const { color, text } = EgmGpLpCode(el.status);
       return (
         <Dropdown key={uuid()} arrow overlay={<AllMenu item={el} />}>
           <div
             role="presentation"
-            onClick={() => (color === 'success'
-              ? onClickHandler(el.EGMnum)
-              : toast.error(`${el.EGMnum} : ${text}`))}
+            onClick={() => (true
+              ? onClickHandler(el.ip)
+              : toast.error(`${el.ip} : ${text}`))}
             className={`${classes['drum-pad']}`}
+            color={color}
           >
-            {(el.EGMnum && el.EGMnum.slice(0, 4)) || '未知'}
+            {el.number || '未知'}
           </div>
         </Dropdown>
       );
@@ -159,9 +165,10 @@ const MachineList = () => {
 
 AllMenu.propTypes = {
   item: PropTypes.shape({
-    EGMnum: PropTypes.number.isRequired,
+    number: PropTypes.number.isRequired,
     creditInCent: PropTypes.number.isRequired,
-    excCode: PropTypes.string.isRequired,
+    status: PropTypes.string.isRequired,
+    signalConnectionTime: PropTypes.string,
   }).isRequired,
 };
 

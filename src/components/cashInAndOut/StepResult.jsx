@@ -18,9 +18,19 @@ import styles from './StepResult.module.scss';
 const StepResult = ({ onFinish, requestErr, children }) => {
   const { action } = useSelector((state) => state.egmCashInOutData);
 
-  const titleText = () => {
-    if (action === 'cashIn') return '開分';
-    if (action === 'cashOut') return '洗分';
+  const actionText = (actionType) => {
+    switch (actionType) {
+      case 'cashIn':
+        return '開分';
+
+      case 'cashOut':
+        return '洗分';
+
+      case 'promoIn':
+        return '招待分';
+      default:
+        return '未知';
+    }
   };
 
   const titleResultText = () => {
@@ -32,18 +42,13 @@ const StepResult = ({ onFinish, requestErr, children }) => {
     <Result
       status={requestErr ? 'error' : 'success'}
       title={
-          titleText() + titleResultText()
+        actionText(action) + titleResultText()
         }
       subTitle=""
       extra={(
-        <>
-          {/* <Button type="primary" onClick={againClickHandler}>
-              再來一次
-            </Button> */}
-          <Button type="primary" onClick={onFinish}>
-            關閉
-          </Button>
-        </>
+        <Button type="primary" onClick={onFinish}>
+          關閉
+        </Button>
         )}
       className={styles.result}
     >
