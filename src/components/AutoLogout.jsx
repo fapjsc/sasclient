@@ -9,7 +9,10 @@ import { Statistic } from 'antd';
 // Helpers
 import { _logOutHandler } from '../lib/helper';
 
-const timeRange = 1000 * 1 * 60 * 60; // 一小時
+// Config
+import { autoLogoutTime as timeRange } from '../config/config';
+
+// const timeRange = 1000 * 1 * 60 * 60; // 一小時
 // const timeRange = 1000 * 1 * 10; // 10秒
 
 const AutoLogout = () => {

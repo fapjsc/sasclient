@@ -6,7 +6,7 @@ import {
 
 const cashInOutInitialState = {
   action: null,
-  machineNumber: null,
+  ip: null,
   amount: null,
 };
 
@@ -35,7 +35,7 @@ export const egmStatus = (state = egmStatusInitState, action) => {
   switch (action.type) {
     case SET_EGM_STATUS:
       // const statusArr = Object.values(action.egmStatus);
-      return [...Object.values(action.egmStatus)];
+      return [...Object.values(action.egmStatus)].sort((a, b) => a.number - b.number);
 
     default:
       return state;

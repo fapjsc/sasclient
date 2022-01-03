@@ -17,7 +17,7 @@ import { _getUserName } from '../../lib/helper';
 
 const StepDescriptions = ({ bordered }) => {
   const {
-    action, amount, machineNumber,
+    action, amount, ip,
   } = useSelector((state) => state.egmCashInOutData);
 
   const actionText = (actionType) => {
@@ -45,7 +45,7 @@ const StepDescriptions = ({ bordered }) => {
 
       </Descriptions.Item>
       <Descriptions.Item label="EGM IP">
-        {machineNumber}
+        {ip}
       </Descriptions.Item>
       <Descriptions.Item label="操作金額">
         <Statistic

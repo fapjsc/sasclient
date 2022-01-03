@@ -98,7 +98,7 @@ export const authorizedRoutes = [
       },
       {
         path: '/admin/jackpot-setting',
-        alias: 'jackpot-setting',
+        alias: 'jackpot',
         name: '彩金系統',
       },
       {
@@ -124,6 +124,7 @@ export const authorizedRoutes = [
     redirect: '/access-denied',
     component: JackpotSettingScreen,
     isMain: false,
+    alias: 'jackpot',
   },
   {
     path: '/admin/history-record',

@@ -6,9 +6,6 @@ import { useDispatch, useSelector } from 'react-redux';
 // Prop types
 import PropTypes from 'prop-types';
 
-// uuid
-import { v4 as uuid } from 'uuid';
-
 // Toastify
 import { toast } from 'react-toastify';
 
@@ -30,7 +27,7 @@ import { EgmGpLpCode } from '../../config/egmStatus';
 import {} from '@ant-design/icons';
 
 // Helpers
-// import { egmIsDisconnect } from '../../lib/helper';
+import { egmIsDisconnect } from '../../lib/helper';
 
 // Style
 import classes from './MachineList.module.scss';
@@ -38,11 +35,15 @@ import classes from './MachineList.module.scss';
 const { TabPane } = Tabs;
 
 //** All Menu */
-const AllMenu = ({ item }) => (
+const AllMenu = ({ item, isDisconnect }) => (
   <Menu key={item.number}>
     <Menu.Item key="machineNo">
       機台編號：
       {item.number}
+    </Menu.Item>
+    <Menu.Item key="machineIP">
+      機台編號：
+      {item.ip}
     </Menu.Item>
     <Menu.Item key="memberNo">
       會員編號：
@@ -54,7 +55,7 @@ const AllMenu = ({ item }) => (
     </Menu.Item>
     <Menu.Item key="machineStatus">
       狀態：
-      {EgmGpLpCode(item.status).text}
+      {isDisconnect ? '無法連線' : EgmGpLpCode(item.status).text}
     </Menu.Item>
   </Menu>
 );
@@ -74,9 +75,9 @@ const MachineList = () => {
     console.log(e);
   };
 
-  const onClickHandler = (machineNumber) => {
+  const onClickHandler = (ip) => {
     setShowCashInAndOut(true);
-    dispatch(setEgmCashInOut({ machineNumber }));
+    dispatch(setEgmCashInOut({ ip }));
   };
 
   // useEffect(() => {
@@ -102,15 +103,20 @@ const MachineList = () => {
   const allDropdownEl = egmStatus
     && egmStatus.map((el) => {
       const { color, text } = EgmGpLpCode(el.status);
+      const isDisconnect = egmIsDisconnect(el.signalConnectionTime);
       return (
-        <Dropdown key={uuid()} arrow overlay={<AllMenu item={el} />}>
+        <Dropdown
+          key={el.id}
+          arrow
+          overlay={<AllMenu item={el} isDisconnect={isDisconnect} />}
+        >
           <div
             role="presentation"
             onClick={() => (true
               ? onClickHandler(el.ip)
               : toast.error(`${el.ip} : ${text}`))}
             className={`${classes['drum-pad']}`}
-            color={color}
+            color={isDisconnect ? 'danger' : color}
           >
             {el.number || '未知'}
           </div>
@@ -169,7 +175,9 @@ AllMenu.propTypes = {
     creditInCent: PropTypes.number.isRequired,
     status: PropTypes.string.isRequired,
     signalConnectionTime: PropTypes.string,
+    ip: PropTypes.string,
   }).isRequired,
+  isDisconnect: PropTypes.bool.isRequired,
 };
 
 export default MachineList;

@@ -34,6 +34,8 @@ const StepResult = ({ onFinish, requestErr, children }) => {
   };
 
   const titleResultText = () => {
+    const text = actionText(action);
+    if (text === '未知') return '';
     if (requestErr) return '失敗';
     if (!requestErr) return '成功';
   };

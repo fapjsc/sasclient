@@ -106,6 +106,12 @@ export const egmCashInOut = async (params) => {
 
   if (params?.length) {
     console.log('快速開分');
+    params = {
+      action: params[0],
+      amount: params[1],
+      ip: params[2],
+      quick: true,
+    };
   }
 
   if (params.action === 'cashIn') url = `${AGENT_URL}/${CASH_IN}`;
@@ -130,5 +136,5 @@ export const egmCashInOut = async (params) => {
   if (!response.ok) throw new Error(data.message || 'Could not operation cash in or cash out');
   if (data.status !== 200) throw new Error(data.message || 'cash in or cash out fail');
   console.log(data);
-  return data;
+  return { ...data, quick: params?.quick };
 };

@@ -192,7 +192,8 @@ export const getQueryEl = (searchRef) => {
 
 export const egmIsDisconnect = (connectTime) => {
   if (!connectTime) return true;
-  return new Date() - new Date(connectTime) > (1 * 1000 * 60);
+
+  return (new Date() - new Date(connectTime)) > (1 * 1000 * 60);
 };
 
 //** for test */

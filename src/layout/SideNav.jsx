@@ -13,11 +13,9 @@ import { Layout, Menu } from 'antd';
 // Hooks
 import { useI18n } from '../i18n';
 
-// Helpers
-// import { _logOutHandler } from '../lib/helper';
-
 // Config
 import { authorizedRoutes } from '../config/routerRole';
+import { removeOwn } from '../config/config';
 
 const { Sider } = Layout;
 const { SubMenu } = Menu;
@@ -31,23 +29,14 @@ const SideNav = () => {
   const { t } = useI18n();
 
   // Router
-  // const history = useHistory();
   const location = useLocation();
 
   // Redux
   const { permission } = useSelector((state) => state.user);
-  // const {
-  //   loginInfo: { account },
-  // } = user;
 
   const toggle = () => {
     setCollapsed((preState) => !preState);
   };
-
-  // const logoutHandler = () => {
-  //   _logOutHandler(true);
-  //   history.replace('/login');
-  // };
 
   useEffect(() => {
     const path = location.pathname.split('/')[1];
@@ -85,10 +74,11 @@ const SideNav = () => {
   };
 
   const menuItem = authorizedRoutes
+    .filter((el) => !removeOwn.includes(el.alias))
     .filter((menu) => menu.permissions.includes(permission) && menu.isMain)
     .map((menu) => (menu.alias === 'admin' ? (
       <SubMenu key={menu.alias} icon={menu.icon} title={handleSideMenuName(menu.name)}>
-        {menu.subRoutes.map((subMenu) => (
+        {menu.subRoutes.filter((el) => !removeOwn.includes(el.alias)).map((subMenu) => (
           <Menu.Item key={subMenu.alias}>
             <Link to={subMenu.path}>{handleSideMenuName(subMenu.name)}</Link>
           </Menu.Item>
@@ -112,13 +102,6 @@ const SideNav = () => {
       >
         {menuItem}
 
-        {/* <Menu.Item
-          key="logout"
-          icon={<LogoutOutlined />}
-          onClick={logoutHandler}
-        >
-          {t('side_nav_logout')}
-        </Menu.Item> */}
       </Menu>
     </Sider>
   );

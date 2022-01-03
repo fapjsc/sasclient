@@ -191,6 +191,12 @@ export const EgmGpLpCode = (str) => {
         text: '機器捲軸裝置斷開連接',
       };
 
+    case '0x51':
+      return {
+        color: warning,
+        text: 'Hand pay等待中',
+      };
+
     case '0x60':
       return {
         color: danger,

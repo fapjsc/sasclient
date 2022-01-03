@@ -15,6 +15,7 @@ import {
   Card,
   Button,
   Divider,
+  message,
 } from 'antd';
 
 // Antd Pro Layout
@@ -54,7 +55,7 @@ const CashForm = ({
   const { egmCashInOutData } = useSelector((state) => state);
 
   const {
-    machineNumber, opName, amount, action,
+    ip, opName, amount, action,
   } = egmCashInOutData;
 
   // Ref
@@ -82,14 +83,15 @@ const CashForm = ({
   };
 
   useEffect(() => {
-    if (!opName && !action && !machineNumber && !amount) {
+    if (!opName && !action && !ip && !amount) {
       resetForm();
     }
     // eslint-disable-next-line
-  }, [opName, action, machineNumber, amount]);
+  }, [opName, action, ip, amount]);
 
   //** Http狀態監聽 */
   useEffect(() => {
+    console.log(cashInOutData);
     if (cashInOutError) {
       toast.error(cashInOutError);
     }
@@ -97,7 +99,11 @@ const CashForm = ({
     if (cashInOutStatus === 'completed'
     && !cashInOutError
     && cashInOutData.status === 200) {
-      setCurrent(2);
+      if (!cashInOutData.quick) {
+        setCurrent(2);
+      } else {
+        message.success('開分成功');
+      }
     }
   }, [cashInOutStatus, cashInOutError, cashInOutReq, setCurrent, cashInOutData]);
 
@@ -118,8 +124,28 @@ const CashForm = ({
           label: '招1000分',
           children: [
             {
-              value: machineNumber,
-              label: machineNumber,
+              value: ip,
+              label: ip,
+            },
+          ],
+        },
+        {
+          value: '3000',
+          label: '招3000分',
+          children: [
+            {
+              value: ip,
+              label: ip,
+            },
+          ],
+        },
+        {
+          value: '5000',
+          label: '招5000分',
+          children: [
+            {
+              value: ip,
+              label: ip,
             },
           ],
         },
@@ -135,8 +161,28 @@ const CashForm = ({
           label: '開1000分',
           children: [
             {
-              value: machineNumber,
-              label: machineNumber,
+              value: ip,
+              label: ip,
+            },
+          ],
+        },
+        {
+          value: '3000',
+          label: '開3000分',
+          children: [
+            {
+              value: ip,
+              label: ip,
+            },
+          ],
+        },
+        {
+          value: '5000',
+          label: '開5000分',
+          children: [
+            {
+              value: ip,
+              label: ip,
             },
           ],
         },
@@ -151,8 +197,8 @@ const CashForm = ({
           label: '洗到百分位',
           children: [
             {
-              value: machineNumber,
-              label: machineNumber,
+              value: ip,
+              label: ip,
             },
           ],
         },
@@ -161,8 +207,8 @@ const CashForm = ({
           label: '全洗',
           children: [
             {
-              value: machineNumber,
-              label: machineNumber,
+              value: ip,
+              label: ip,
             },
           ],
         },
@@ -171,8 +217,7 @@ const CashForm = ({
   ];
 
   const cascaderOnChange = (value) => {
-    console.log(value);
-    egmCashInOut(value);
+    cashInOutReq(value);
   };
 
   return (
@@ -193,8 +238,6 @@ const CashForm = ({
             onChange={cascaderOnChange}
             placeholder="Please select"
             value={cascaderValue}
-            dropdownClassName="1234124708"
-
           />
         )}
       >
@@ -317,8 +360,8 @@ const CashForm = ({
                       label="EGM IP"
                       disabled
                       width="md"
-                      name="machineNumber"
-                      value={machineNumber}
+                      name="ip"
+                      value={ip}
                       placeholder=""
                     />
                   </ProForm.Group>

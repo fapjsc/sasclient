@@ -2,7 +2,9 @@ import { _getUserToken } from '../helper';
 
 // Local Server
 // export const localServer = 'http://192.168.10.60/api';
-export const AGENT_URL = 'http://192.168.10.101:3030';
+// export const AGENT_URL = 'http://192.168.10.119:3030';
+
+export { AGENT_URL } from '../../config/config';
 
 // History api
 export const METER_RECORD = 'sasClient/meterRecord';
@@ -25,10 +27,6 @@ export const GET_CRYPT_KEY = 'login/getKey';
 
 // Get Headers
 export const getHeaders = (token = null) => {
-  // const result = _checkTokenExpire();
-
-  // console.log(result);
-
   const headers = new Headers();
   if (!token) token = _getUserToken();
 
