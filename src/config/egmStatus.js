@@ -53,6 +53,12 @@ export const EgmGpLpCode = (str) => {
         text: '廣告燈箱片門被打開',
       };
 
+    case '0x1F':
+      return {
+        color: success,
+        text: '正常',
+      };
+
     case '0x20':
       return {
         color: danger,
