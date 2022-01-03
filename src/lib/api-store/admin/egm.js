@@ -12,12 +12,7 @@ import {
     Admin - EGM
 ===================
 */
-/* Get EGM
-// @ params: id: <string>,
-             ip: <string>,
-             number: <string>,
-             denomination: <string>
-*/
+
 export const adminGetEgmList = async (params) => {
   const {
     id, ip, number, denomination, created,

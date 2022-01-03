@@ -2,7 +2,7 @@ import { _getUserToken } from '../helper';
 
 // Local Server
 // export const localServer = 'http://192.168.10.60/api';
-export const AGENT_URL = 'http://192.168.10.119:3030';
+export const AGENT_URL = 'http://192.168.10.101:3030';
 
 // History api
 export const METER_RECORD = 'sasClient/meterRecord';
