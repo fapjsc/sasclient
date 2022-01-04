@@ -17,19 +17,23 @@ import { _getUserName } from '../../lib/helper';
 
 const StepDescriptions = ({ bordered }) => {
   const {
-    action, amount, ip,
+    action, cashAmount, ip,
   } = useSelector((state) => state.egmCashInOutData);
 
   const actionText = (actionType) => {
     switch (actionType) {
-      case 'cashIn':
+      case 'atfIn':
         return '開分';
 
-      case 'cashOut':
+      case 'aftOut':
+        return '洗分';
+
+      case 'aftOutDigit':
         return '洗分';
 
       case 'promoIn':
         return '招待分';
+
       default:
         return '未知';
     }
@@ -49,7 +53,7 @@ const StepDescriptions = ({ bordered }) => {
       </Descriptions.Item>
       <Descriptions.Item label="操作金額">
         <Statistic
-          value={amount}
+          value={cashAmount}
           suffix={(
             <span style={{ fontSize: 14 }}>
               元

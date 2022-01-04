@@ -7,7 +7,7 @@ import {
 const cashInOutInitialState = {
   action: null,
   ip: null,
-  amount: null,
+  cashAmount: null,
 };
 
 export const egmCashInOutReducer = (state = cashInOutInitialState, action) => {

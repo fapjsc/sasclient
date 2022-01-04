@@ -98,12 +98,17 @@ const CashForm = ({
 
     if (cashInOutStatus === 'completed'
     && !cashInOutError
-    && cashInOutData.status === 200) {
-      if (!cashInOutData.quick) {
+    && cashInOutData?.status === 200) {
+      if (!cashInOutData?.quick) {
         setCurrent(2);
-      } else {
-        message.success('開分成功');
+        return;
       }
+
+      if (cashInOutData.result === 'atfIn success') message.success('開分成功');
+      if (cashInOutData.result === 'promoIn success') message.success('招分成功');
+
+      if (cashInOutData.result === 'aftOut success'
+      || cashInOutData.result === 'aftOutDigit success') message.success('洗分成功');
     }
   }, [cashInOutStatus, cashInOutError, cashInOutReq, setCurrent, cashInOutData]);
 
@@ -120,7 +125,7 @@ const CashForm = ({
       label: '招待分',
       children: [
         {
-          value: '1000',
+          value: 1000,
           label: '招1000分',
           children: [
             {
@@ -130,7 +135,7 @@ const CashForm = ({
           ],
         },
         {
-          value: '3000',
+          value: 3000,
           label: '招3000分',
           children: [
             {
@@ -140,7 +145,7 @@ const CashForm = ({
           ],
         },
         {
-          value: '5000',
+          value: 5000,
           label: '招5000分',
           children: [
             {
@@ -152,12 +157,12 @@ const CashForm = ({
       ],
     },
     {
-      name: 'cashIn',
-      value: 'cashIn',
+      name: 'atfIn',
+      value: 'atfIn',
       label: '開分',
       children: [
         {
-          value: '1000',
+          value: 1000,
           label: '開1000分',
           children: [
             {
@@ -167,7 +172,7 @@ const CashForm = ({
           ],
         },
         {
-          value: '3000',
+          value: 3000,
           label: '開3000分',
           children: [
             {
@@ -177,7 +182,7 @@ const CashForm = ({
           ],
         },
         {
-          value: '5000',
+          value: 5000,
           label: '開5000分',
           children: [
             {
@@ -189,11 +194,42 @@ const CashForm = ({
       ],
     },
     {
-      value: 'cashOut',
+      name: 'aftOut',
+      value: 'aftOut',
       label: '洗分',
       children: [
         {
-          value: 'h',
+          value: 1000,
+          label: '洗1000分',
+          children: [
+            {
+              value: ip,
+              label: ip,
+            },
+          ],
+        },
+        {
+          value: 3000,
+          label: '洗3000分',
+          children: [
+            {
+              value: ip,
+              label: ip,
+            },
+          ],
+        },
+        {
+          value: 5000,
+          label: '洗5000分',
+          children: [
+            {
+              value: ip,
+              label: ip,
+            },
+          ],
+        },
+        {
+          value: 'percentile',
           label: '洗到百分位',
           children: [
             {
@@ -203,7 +239,17 @@ const CashForm = ({
           ],
         },
         {
-          value: 'all',
+          value: 'thousands',
+          label: '洗到千分位',
+          children: [
+            {
+              value: ip,
+              label: ip,
+            },
+          ],
+        },
+        {
+          value: 99999999,
           label: '全洗',
           children: [
             {
@@ -217,6 +263,7 @@ const CashForm = ({
   ];
 
   const cascaderOnChange = (value) => {
+    if (!value) return;
     cashInOutReq(value);
   };
 
@@ -312,11 +359,11 @@ const CashForm = ({
                       options={[
                         {
                           label: '開分',
-                          value: 'cashIn',
+                          value: 'atfIn',
                         },
                         {
                           label: '洗分',
-                          value: 'cashOut',
+                          value: 'aftOut',
                         },
                         {
                           label: '招待分',
@@ -328,7 +375,7 @@ const CashForm = ({
                     <ProFormDigit
                       decimalSeparator="0"
                       label="操作金額"
-                      name="amount"
+                      name="cashAmount"
                       width="100%"
                       rules={[
                         {

@@ -1,9 +1,10 @@
 import {
   AGENT_URL,
   EGM_LIST,
-  CASH_IN,
-  CASH_OUT,
-  PROMO_IN,
+  // CASH_IN,
+  // CASH_OUT,
+  // PROMO_IN,
+  AFT,
   getHeaders,
 } from '../utils';
 
@@ -102,30 +103,46 @@ export const adminEgmDelete = async (id) => {
 //** Cash in out */
 // {"ip": "192.168.10.73", "cashAmount": 2000
 export const egmCashInOut = async (params) => {
-  let url;
+  if (!params) return;
+  const url = `${AGENT_URL}/${AFT}`;
 
-  if (params?.length) {
+  if (Array.isArray(params)) {
     console.log('快速開分');
-    params = {
-      action: params[0],
-      amount: params[1],
-      ip: params[2],
-      quick: true,
-    };
-  }
 
-  if (params.action === 'cashIn') url = `${AGENT_URL}/${CASH_IN}`;
-  if (params.action === 'cashOut') url = `${AGENT_URL}/${CASH_OUT}`;
-  if (params.action === 'promoIn') url = `${AGENT_URL}/${PROMO_IN}`;
+    if (params[1] === 'percentile'
+    || params[1] === 'thousands'
+    ) {
+      let digit;
+      if (params[1] === 'percentile') digit = 100;
+      if (params[1] === 'thousands') digit = 1000;
+      params = {
+        action: 'aftOutDigit',
+        ip: params[2],
+        quick: true,
+        digit,
+      };
+    } else {
+      params = {
+        action: params[0],
+        ip: params[2],
+        quick: true,
+        cashAmount: params[1],
+      };
+    }
+  }
 
   const headers = getHeaders();
 
-  const { ip, amount: cashAmount } = params || {};
+  const {
+    ip, cashAmount, action, digit, quick,
+  } = params || {};
 
   const response = await fetch(url, {
     method: 'POST',
     headers,
     body: JSON.stringify({
+      action,
+      digit,
       ip,
       cashAmount,
     }),
@@ -136,5 +153,5 @@ export const egmCashInOut = async (params) => {
   if (!response.ok) throw new Error(data.message || 'Could not operation cash in or cash out');
   if (data.status !== 200) throw new Error(data.message || 'cash in or cash out fail');
   console.log(data);
-  return { ...data, quick: params?.quick };
+  return { ...data, quick };
 };

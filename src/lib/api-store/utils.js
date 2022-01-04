@@ -17,9 +17,10 @@ export const JACKPOT_SETTING = 'sasClient/jackpotSetting';
 
 // Egm api
 export const EGM_LIST = 'sasClient/egmList';
-export const CASH_IN = 'sasClient/aftIn';
-export const CASH_OUT = 'sasClient/aftOut';
-export const PROMO_IN = 'sasClient/promoIn';
+// export const CASH_IN = 'sasClient/aftIn';
+// export const CASH_OUT = 'sasClient/aftOut';
+// export const PROMO_IN = 'sasClient/promoIn';
+export const AFT = 'sasClient/aft';
 
 // Auth api
 export const USER_LOGIN = 'login/sasClient';

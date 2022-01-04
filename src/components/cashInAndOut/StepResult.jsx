@@ -1,7 +1,7 @@
 import React from 'react';
 
 // Redux
-import { useSelector } from 'react-redux';
+// import { useSelector } from 'react-redux';
 
 // Antd
 import {
@@ -16,26 +16,30 @@ import PropTypes from 'prop-types';
 import styles from './StepResult.module.scss';
 
 const StepResult = ({ onFinish, requestErr, children }) => {
-  const { action } = useSelector((state) => state.egmCashInOutData);
+  // const { action } = useSelector((state) => state.egmCashInOutData);
 
-  const actionText = (actionType) => {
-    switch (actionType) {
-      case 'cashIn':
-        return '開分';
+  // const actionText = (actionType) => {
+  //   switch (actionType) {
+  //     case 'atfIn':
+  //       return '開分';
 
-      case 'cashOut':
-        return '洗分';
+  //     case 'aftOut':
+  //       return '洗分';
 
-      case 'promoIn':
-        return '招待分';
-      default:
-        return '未知';
-    }
-  };
+  //     case 'aftOutDigit':
+  //       return '洗分';
+
+  //     case 'promoIn':
+  //       return '招待分';
+
+  //     default:
+  //       return '未知';
+  //   }
+  // };
 
   const titleResultText = () => {
-    const text = actionText(action);
-    if (text === '未知') return '';
+    // const text = actionText(action);
+    // if (text === '未知') return '';
     if (requestErr) return '失敗';
     if (!requestErr) return '成功';
   };
@@ -44,7 +48,8 @@ const StepResult = ({ onFinish, requestErr, children }) => {
     <Result
       status={requestErr ? 'error' : 'success'}
       title={
-        actionText(action) + titleResultText()
+        // actionText(action) + titleResultText()
+        `操作${titleResultText()}`
         }
       subTitle=""
       extra={(
