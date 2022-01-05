@@ -196,6 +196,17 @@ export const egmIsDisconnect = (connectTime) => {
   return (new Date() - new Date(connectTime)) > (1 * 1000 * 60);
 };
 
+// 防抖
+export const debounce = (fn, wait) => {
+  let timeout = null;
+  return function (input) {
+    console.log(input);
+    input.persist();
+    if (timeout !== null) clearTimeout(timeout);
+    timeout = setTimeout(fn, wait, input);
+  };
+};
+
 //** for test */
 export const waitTime = (time) => new Promise((resolve) => {
   setTimeout(() => {

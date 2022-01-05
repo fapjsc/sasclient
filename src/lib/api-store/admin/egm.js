@@ -1,9 +1,6 @@
 import {
   AGENT_URL,
   EGM_LIST,
-  // CASH_IN,
-  // CASH_OUT,
-  // PROMO_IN,
   AFT,
   getHeaders,
 } from '../utils';
@@ -41,8 +38,8 @@ export const adminGetEgmList = async (params) => {
   } catch (error) {
     return {
       status: 400,
-      message: error.message,
-    } || 'Something went wrong';
+      message: error.message || 'Something went wrong',
+    };
   }
 };
 

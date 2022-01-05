@@ -26,6 +26,9 @@ export const AFT = 'sasClient/aft';
 export const USER_LOGIN = 'login/sasClient';
 export const GET_CRYPT_KEY = 'login/getKey';
 
+// Handover api
+export const HAND_OVER_DETAIL = 'https://jsonplaceholder.typicode.com/posts/1/comments';
+
 // Get Headers
 export const getHeaders = (token = null) => {
   const headers = new Headers();

@@ -16,7 +16,7 @@ import {
 
 //** Authorized Pages */
 import DashboardScreen from '../pages/DashboardScreen';
-import CashierScreen from '../pages/CashierScreen';
+import HandOverScreen from '../pages/HandOverScreen';
 // import AdminScreen from '../pages/AdminScreen';
 import OperatorScreen from '../pages/OperatorScreen';
 import MemberScreen from '../pages/MemberScreen';
@@ -71,7 +71,7 @@ export const authorizedRoutes = [
     exact: true,
     permissions: ['admin', 'op'],
     redirect: '/access-denied',
-    component: CashierScreen,
+    component: HandOverScreen,
     alias: 'cashier',
     name: '櫃檯接班明細',
     icon: <FileTextOutlined />,

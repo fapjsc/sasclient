@@ -1,8 +1,6 @@
 @import "@ant-design/pro-card/dist/card.css";
 @import "~antd/dist/antd.dark.css";
 
-
-
 /* Layout */
 .logo {
   height: 32px;
@@ -55,10 +53,6 @@
   }
 }
 
-// .test {
-//   display: none;
-// }
-
 .anticon-reload {
   cursor: pointer !important;
 }
@@ -84,5 +78,8 @@
   background: #ff4d4f;
 }
 
-
-
+.handover-detail-table {
+  .ant-table-content {
+    overflow: auto;
+  }
+}

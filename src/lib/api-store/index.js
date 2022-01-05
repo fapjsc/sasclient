@@ -28,3 +28,8 @@ export {
   adminEgmDelete,
   egmCashInOut,
 } from './admin/egm';
+
+// Handover
+export {
+  getHandOverDetail,
+} from './handover/handover';
