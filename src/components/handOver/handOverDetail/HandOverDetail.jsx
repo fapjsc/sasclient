@@ -1,115 +1,187 @@
-import React, { useState, useRef } from 'react';
-
-// Print
-import { useReactToPrint } from 'react-to-print';
+import React, { useRef } from 'react';
+import { Divider } from 'antd';
 
 // Antd
-import ProTable from '@ant-design/pro-table';
-import { PrinterOutlined, CoffeeOutlined } from '@ant-design/icons';
-import { Button } from 'antd';
+import ProDescriptions from '@ant-design/pro-descriptions';
+import ProForm, { ProFormText, ProFormGroup } from '@ant-design/pro-form';
 
 // Columns
-import columns from './columns';
-
-// Components
-import ModalConfirm from '../../ModalConfirm';
-
-// Apis
-// import { getHandOverDetail } from '../../../lib/api-store';
+import {
+  totalColumns, settlementColumns, payColumns, handoverAmountColumns,
+} from './columns';
 
 // Helpers
-import { getPrintPageStyle, getPrintTableEl, getQueryEl } from '../../../lib/helper';
+import { waitTime } from '../../../lib/helper';
 
 let data;
 
+const dividerStyle = {
+  color: '#8c8c8c',
+};
+
+const contentStyle = {
+  color: '#bfbfbf',
+};
+
+const labelStyle = {
+  color: '#bfbfbf',
+
+};
+
 const HandOverDetail = () => {
-  // Init State
-  const [isSort, setIsSort] = useState(false);
-  const [showModalConfirm, setShowModalConfirm] = useState(false);
+  const actionRef = useRef();
 
-  // Ref
-  const printRef = useRef();
-  const searchRef = useRef();
-
-  const requestPromise = async (params) => {
-    console.log(params);
-    if (!isSort) {
-      // data = await getHandOverDetail(params);
-    }
-    setTimeout(() => {
-      if (isSort) setIsSort(false);
-    }, 0);
-
+  //** 總計  */
+  const requestPromiseTotal = async () => {
+    // data = await getMeterRecord(params);
+    data = {
+      account: '23523212',
+      cashierIn: '20200730',
+      tickIn: '-12121',
+      tickOut: '124323',
+      cardIn: '124323',
+      cardOut: '124323',
+      aftIn: '124323',
+      aftOut: '124323',
+      aftInEgm: '124323',
+      aftOutEgm: '124323',
+      totalIn: '124323',
+      totalOut: '124323',
+      jackpot: '124323',
+    };
     return Promise.resolve({
       success: true,
       data: data,
     });
   };
 
-  const handoverClickHandler = () => {
-    console.log('click');
-    setShowModalConfirm(true);
+  //** 勞動報酬 */
+  const requestPromisePay = async () => {
+    // data = await getMeterRecord(params);
+    data = {
+      settlementAmount: '235232',
+      totalRevenue: '20200730',
+    };
+    return Promise.resolve({
+      success: true,
+      data: data,
+    });
   };
 
-  const handlePrint = useReactToPrint({
-    content: () => printRef.current,
-    pageStyle: getPrintPageStyle(),
-
-  });
-
-  const handlePrintClick = () => {
-    const printTableEl = getPrintTableEl('.handover-detail-table');
-    const printQueryEl = getQueryEl(searchRef);
-    printTableEl.prepend(printQueryEl);
-    printRef.current = printTableEl;
-    handlePrint();
-    printQueryEl.remove();
+  //** 交班金額 */
+  const requestPromiseHandoverAmount = async () => {
+    // data = await getMeterRecord(params);
+    data = {
+      counterAmount: '235232',
+      egmIn: '20200730',
+      total: '0',
+    };
+    return Promise.resolve({
+      success: true,
+      data: data,
+    });
   };
+
+  //** 結算查詢 */
+  const requestPromiseTotalSettlement = async () => {
+    // data = await getMeterRecord(params);
+    data = {
+      totalClose: '235232',
+      balance: '20200730',
+    };
+    return Promise.resolve({
+      success: true,
+      data: data,
+    });
+  };
+
+  const onFinishHandler = async (value) => {
+    await waitTime(2000);
+    console.log(value);
+  };
+
   return (
     <>
-      <ModalConfirm visible={showModalConfirm} setVisible={setShowModalConfirm} />
-      <ProTable
-        className="handover-detail-table"
-        columns={columns}
-        debounceTime={300}
-        rowKey="id"
-        dateFormatter="string"
-        headerTitle="Handover Detail"
-        request={requestPromise}
-        beforeSearchSubmit={(params) => {
-          searchRef.current = params;
-          return params;
-        }}
-        onChange={(pagination, filters, sorter, extra) => {
-          if (extra.action === 'sort') setIsSort(true);
-        }}
-        search={{
-          layout: 'vertical',
-          defaultCollapsed: true,
-        }}
-        pagination={{
-          defaultPageSize: 10,
-          showQuickJumper: true,
-        }}
-        toolBarRender={() => [
-          <Button
-            key="button"
-            icon={<PrinterOutlined />}
-            onClick={handlePrintClick}
-            type="primary"
-          >
-            列印
-          </Button>,
-          <Button
-            key="button"
-            icon={<CoffeeOutlined />}
-            onClick={handoverClickHandler}
-            type="danger"
-          >
-            交班
-          </Button>,
-        ]}
+      <Divider
+        dashed
+        plain
+        style={dividerStyle}
+        orientation="left"
+      >
+        總計
+      </Divider>
+      <ProDescriptions
+        request={requestPromiseTotal}
+        columns={totalColumns}
+        actionRef={actionRef}
+        labelStyle={labelStyle}
+        contentStyle={contentStyle}
       />
+      <br />
+
+      <Divider
+        dashed
+        plain
+        style={dividerStyle}
+        orientation="left"
+      >
+        勞動報酬
+      </Divider>
+      <ProDescriptions
+        request={requestPromisePay}
+        columns={payColumns}
+        labelStyle={labelStyle}
+        contentStyle={contentStyle}
+      />
+      <br />
+
+      <Divider
+        dashed
+        plain
+        style={dividerStyle}
+        orientation="left"
+      >
+        交班金額
+      </Divider>
+      <ProDescriptions
+        request={requestPromiseHandoverAmount}
+        columns={handoverAmountColumns}
+        labelStyle={labelStyle}
+        contentStyle={contentStyle}
+      />
+      <br />
+
+      <Divider
+        dashed
+        plain
+        style={dividerStyle}
+        orientation="left"
+      >
+        結算查詢
+      </Divider>
+      <ProDescriptions
+        request={requestPromiseTotalSettlement}
+        columns={settlementColumns}
+        labelStyle={labelStyle}
+        contentStyle={contentStyle}
+      />
+      <br />
+      <ProForm
+        onFinish={onFinishHandler}
+      >
+        <ProFormGroup>
+          <ProFormText
+            width="sm"
+            name="handover"
+            label="交班餘額(3)"
+          />
+          <ProFormText
+            width="sm"
+            name="other"
+            label="其他收入(4)"
+          />
+        </ProFormGroup>
+      </ProForm>
     </>
   );
 };

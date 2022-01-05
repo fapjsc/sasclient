@@ -1,34 +1,55 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 // Antd
-import { Tabs } from 'antd';
+import { Tabs, Button } from 'antd';
+import { CoffeeOutlined } from '@ant-design/icons';
 
 // Components
 import HandOverDetail from '../components/handOver/handOverDetail/HandOverDetail';
+import HandOverEgmDetail from '../components/handOver/handEgmOverDetail/HandOverEgmDetail';
+import ModalConfirm from '../components/ModalConfirm';
 
 const { TabPane } = Tabs;
 
 const CashierScreen = () => {
+  // Init State
+  const [showModalConfirm, setShowModalConfirm] = useState(false);
   const callback = (key) => {
-    // eslint-disable-next-line
     console.log(key);
   };
-  return (
-    <Tabs
-      defaultActiveKey="handover-detail"
-      onChange={callback}
-      tabBarGutter={60}
-      size="lg"
-      // style={{ padding: '12px 0' }}s
-    >
-      <TabPane tab="交班明細" key="handover-detail">
-        <HandOverDetail />
-      </TabPane>
 
-      <TabPane tab="交班記錄" key="handover-history">
-        交班記錄
-      </TabPane>
-    </Tabs>
+  const handoverClickHandler = () => {
+    console.log('click');
+    setShowModalConfirm(true);
+  };
+
+  const OperationsSlot = {
+    right: <Button onClick={handoverClickHandler} type="danger" icon={<CoffeeOutlined />}>交班</Button>,
+  };
+
+  return (
+    <>
+      <ModalConfirm visible={showModalConfirm} setVisible={setShowModalConfirm} />
+      <Tabs
+        defaultActiveKey="handover-egm-detail"
+        onChange={callback}
+        tabBarGutter={60}
+        size="lg"
+        tabBarExtraContent={OperationsSlot}
+      >
+        <TabPane tab="EGM明細" key="handover-egm-detail">
+          <HandOverEgmDetail />
+        </TabPane>
+
+        <TabPane tab="統計明細" key="handover-detail">
+          <HandOverDetail />
+        </TabPane>
+
+        <TabPane tab="交班記錄" key="handover-history">
+          交班記錄
+        </TabPane>
+      </Tabs>
+    </>
   );
 };
 

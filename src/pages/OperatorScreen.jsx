@@ -3,6 +3,9 @@ import React from 'react';
 // Antd
 import { Tabs } from 'antd';
 
+// Components
+import OperatorHistory from '../components/operator/OperatorHistory';
+
 const { TabPane } = Tabs;
 
 const OperatorScreen = () => {
@@ -56,7 +59,7 @@ const OperatorScreen = () => {
       </TabPane>
 
       <TabPane tab="操作記錄" key="4">
-        操作記錄
+        <OperatorHistory />
       </TabPane>
     </Tabs>
   );
