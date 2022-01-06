@@ -4,7 +4,8 @@ import React from 'react';
 import { Tabs } from 'antd';
 
 // Components
-import OperatorHistory from '../components/operator/OperatorHistory';
+import OperatorHistory from '../components/operator/history/OperatorHistory';
+import CashierInOut from '../components/operator/cashier/CashierInOut';
 
 const { TabPane } = Tabs;
 
@@ -23,10 +24,11 @@ const OperatorScreen = () => {
       style={{ padding: '12px' }}
     >
       <TabPane tab="櫃檯金額" key="1">
-        <ul>
+        <CashierInOut />
+        {/* <ul>
           <li>開班週轉金</li>
           <li>櫃檯抽屜現金補入或提取</li>
-        </ul>
+        </ul> */}
       </TabPane>
 
       <TabPane tab="票務" key="2">

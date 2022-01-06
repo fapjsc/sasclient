@@ -8,13 +8,13 @@ import ProTable from '@ant-design/pro-table';
 import { PrinterOutlined } from '@ant-design/icons';
 import { Button } from 'antd';
 
-// Columns
-import columns from './columns';
-
 // Helpers
 import {
   getPrintPageStyle, getPrintTableEl, getQueryEl,
-} from '../../lib/helper';
+} from '../../../lib/helper';
+
+// Columns
+import columns from './columns';
 
 let data;
 

@@ -6,7 +6,7 @@ import { connectWithSocket, closeSocketWithAgent } from '../lib/socketConnection
 // Components
 import MachineList from '../components/gameMachine/MachineList';
 
-const HomeScreen = () => {
+const DashboardScreen = () => {
   useEffect(() => {
     connectWithSocket();
 
@@ -22,4 +22,4 @@ const HomeScreen = () => {
   );
 };
 
-export default HomeScreen;
+export default DashboardScreen;

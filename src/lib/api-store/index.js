@@ -33,3 +33,10 @@ export {
 export {
   getHandOverDetail,
 } from './handover/handover';
+
+// Operator
+export {
+  cashierOperator,
+  GetCashierAmounts,
+  GetCashierRecord,
+} from './operator/operator';

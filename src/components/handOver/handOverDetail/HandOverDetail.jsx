@@ -13,19 +13,21 @@ import {
 // Helpers
 import { waitTime } from '../../../lib/helper';
 
+// Styles
+import variable from '../../../sass/variable.module.scss';
+
 let data;
 
 const dividerStyle = {
-  color: '#8c8c8c',
+  color: variable['grey-dark'],
 };
 
 const contentStyle = {
-  color: '#bfbfbf',
+  color: variable['grey-light'],
 };
 
 const labelStyle = {
-  color: '#bfbfbf',
-
+  color: variable['grey-light'],
 };
 
 const HandOverDetail = () => {

@@ -23,6 +23,10 @@ export const AFT = 'sasClient/aft';
 export const USER_LOGIN = 'login/sasClient';
 export const GET_CRYPT_KEY = 'login/getKey';
 
+// Operator api
+export const CASHIER_OPERATOR = 'sasClient/cashier';
+export const GET_CASHIER_RECORD = 'sasClient/cashierRecord';
+
 // Handover api
 export const HAND_OVER_DETAIL = 'https://jsonplaceholder.typicode.com/posts/1/comments';
 
