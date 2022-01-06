@@ -4,8 +4,8 @@ import React from 'react';
 import { Tabs } from 'antd';
 
 // Components
-import OperatorHistory from '../components/operator/history/OperatorHistory';
-import CashierInOut from '../components/operator/cashier/CashierInOut';
+import OperatorHistory from '../components/cashier/history/OperatorHistory';
+import CashierInOut from '../components/cashier/cashier/CashierInOut';
 
 const { TabPane } = Tabs;
 

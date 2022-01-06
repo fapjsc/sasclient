@@ -15,19 +15,19 @@ import {
 } from 'antd';
 
 // Actions
-import { setEgmCashInOut } from '../../store/actions/egmActions';
+import { setEgmCashInOut } from '../../../store/actions/egmActions';
 
 // Components
-import CashInAndOut from '../cashInAndOut/CashInAndOut';
+import CashInAndOut from '../../cashInAndOut/CashInAndOut';
 
 // Config
-import { EgmGpLpCode } from '../../config/egmStatus';
+import { EgmGpLpCode } from '../../../config/egmStatus';
 
 // Icons
 import {} from '@ant-design/icons';
 
 // Helpers
-import { egmIsDisconnect } from '../../lib/helper';
+import { egmIsDisconnect } from '../../../lib/helper';
 
 // Style
 import classes from './MachineList.module.scss';

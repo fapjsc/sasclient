@@ -34,16 +34,16 @@ import StepDescriptions from './StepDescription';
 import StepResult from './StepResult';
 
 // Actions
-import { setEgmCashInOut, restEgmCashInOut } from '../../store/actions/egmActions';
+import { setEgmCashInOut, restEgmCashInOut } from '../../../store/actions/egmActions';
 
 // Apis
-import { egmCashInOut } from '../../lib/api-store';
+import { egmCashInOut } from '../../../lib/api-store';
 
 // Helpers
-import { _getUserName } from '../../lib/helper';
+import { _getUserName } from '../../../lib/helper';
 
 // Hooks
-import useHttp from '../../hooks/useHttp';
+import useHttp from '../../../hooks/useHttp';
 
 // import classes from './CashForm.module.scss';
 
