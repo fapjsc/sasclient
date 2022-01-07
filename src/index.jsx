@@ -6,7 +6,7 @@ import { ToastContainer } from 'react-toastify';
 
 // Antd i18n
 import { ConfigProvider } from 'antd';
-import zhCN from 'antd/lib/locale/zh_TW';
+import zhTW from 'antd/lib/locale/zh_TW';
 // import enUS from 'antd/lib/locale/en_US';
 
 // Moment
@@ -22,7 +22,8 @@ import { I18nProvider } from './i18n';
 
 // locals
 import {
-  TW, CN, JP, US,
+  // eslint-disable-next-line
+  zh_TW, zh_CN, ja_JP, en_US,
 } from './i18n/locales';
 
 // Components
@@ -34,25 +35,26 @@ import reportWebVitals from './reportWebVitals';
 // Styles
 import 'react-toastify/dist/ReactToastify.css';
 
+import { i18nTypes } from './config/config';
+
 // moment i18n
-moment.locale = 'zh_TW';
+moment.locale = localStorage.getItem('locale') || 'zh_TW';
 
 // Custom i18n
-const locales = ['en_US', 'zh_TW', 'ja_JP', 'zh_CN'];
+const locales = i18nTypes.map((el) => el.key);
 
 const translations = {
-  // 'en-US': require('./locales/en-US').default,
-  zh_CN: CN,
-  zh_TW: TW,
-  ja_JP: JP,
-  en_US: US,
+  zh_CN,
+  zh_TW,
+  ja_JP,
+  en_US,
 };
 
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
       <ToastContainer theme="colored" />
-      <ConfigProvider locale={zhCN}>
+      <ConfigProvider locale={zhTW}>
         <I18nProvider locales={locales} translations={translations}>
           <App />
         </I18nProvider>

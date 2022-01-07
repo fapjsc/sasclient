@@ -1,6 +1,8 @@
 import {
   SET_USER_INFO,
-  USER_LOGOUT,
+  SYSTEM_LOG_OUT,
+  USER_LOGIN,
+  USER_LOG_OUT,
 } from '../types/userType';
 
 const initialState = {
@@ -18,12 +20,25 @@ export const userReducer = (state = initialState, action) => {
         ...state,
         token: action.userInfo.token,
         permission: action.userInfo.permission,
-        account: action.userInfo.account,
         name: action.userInfo.name,
+        account: null,
       };
 
-    case USER_LOGOUT:
+    case SYSTEM_LOG_OUT:
       return initialState;
+
+    case USER_LOG_OUT:
+      return {
+        ...state,
+        account: null,
+      };
+
+    case USER_LOGIN: {
+      return {
+        ...state,
+        account: action.user,
+      };
+    }
 
     default:
       return state;

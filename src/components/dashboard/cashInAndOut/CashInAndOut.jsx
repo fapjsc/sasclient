@@ -9,7 +9,7 @@ import { Modal } from 'antd';
 import { useDispatch } from 'react-redux';
 
 // Actions
-import { restEgmCashInOut } from '../../store/actions/egmActions';
+import { restEgmCashInOut } from '../../../store/actions/egmActions';
 
 // Components
 import CashForm from './CashForm';
@@ -25,17 +25,15 @@ const CashInAndOut = ({ visible, setVisible, selectMachine }) => {
     setVisible(false);
   };
   return (
-    <>
-      <Modal title="設定" visible={visible} onCancel={handleCancel} width={800} footer={null}>
-        <CashForm
-          setVisible={setVisible}
-          selectMachine={selectMachine}
-          handleCancel={handleCancel}
-          current={current}
-          setCurrent={setCurrent}
-        />
-      </Modal>
-    </>
+    <Modal title="設定" visible={visible} onCancel={handleCancel} width={800} footer={null}>
+      <CashForm
+        setVisible={setVisible}
+        selectMachine={selectMachine}
+        handleCancel={handleCancel}
+        current={current}
+        setCurrent={setCurrent}
+      />
+    </Modal>
   );
 };
 

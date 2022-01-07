@@ -1,40 +1,47 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
-// Router Props
-import { useHistory } from 'react-router-dom';
+// Redux
+import { useSelector, useDispatch } from 'react-redux';
 
 // Antd
 import {
-  Space, Menu, Dropdown, Avatar,
+  Space, Menu, Dropdown, Avatar, Button,
 } from 'antd';
 import { LogoutOutlined, GlobalOutlined } from '@ant-design/icons';
 
 // Hooks
 import { useI18n } from '../i18n';
 
-// Helpers
-import { _getUserName, _logOutHandler } from '../lib/helper';
+// Socket
+import {
+  connectWithSocket,
+  closeSocketWithAgent,
+} from '../lib/socketConnection';
 
 // Components
 import AutoLogout from '../components/AutoLogout';
 import Clock from '../components/Clock';
+import ModalUserLogin from '../components/modal/ModalUserLogin';
 
-// Socket
-// import { connectWithSocket } from '../lib/socketConnection';
+// Actions
+import { userLogoutAction } from '../store/actions/userActions';
+
+// Config
+import { i18nTypes } from '../config/config';
 
 const HeaderContent = () => {
-  // Router Props
-  const history = useHistory();
+  // Init State
+  const [showLoginModel, setShowLoginModel] = useState(false);
 
+  // Redux
+  const { account } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+
+  // Hooks
   const { setLocale, getLocale } = useI18n();
 
   const handleSelectLanguage = (item) => {
     setLocale(item.key);
-  };
-
-  const logoutHandler = () => {
-    _logOutHandler(true);
-    history.replace('/login');
   };
 
   const i18nMenu = (
@@ -43,59 +50,37 @@ const HeaderContent = () => {
         handleSelectLanguage(e);
       }}
     >
-      <Menu.Item key="zh_TW">
-        <Space>
-          <p>
-            🇹🇼
-          </p>
-          <p>
-            繁體中文
-          </p>
-        </Space>
-      </Menu.Item>
-      <Menu.Item key="ja_JP">
-        <Space>
-          <p>
-            🇯🇵
-          </p>
-          <p>
-            日本語
-          </p>
-        </Space>
-      </Menu.Item>
-      <Menu.Item key="en_US">
-        <Space>
-          <p>
-            🇺🇸
-          </p>
-          <p>
-            English
-          </p>
-        </Space>
-      </Menu.Item>
-      <Menu.Item key="zh_CN">
-        <Space>
-          <p>
-            🇨🇳
-          </p>
-          <p>
-            简体中文
-          </p>
-        </Space>
-      </Menu.Item>
+      {i18nTypes.map((el) => (
+        <Menu.Item key={el.key}>
+          <Space>
+            <p>{el.icon}</p>
+            <p>{el.lan}</p>
+          </Space>
+        </Menu.Item>
+      ))}
     </Menu>
   );
 
+  const userLogoutHandler = () => {
+    dispatch(userLogoutAction());
+  };
+
+  useEffect(() => {
+    connectWithSocket();
+
+    return () => {
+      closeSocketWithAgent();
+    };
+  }, []);
+
   const avatarMenu = (
     <Menu>
-      <Menu.Item key="logout" onClick={logoutHandler}>
+      <Menu.Item key="logout" onClick={userLogoutHandler}>
         <Space>
           <p>
             <LogoutOutlined />
           </p>
-          <p>
-            離開系統
-          </p>
+          <p>登出</p>
         </Space>
       </Menu.Item>
     </Menu>
@@ -107,39 +92,52 @@ const HeaderContent = () => {
     localStorage.setItem('locale', locale);
   });
 
-  // useEffect(() => {
-  //   connectWithSocket();
-  // }, []);
+  const onCancelHandler = () => {
+    setShowLoginModel(false);
+  };
 
   return (
     <>
+      <ModalUserLogin onVisible={showLoginModel} onCancel={onCancelHandler} />
+
       <Space>
         <Clock />
       </Space>
-      <Space style={{
-        display: 'flex',
-        float: 'right',
-        marginLeft: 'auto',
-        overflow: 'hidden',
-        marginRight: '1rem',
-      }}
+
+      <Space
+        style={{
+          display: 'flex',
+          float: 'right',
+          marginLeft: 'auto',
+          overflow: 'hidden',
+          marginRight: '1rem',
+        }}
       >
-        <Space style={{ marginRight: '3rem' }}>
-          <Dropdown overlay={avatarMenu}>
-            <span style={{ cursor: 'pointer' }}>
-              <Avatar
-                src="https://joeschmoe.io/api/v1/random"
-                size="small"
-                menu={avatarMenu}
-                style={{ backgroundColor: '#91d5ff', marginBottom: '1px' }}
-              />
-              <span style={{ marginLeft: '5px' }}>{_getUserName()?.toUpperCase()}</span>
-            </span>
-          </Dropdown>
-        </Space>
+        {account && (
+          <Space style={{ marginRight: '3rem' }}>
+            <Dropdown overlay={avatarMenu}>
+              <span style={{ cursor: 'pointer' }}>
+                <Avatar
+                  src="https://joeschmoe.io/api/v1/random"
+                  size="small"
+                  menu={avatarMenu}
+                  style={{ backgroundColor: '#91d5ff', marginBottom: '1px' }}
+                />
+
+                <span style={{ marginLeft: '5px' }}>{account}</span>
+              </span>
+            </Dropdown>
+          </Space>
+        )}
+
+        {!account && (
+          <div style={{ marginRight: '1rem' }}>
+            <Button onClick={() => setShowLoginModel(true)}>LOGIN</Button>
+          </div>
+        )}
 
         <Dropdown overlay={i18nMenu}>
-          <Space style={{ cursor: 'pointer' }}>
+          <Space style={{ cursor: 'pointer', marginBottom: '1px' }}>
             <Avatar
               icon={<GlobalOutlined />}
               size="small"
@@ -148,11 +146,9 @@ const HeaderContent = () => {
             />
           </Space>
         </Dropdown>
-
       </Space>
 
       <AutoLogout />
-
     </>
   );
 };

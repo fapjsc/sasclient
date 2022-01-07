@@ -3,7 +3,7 @@ import store from '../store/store';
 
 // Actions
 // import { restEgmCashInOut } from '../store/actions/egmActions';
-import { userLogout } from '../store/actions/userActions';
+import { systemLogout } from '../store/actions/userActions';
 
 const key = CryptoJS.enc.Utf8.parse('N2841A3412APCD6F'); // 16位進制key
 const iv = CryptoJS.enc.Utf8.parse('AUCDTF12H41P34Y2'); //  16位進制key的偏移量
@@ -66,7 +66,6 @@ const _removeLocalStorage = (remoteKey) => {
   localStorage.removeItem(remoteKey);
 };
 
-// /** 取Token*/
 export const _getUserData = (getKey) => {
   if (!localStorage) return false;
 
@@ -135,7 +134,7 @@ export const _removeLocalStorageExLocale = () => {
 
 //第一個參數：決定是不是要清除localStorage, 預設是null
 export const _logOutHandler = (clearStorage = null) => {
-  store.dispatch(userLogout());
+  store.dispatch(systemLogout());
   if (clearStorage) _removeLocalStorageExLocale();
 };
 
@@ -197,15 +196,14 @@ export const egmIsDisconnect = (connectTime) => {
 };
 
 // 防抖
-export const debounce = (fn, wait) => {
-  let timeout = null;
-  return function (input) {
-    console.log(input);
-    input.persist();
-    if (timeout !== null) clearTimeout(timeout);
-    timeout = setTimeout(fn, wait, input);
-  };
-};
+// export const debounce = (fn, wait) => {
+//   let timeout = null;
+//   return function (input) {
+//     input.persist();
+//     if (timeout !== null) clearTimeout(timeout);
+//     timeout = setTimeout(fn, wait, input);
+//   };
+// };
 
 //** for test */
 export const waitTime = (time) => new Promise((resolve) => {

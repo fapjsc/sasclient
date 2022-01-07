@@ -15,6 +15,9 @@ import { cashierOperator, GetCashierAmounts } from '../../../lib/api-store';
 // Hooks
 import useHttp from '../../../hooks/useHttp';
 
+// Helpers
+import { thousandsFormat } from '../../../lib/helper';
+
 // Styles
 import styles from './CashierInOut.module.scss';
 import variable from '../../../sass/variable.module.scss';
@@ -35,8 +38,16 @@ const options = [
 ];
 
 const totalAmountStyle = {
-  color: variable['gold-5'],
   fontSize: variable['font-size-2'],
+  fontWeight: 'bold',
+};
+
+const gold5 = {
+  color: variable['gold-5'],
+};
+
+const red5 = {
+  color: variable['red-5'],
 };
 
 const CashierInOut = () => {
@@ -84,19 +95,32 @@ const CashierInOut = () => {
     resultHandler(result, value);
   };
 
-  //** Get Amount */
   const moneyAmountRender = (dom) => {
     const domIsNum = _.isNumber(dom);
     if (domIsNum && getAmountStatus === 'completed' && !getAmountError) {
       return (
-        <Space className={domIsNum ? styles['fade-in'] : styles['fade-out']}>
-          <span style={totalAmountStyle}>$</span>
-          <span style={totalAmountStyle}>{dom}</span>
+        <Space className={styles['fade-in']}>
+          <span style={{ ...totalAmountStyle, ...gold5 }}>$</span>
+          <span style={{ ...totalAmountStyle, ...gold5 }}>{thousandsFormat(dom)}</span>
         </Space>
       );
     }
 
-    return <span className={!domIsNum ? styles['fade-in'] : styles['fade-out']} style={totalAmountStyle}>-</span>;
+    return <span className={styles['fade-in']} style={totalAmountStyle}>-</span>;
+  };
+
+  const moneyBalanceRender = (dom) => {
+    // const domIsNum = _.isNumber(dom);
+    if (dom) {
+      return (
+        <Space className={styles['fade-in']}>
+          <span style={{ ...totalAmountStyle, ...red5 }}>$</span>
+          <span style={{ ...totalAmountStyle, ...red5 }}>{thousandsFormat(dom)}</span>
+        </Space>
+      );
+    }
+
+    return <span className={styles['fade-in']} style={totalAmountStyle}>-</span>;
   };
 
   useEffect(() => {
@@ -135,25 +159,41 @@ const CashierInOut = () => {
   ];
 
   return (
-    <Card border={false} style={{ maxWidth: '35rem' }}>
-      <ProDescriptions
-        actionRef={actionRef}
-        title="目前金額"
-        dataSource={amountData}
-        extra={descriptionExtra}
-      >
-        <ProDescriptions.Item render={moneyAmountRender} dataIndex="amount" />
-      </ProDescriptions>
+    <Card
+      title="櫃檯"
+      extra={descriptionExtra}
+      border={false}
+      style={{ maxWidth: '35rem' }}
+    >
+      <Space>
+        <ProDescriptions
+          actionRef={actionRef}
+          title="應有金額"
+          dataSource={amountData}
+        >
+          <ProDescriptions.Item render={moneyAmountRender} dataIndex="amount" />
+        </ProDescriptions>
+
+        <ProDescriptions
+          title="差額"
+          dataSource={{ balance: 1113 }}
+        >
+          <ProDescriptions.Item render={moneyBalanceRender} dataIndex="balance" />
+        </ProDescriptions>
+      </Space>
 
       <Divider style={{ color: variable['grey-dark'] }} orientation="left">設定</Divider>
 
-      <ProForm onFinish={onFinishHandler} scrollToFirstError>
+      <ProForm onFinish={onFinishHandler}>
         <ProFormMoney
           name="amounts"
           label="金額"
           width="30%"
           customSymbol="$"
           rules={fromRules}
+          fieldProps={{
+            autoFocus: true,
+          }}
         />
         <ProFormRadio.Group name="action" options={options} />
       </ProForm>

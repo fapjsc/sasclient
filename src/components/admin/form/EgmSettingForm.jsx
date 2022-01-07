@@ -100,7 +100,18 @@ const EgmUpdateForm = (props) => {
               rules={[
                 {
                   required: true,
-                  message: '請輸入EGM number',
+                  message: '請輸入EGM Number',
+                },
+              ]}
+            />
+
+            <ProFormText
+              name="model"
+              label="EGM Model"
+              rules={[
+                {
+                  required: true,
+                  message: '請輸入EGM Model',
                 },
               ]}
             />
@@ -158,6 +169,7 @@ EgmUpdateForm.propTypes = {
     number: PropTypes.string,
     denomination: PropTypes.number,
     labels: PropTypes.arrayOf(PropTypes.string),
+    model: PropTypes.string,
   }),
 };
 

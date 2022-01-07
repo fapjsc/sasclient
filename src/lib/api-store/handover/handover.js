@@ -7,7 +7,9 @@ import {
 export const getHandOverDetail = async (params) => {
   console.log(params);
   try {
-    const url = `${AGENT_URL}/${HAND_OVER_DETAIL}`;
+    const { created } = params || {};
+    const createdStr = created ? `startTime=${created[0]}&endTime=${created[1]}&` : '';
+    const url = `${AGENT_URL}/${HAND_OVER_DETAIL}?${createdStr}`;
     const headers = getHeaders();
     const response = await fetch(url, { headers });
     const data = await response.json();

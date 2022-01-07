@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 const columns = [
   {
     title: 'ID',
@@ -15,18 +17,6 @@ const columns = [
     title: 'Model',
     key: 'model',
     dataIndex: 'model',
-    hideInSearch: true,
-  },
-  {
-    title: 'Cashless_in',
-    key: 'cashlessIn',
-    dataIndex: 'cashlessIn',
-    hideInSearch: true,
-  },
-  {
-    title: 'cashless_out',
-    key: 'cashlessOut',
-    dataIndex: 'cashlessOut',
     hideInSearch: true,
   },
   {
@@ -114,11 +104,18 @@ const columns = [
     hideInSearch: true,
   },
   {
-    title: 'Created',
+    title: 'Time',
     key: 'created',
     dataIndex: 'created',
+    sorter: (a, b) => {
+      const aTime = new Date(a.created).getTime();
+      const bTime = new Date(b.created).getTime();
+      return aTime - bTime;
+    },
+    valueType: 'dateTimeRange',
+    className: 'cancel-icon',
+    render: (e) => moment(e.props.text).format('YYYY-MM-DD HH:mm:ss'),
   },
-
 ];
 
 export default columns;

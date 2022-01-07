@@ -1,24 +1,36 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 
-// Socket
-import { connectWithSocket, closeSocketWithAgent } from '../lib/socketConnection';
+// Antd
+import { Tabs } from 'antd';
 
 // Components
-import MachineList from '../components/gameMachine/MachineList';
+import MachineList from '../components/dashboard/gameMachine/MachineList';
+
+const { TabPane } = Tabs;
 
 const DashboardScreen = () => {
-  useEffect(() => {
-    connectWithSocket();
-
-    return () => {
-      closeSocketWithAgent();
-    };
-  }, []);
-
+  const callback = (key) => {
+    // eslint-disable-next-line
+    console.log(key);
+  };
   return (
-    <div>
-      <MachineList />
-    </div>
+    <Tabs
+      defaultActiveKey="egm"
+      onChange={callback}
+      tabBarGutter={60}
+      size="lg"
+      style={{ padding: '12px' }}
+    >
+
+      <TabPane tab="EGM狀態" key="egm">
+        <MachineList />
+      </TabPane>
+
+      <TabPane tab="統計圖表" key="charts">
+        統計圖表
+      </TabPane>
+
+    </Tabs>
   );
 };
 

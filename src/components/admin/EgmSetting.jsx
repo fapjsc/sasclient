@@ -115,7 +115,12 @@ const EgmSetting = () => {
       dataIndex: 'ip',
       copyable: true,
     },
-
+    {
+      title: 'Model',
+      key: 'model',
+      dataIndex: 'model',
+      copyable: true,
+    },
     {
       title: 'Number',
       key: 'number',
@@ -194,7 +199,7 @@ const EgmSetting = () => {
           }}
           onClick={() => {
             const {
-              id, ip, number, labels, denomination,
+              id, model, ip, number, labels, denomination,
             } = record;
 
             const formatLabels = [];
@@ -207,6 +212,7 @@ const EgmSetting = () => {
               id,
               ip,
               number,
+              model,
               labels: formatLabels,
               denomination,
             });
@@ -224,7 +230,6 @@ const EgmSetting = () => {
             cursor: 'pointer',
           }}
           onClick={() => {
-            // console.log('pre-delete', record);
             showDeleteModal(record.id, record.number);
           }}
         >
@@ -242,7 +247,7 @@ const EgmSetting = () => {
         columns={columns}
         debounceTime={300}
         rowKey="id"
-        dateFormatter="string"
+        // dateFormatter="string"
         headerTitle="EGM設定"
         request={requestPromise}
         search={{

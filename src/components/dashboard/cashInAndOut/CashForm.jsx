@@ -91,9 +91,9 @@ const CashForm = ({
 
   //** Http狀態監聽 */
   useEffect(() => {
-    console.log(cashInOutData);
     if (cashInOutError) {
       toast.error(cashInOutError);
+      return;
     }
 
     if (cashInOutStatus === 'completed'

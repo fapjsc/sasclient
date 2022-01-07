@@ -65,6 +65,7 @@ const HandOverEgmDetail = () => {
       dateFormatter="string"
       headerTitle="Handover Detail"
       request={requestPromise}
+      scroll={{ x: true }}
       beforeSearchSubmit={(params) => {
         searchRef.current = params;
         return params;

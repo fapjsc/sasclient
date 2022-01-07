@@ -28,7 +28,7 @@ import { setUserInfo } from '../store/actions/userActions';
 import useHttp from '../hooks/useHttp';
 
 // Apis
-import { userLogin, getCryptKey } from '../lib/api-store';
+import { systemLogin, getCryptKey } from '../lib/api-store';
 
 // Helpers
 import { _setToken, _removeLocalStorageExLocale } from '../lib/helper';
@@ -63,7 +63,7 @@ const Login = () => {
     data: loginData,
     error: loginError,
     sendRequest: loginRequest,
-  } = useHttp(userLogin);
+  } = useHttp(systemLogin);
 
   const {
     // eslint-disable-next-line

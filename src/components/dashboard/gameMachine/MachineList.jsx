@@ -11,14 +11,15 @@ import { toast } from 'react-toastify';
 
 // Antd
 import {
-  Tabs, Badge, Dropdown, Menu, Space,
+  Dropdown, Menu, Space,
 } from 'antd';
 
 // Actions
 import { setEgmCashInOut } from '../../../store/actions/egmActions';
 
 // Components
-import CashInAndOut from '../../cashInAndOut/CashInAndOut';
+import CashInAndOut from '../cashInAndOut/CashInAndOut';
+import EgmStatisticCard from '../egmStatisticCard/EgmStatisticCard';
 
 // Config
 import { EgmGpLpCode } from '../../../config/egmStatus';
@@ -31,8 +32,6 @@ import { egmIsDisconnect } from '../../../lib/helper';
 
 // Style
 import classes from './MachineList.module.scss';
-
-const { TabPane } = Tabs;
 
 //** All Menu */
 const AllMenu = ({ item, isDisconnect }) => (
@@ -60,44 +59,32 @@ const AllMenu = ({ item, isDisconnect }) => (
   </Menu>
 );
 
+// const category = {
+//   total: { count: 0 },
+//   success: { count: 0 },
+//   process: { count: 0 },
+//   warning: { count: 0 },
+//   danger: { count: 0 },
+//   default: { count: 0 },
+// };
+
 //** Machine List */
 const MachineList = () => {
   // Init State
-  const [tabPosition] = useState('top');
   const [showCashInAndOut, setShowCashInAndOut] = useState(false);
 
   // Redux
   const dispatch = useDispatch();
   const { egmStatus } = useSelector((state) => state);
 
-  const onChangeHandler = (e) => {
-    // eslint-disable-next-line
-    console.log(e);
+  const category = {
+    total: { count: egmStatus.length },
   };
 
   const onClickHandler = (ip) => {
     setShowCashInAndOut(true);
     dispatch(setEgmCashInOut({ ip }));
   };
-
-  // useEffect(() => {
-  //   egmStatus.forEach((el) => {
-  //     // console.log(el);
-
-  //     if (el.status !== '0x00' && false) {
-  //       const { number } = el;
-  //       const { text } = EgmGpLpCode(el.status);
-
-  //       toast.error(`${number} : ${text}`);
-  //     }
-  //   });
-  // }, [egmStatus]);
-
-  // const classNameHandler = () => {
-  //   if (color === 'success') return classes.success;
-  //   if (color === 'danger') return classes.danger;
-  //   if (color === 'warning') return classes.warning;
-  // };
 
   //** ALL */
   const allDropdownEl = egmStatus
@@ -112,13 +99,13 @@ const MachineList = () => {
         >
           <div
             role="presentation"
+            className={`${classes['drum-pad']}`}
+            color={isDisconnect ? 'danger' : color}
             onClick={() => (true
               ? onClickHandler(el.ip)
               : toast.error(`${el.ip} : ${text}`))}
-            className={`${classes['drum-pad']}`}
-            color={isDisconnect ? 'danger' : color}
           >
-            {el.number || '未知'}
+            {el.number === 0 ? '未設定' : el.number || '未知'}
           </div>
         </Dropdown>
       );
@@ -129,42 +116,11 @@ const MachineList = () => {
       {/* 開分操作 */}
       <CashInAndOut visible={showCashInAndOut} setVisible={setShowCashInAndOut} />
 
-      <Tabs
-        onChange={onChangeHandler}
-        tabBarGutter={80}
-        tabPosition={tabPosition}
-        size="lg"
-        tabBarExtraContent={`數量: ${egmStatus.length}`}
-        style={{ padding: '12px' }}
-      >
-        <TabPane tab={<div>所有機台</div>} key="all">
-          <Space size={[32, 24]} wrap>
-            {allDropdownEl}
-          </Space>
-        </TabPane>
+      <EgmStatisticCard category={category} />
 
-        <TabPane tab={<div>連線正常</div>} key="connection">
-          連線正常Screen
-        </TabPane>
-
-        <TabPane tab={<div>遊戲中</div>} key="isPlaying">
-          遊戲中Screen
-        </TabPane>
-
-        <TabPane
-          tab={(
-            <div>
-              連線異常
-              <span style={{ position: 'absolute', top: -2 }}>
-                <Badge count={5} style={{ backgroundColor: 'red' }} />
-              </span>
-            </div>
-          )}
-          key="connError"
-        >
-          連線異常Screen
-        </TabPane>
-      </Tabs>
+      <Space size={[32, 24]} wrap>
+        {allDropdownEl}
+      </Space>
     </>
   );
 };

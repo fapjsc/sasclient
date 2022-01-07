@@ -1,6 +1,8 @@
 import {
   SET_USER_INFO,
-  USER_LOGOUT,
+  SYSTEM_LOG_OUT,
+  USER_LOGIN,
+  USER_LOG_OUT,
 } from '../types/userType';
 
 export const setUserInfo = (userInfo) => ({
@@ -8,6 +10,15 @@ export const setUserInfo = (userInfo) => ({
   userInfo,
 });
 
-export const userLogout = () => ({
-  type: USER_LOGOUT,
+export const systemLogout = () => ({
+  type: SYSTEM_LOG_OUT,
+});
+
+export const userLogoutAction = () => ({
+  type: USER_LOG_OUT,
+});
+
+export const userLoginAction = (user) => ({
+  type: USER_LOGIN,
+  user,
 });

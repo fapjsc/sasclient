@@ -12,17 +12,19 @@ import {
 */
 
 export const adminGetEgmList = async (params) => {
+  console.log(params);
   const {
-    id, ip, number, denomination, created,
+    id, ip, model, number, denomination, created,
   } = params || {};
 
   const idStr = id ? `id=${id}&` : '';
   const ipStr = ip ? `ip=${ip}&` : '';
+  const modelStr = model ? `model=${model}&` : '';
   const numberStr = number ? `number=${number}&` : '';
   const denominationStr = denomination ? `denomination=${denomination}&` : '';
   const createdStr = created ? `startTime=${created[0]}&endTime=${created[1]}&` : '';
 
-  const url = `${AGENT_URL}/${EGM_LIST}?${idStr}${ipStr}${numberStr}${denominationStr}${createdStr}`;
+  const url = `${AGENT_URL}/${EGM_LIST}?${idStr}${modelStr}${ipStr}${numberStr}${denominationStr}${createdStr}`;
 
   try {
     const headers = getHeaders();
@@ -149,6 +151,6 @@ export const egmCashInOut = async (params) => {
 
   if (!response.ok) throw new Error(data.message || 'Could not operation cash in or cash out');
   if (data.status !== 200) throw new Error(data.message || 'cash in or cash out fail');
-  console.log(data);
+
   return { ...data, quick };
 };

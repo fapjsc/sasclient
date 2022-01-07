@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from 'react';
 
 // Router
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useHistory } from 'react-router-dom';
 
 // Redux
 import { useSelector } from 'react-redux';
 
 // Antd
-// import { LogoutOutlined } from '@ant-design/icons';
-import { Layout, Menu } from 'antd';
+import { LogoutOutlined } from '@ant-design/icons';
+import {
+  Layout, Menu,
+} from 'antd';
 
 // Hooks
 import { useI18n } from '../i18n';
@@ -16,6 +18,9 @@ import { useI18n } from '../i18n';
 // Config
 import { authorizedRoutes } from '../config/routerRole';
 import { removeOwn } from '../config/config';
+
+// Helpers
+import { _logOutHandler } from '../lib/helper';
 
 const { Sider } = Layout;
 const { SubMenu } = Menu;
@@ -30,6 +35,7 @@ const SideNav = () => {
 
   // Router
   const location = useLocation();
+  const history = useHistory();
 
   // Redux
   const { permission } = useSelector((state) => state.user);
@@ -73,6 +79,11 @@ const SideNav = () => {
     }
   };
 
+  const logoutHandler = () => {
+    _logOutHandler(true);
+    history.replace('/login');
+  };
+
   const menuItem = authorizedRoutes
     .filter((el) => !removeOwn.includes(el.alias))
     .filter((menu) => menu.permissions.includes(permission) && menu.isMain)
@@ -101,8 +112,9 @@ const SideNav = () => {
         selectedKeys={[currentPath]}
       >
         {menuItem}
-
+        <Menu.Item onClick={logoutHandler} icon={<LogoutOutlined />} key="leave">離開系統</Menu.Item>
       </Menu>
+
     </Sider>
   );
 };

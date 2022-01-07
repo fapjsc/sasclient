@@ -20,7 +20,8 @@ export const EGM_LIST = 'sasClient/egmList';
 export const AFT = 'sasClient/aft';
 
 // Auth api
-export const USER_LOGIN = 'login/sasClient';
+export const SYSTEM_LOGIN = 'login/sasClient';
+export const USER_LOGIN = 'https://jsonplaceholder.typicode.com/posts/1/comments';
 export const GET_CRYPT_KEY = 'login/getKey';
 
 // Operator api

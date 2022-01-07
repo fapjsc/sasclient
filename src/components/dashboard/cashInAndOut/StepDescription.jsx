@@ -13,7 +13,7 @@ import {
 } from 'antd';
 
 // Helper
-import { _getUserName } from '../../lib/helper';
+import { _getUserName } from '../../../lib/helper';
 
 const StepDescriptions = ({ bordered }) => {
   const {
