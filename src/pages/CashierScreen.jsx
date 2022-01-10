@@ -4,8 +4,8 @@ import React from 'react';
 import { Tabs } from 'antd';
 
 // Components
-import OperatorHistory from '../components/cashier/history/OperatorHistory';
-import CashierInOut from '../components/cashier/cashier/CashierInOut';
+import CashierRecord from '../components/cashier/cashier-record/CashierRecord';
+import CashierInOut from '../components/cashier/cashier-cash-in-out/CashierInOut';
 
 const { TabPane } = Tabs;
 
@@ -60,7 +60,7 @@ const OperatorScreen = () => {
       </TabPane>
 
       <TabPane tab="操作記錄" key="4">
-        <OperatorHistory />
+        <CashierRecord />
       </TabPane>
     </Tabs>
   );

@@ -18,7 +18,7 @@ import {
 import DashboardScreen from '../pages/DashboardScreen';
 import HandOverScreen from '../pages/HandOverScreen';
 // import AdminScreen from '../pages/AdminScreen';
-import OperatorScreen from '../pages/OperatorScreen';
+import CashierScreen from '../pages/CashierScreen';
 import MemberScreen from '../pages/MemberScreen';
 
 // Admin Page
@@ -59,7 +59,7 @@ export const authorizedRoutes = [
     exact: true,
     permissions: ['admin', 'op'],
     redirect: '/access-denied',
-    component: OperatorScreen,
+    component: CashierScreen,
     alias: 'operator',
     name: '櫃檯值班',
     icon: <DesktopOutlined />,

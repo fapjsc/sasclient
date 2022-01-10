@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
+
+import { gsap } from 'gsap';
 
 // Redux
 import { useDispatch, useSelector } from 'react-redux';
@@ -10,9 +12,7 @@ import PropTypes from 'prop-types';
 import { toast } from 'react-toastify';
 
 // Antd
-import {
-  Dropdown, Menu, Space,
-} from 'antd';
+import { Dropdown, Menu, Space } from 'antd';
 
 // Actions
 import { setEgmCashInOut } from '../../../store/actions/egmActions';
@@ -31,65 +31,74 @@ import {} from '@ant-design/icons';
 import { egmIsDisconnect } from '../../../lib/helper';
 
 // Style
-import classes from './MachineList.module.scss';
+import styles from './MachineList.module.scss';
 
 //** All Menu */
-const AllMenu = ({ item, isDisconnect }) => (
-  <Menu key={item.number}>
-    <Menu.Item key="machineNo">
-      機台編號：
-      {item.number}
-    </Menu.Item>
-    <Menu.Item key="machineIP">
-      機台編號：
-      {item.ip}
-    </Menu.Item>
-    <Menu.Item key="memberNo">
-      會員編號：
-      {null}
-    </Menu.Item>
-    <Menu.Item key="credit">
-      積分：
-      {item.creditInCent}
-    </Menu.Item>
-    <Menu.Item key="machineStatus">
-      狀態：
-      {isDisconnect ? '無法連線' : EgmGpLpCode(item.status).text}
-    </Menu.Item>
-  </Menu>
-);
-
-// const category = {
-//   total: { count: 0 },
-//   success: { count: 0 },
-//   process: { count: 0 },
-//   warning: { count: 0 },
-//   danger: { count: 0 },
-//   default: { count: 0 },
-// };
+// eslint-disable-next-line
+const AllMenu = ({ item, isDisconnect }) => {
+  return (
+    <Menu key={item.number}>
+      <Menu.Item key="machineNo">
+        機台編號：
+        {item.number}
+      </Menu.Item>
+      <Menu.Item key="machineIP">
+        機台編號：
+        {item.ip}
+      </Menu.Item>
+      <Menu.Item key="model">
+        廠牌：
+        {item.model}
+      </Menu.Item>
+      <Menu.Item key="memberNo">
+        會員編號：
+        {null}
+      </Menu.Item>
+      <Menu.Item key="credit">
+        積分：
+        {item.creditInCent}
+      </Menu.Item>
+      <Menu.Item key="machineStatus">
+        狀態：
+        {isDisconnect ? '無法連線' : EgmGpLpCode(item.status).text}
+      </Menu.Item>
+    </Menu>
+  );
+};
 
 //** Machine List */
 const MachineList = () => {
   // Init State
   const [showCashInAndOut, setShowCashInAndOut] = useState(false);
+  const [selectType, setSelectType] = useState('all');
+
+  // Ref
+  const toastRef = useRef(null);
+  const ref = useRef(null);
 
   // Redux
   const dispatch = useDispatch();
-  const { egmStatus } = useSelector((state) => state);
+  const { sections } = useSelector((state) => state.egmStatus);
 
-  const category = {
-    total: { count: egmStatus.length },
-  };
+  const onClickHandler = (ip, isDisconnect) => {
+    if (isDisconnect) {
+      toastRef.current = toast.error(`${ip} 無法連線`);
+      return;
+    }
 
-  const onClickHandler = (ip) => {
+    toast.dismiss();
+
     setShowCashInAndOut(true);
     dispatch(setEgmCashInOut({ ip }));
   };
 
-  //** ALL */
-  const allDropdownEl = egmStatus
-    && egmStatus.map((el) => {
-      const { color, text } = EgmGpLpCode(el.status);
+  const onFilterHandler = (status) => {
+    setSelectType(status);
+  };
+
+  const dropEl = sections
+    && sections[selectType].items.map((el) => {
+      const { color } = EgmGpLpCode(el.status);
       const isDisconnect = egmIsDisconnect(el.signalConnectionTime);
       return (
         <Dropdown
@@ -99,11 +108,9 @@ const MachineList = () => {
         >
           <div
             role="presentation"
-            className={`${classes['drum-pad']}`}
             color={isDisconnect ? 'danger' : color}
-            onClick={() => (true
-              ? onClickHandler(el.ip)
-              : toast.error(`${el.ip} : ${text}`))}
+            onClick={() => onClickHandler(el.ip, isDisconnect)}
+            className={styles['drum-pad']}
           >
             {el.number === 0 ? '未設定' : el.number || '未知'}
           </div>
@@ -111,16 +118,27 @@ const MachineList = () => {
       );
     });
 
+  useEffect(() => {
+    const tl = gsap.timeline();
+    tl.to(ref.current, { transform: 'scale(0.85)', duration: 0.1, ease: 'ease.out' })
+      .to(ref.current, { transform: 'scale(1)', duration: 0.6, ease: 'bounce.out' });
+  }, [selectType]);
+
   return (
     <>
       {/* 開分操作 */}
-      <CashInAndOut visible={showCashInAndOut} setVisible={setShowCashInAndOut} />
+      <CashInAndOut
+        visible={showCashInAndOut}
+        setVisible={setShowCashInAndOut}
+      />
 
-      <EgmStatisticCard category={category} />
+      <EgmStatisticCard onFilterHandler={onFilterHandler} />
 
-      <Space size={[32, 24]} wrap>
-        {allDropdownEl}
-      </Space>
+      <div ref={ref}>
+        <Space size={[36, 24]} wrap>
+          {dropEl}
+        </Space>
+      </div>
     </>
   );
 };
@@ -132,6 +150,7 @@ AllMenu.propTypes = {
     status: PropTypes.string.isRequired,
     signalConnectionTime: PropTypes.string,
     ip: PropTypes.string,
+    model: PropTypes.string,
   }).isRequired,
   isDisconnect: PropTypes.bool.isRequired,
 };

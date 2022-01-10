@@ -250,6 +250,18 @@ export const EgmGpLpCode = (str) => {
         text: '更換打印機色帶',
       };
 
+    case '0x7E':
+      return {
+        color: success,
+        text: '遊戲開始',
+      };
+
+    case '0x7F':
+      return {
+        color: success,
+        text: '遊戲結束',
+      };
+
     case '0x80':
       return {
         color: warning,

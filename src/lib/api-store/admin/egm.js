@@ -149,6 +149,8 @@ export const egmCashInOut = async (params) => {
 
   const data = await response.json();
 
+  console.log(data);
+
   if (!response.ok) throw new Error(data.message || 'Could not operation cash in or cash out');
   if (data.status !== 200) throw new Error(data.message || 'cash in or cash out fail');
 

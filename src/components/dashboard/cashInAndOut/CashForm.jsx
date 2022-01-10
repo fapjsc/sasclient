@@ -11,11 +11,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 // Antd
 import {
-  Cascader,
-  Card,
-  Button,
-  Divider,
-  message,
+  Cascader, Card, Button, Divider, message,
 } from 'antd';
 
 // Antd Pro Layout
@@ -34,7 +30,10 @@ import StepDescriptions from './StepDescription';
 import StepResult from './StepResult';
 
 // Actions
-import { setEgmCashInOut, restEgmCashInOut } from '../../../store/actions/egmActions';
+import {
+  setEgmCashInOut,
+  restEgmCashInOut,
+} from '../../../store/actions/egmActions';
 
 // Apis
 import { egmCashInOut } from '../../../lib/api-store';
@@ -47,9 +46,7 @@ import useHttp from '../../../hooks/useHttp';
 
 // import classes from './CashForm.module.scss';
 
-const CashForm = ({
-  setVisible, setCurrent, current,
-}) => {
+const CashForm = ({ setVisible, setCurrent, current }) => {
   // Redux
   const dispatch = useDispatch();
   const { egmCashInOutData } = useSelector((state) => state);
@@ -96,21 +93,31 @@ const CashForm = ({
       return;
     }
 
-    if (cashInOutStatus === 'completed'
-    && !cashInOutError
-    && cashInOutData?.status === 200) {
+    if (
+      cashInOutStatus === 'completed'
+      && !cashInOutError
+      && cashInOutData?.status === 200
+    ) {
       if (!cashInOutData?.quick) {
         setCurrent(2);
         return;
       }
 
       if (cashInOutData.result === 'atfIn success') message.success('開分成功');
-      if (cashInOutData.result === 'promoIn success') message.success('招分成功');
+      if (cashInOutData.result === 'promoIn success') { message.success('招分成功'); }
 
-      if (cashInOutData.result === 'aftOut success'
-      || cashInOutData.result === 'aftOutDigit success') message.success('洗分成功');
+      if (
+        cashInOutData.result === 'aftOut success'
+        || cashInOutData.result === 'aftOutDigit success'
+      ) { message.success('洗分成功'); }
     }
-  }, [cashInOutStatus, cashInOutError, cashInOutReq, setCurrent, cashInOutData]);
+  }, [
+    cashInOutStatus,
+    cashInOutError,
+    cashInOutReq,
+    setCurrent,
+    cashInOutData,
+  ]);
 
   //==== 發送請求 ====//
   const sendReqHandler = () => {
@@ -269,24 +276,24 @@ const CashForm = ({
 
   return (
     <>
-      {
-      showPageContainer && (
-      <Divider orientation="left" plain>
-        常用開 / 洗分
-      </Divider>
-      )
-    }
+      {showPageContainer && (
+        <Divider orientation="left" plain>
+          常用開 / 洗分
+        </Divider>
+      )}
 
       <PageContainer
-        content={showPageContainer && (
-          <Cascader
-            ref={cascaderRef}
-            options={options}
-            onChange={cascaderOnChange}
-            placeholder="Please select"
-            value={cascaderValue}
-          />
-        )}
+        content={
+          showPageContainer && (
+            <Cascader
+              ref={cascaderRef}
+              options={options}
+              onChange={cascaderOnChange}
+              placeholder="Please select"
+              value={cascaderValue}
+            />
+          )
+        }
       >
         <br />
 

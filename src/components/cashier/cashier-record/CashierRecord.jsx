@@ -13,21 +13,23 @@ import {
   getPrintPageStyle, getPrintTableEl, getQueryEl,
 } from '../../../lib/helper';
 
+import { GetCashierRecord } from '../../../lib/api-store';
+
 // Columns
 import columns from './columns';
 
 let data;
 
-const OperatorHistory = () => {
+const CashierRecord = () => {
   // Init State
   const [isSort, setIsSort] = useState(false);
 
   // Ref
   const printRef = useRef();
   const searchRef = useRef();
-  const requestPromise = async () => {
+  const requestPromise = async (params) => {
     if (!isSort) {
-      //   data = await getMeterRecord(params);
+      data = await GetCashierRecord(params);
     }
     setTimeout(() => {
       if (isSort) setIsSort(false);
@@ -92,4 +94,4 @@ const OperatorHistory = () => {
   );
 };
 
-export default OperatorHistory;
+export default CashierRecord;

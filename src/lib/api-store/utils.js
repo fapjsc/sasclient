@@ -24,9 +24,9 @@ export const SYSTEM_LOGIN = 'login/sasClient';
 export const USER_LOGIN = 'https://jsonplaceholder.typicode.com/posts/1/comments';
 export const GET_CRYPT_KEY = 'login/getKey';
 
-// Operator api
+// Cashiers api
 export const CASHIER_OPERATOR = 'sasClient/cashier';
-export const GET_CASHIER_RECORD = 'sasClient/cashierRecord';
+export const GET_CASHIER_RECORD = 'sasClient/cashierOperationRecord';
 
 // Handover api
 export const HAND_OVER_DETAIL = 'https://jsonplaceholder.typicode.com/posts/1/comments';

@@ -40,4 +40,4 @@ export {
   cashierOperator,
   GetCashierAmounts,
   GetCashierRecord,
-} from './operator/operator';
+} from './cashier/cashier';
