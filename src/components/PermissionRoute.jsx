@@ -5,7 +5,7 @@ import AclRouter from 'react-acl-router';
 
 import { useSelector } from 'react-redux';
 
-import { unAuthorizedRoutes, authorizedRoutes } from '../config/routerRole';
+import { unAuthorizedRoutes, AuthorizedRoutes } from '../config/routerRole';
 
 import { _getUserRole } from '../lib/helper';
 
@@ -24,7 +24,7 @@ const PermissionRoute = () => {
   return (
     <AclRouter
       authorities={role}
-      authorizedRoutes={authorizedRoutes.filter((el) => !removeOwn.includes(el.alias))}
+      authorizedRoutes={AuthorizedRoutes().filter((el) => !removeOwn.includes(el.alias))}
       authorizedLayout={AuthLayout}
       normalRoutes={unAuthorizedRoutes}
       normalLayout={NormalLayout}

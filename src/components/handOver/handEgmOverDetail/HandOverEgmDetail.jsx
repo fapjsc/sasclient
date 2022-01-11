@@ -12,7 +12,7 @@ import { Button } from 'antd';
 import columns from './columns';
 
 // Apis
-// import { getHandOverDetail } from '../../../lib/api-store';
+import { getHandOverEgmDetail } from '../../../lib/api-store';
 
 // Helpers
 import { getPrintPageStyle, getPrintTableEl, getQueryEl } from '../../../lib/helper';
@@ -28,17 +28,33 @@ const HandOverEgmDetail = () => {
   const searchRef = useRef();
 
   const requestPromise = async (params) => {
-    console.log(params);
     if (!isSort) {
-      // data = await getHandOverDetail(params);
+      data = await getHandOverEgmDetail(params);
     }
+
     setTimeout(() => {
       if (isSort) setIsSort(false);
     }, 0);
 
+    const { ip, model } = params || {};
+
     return Promise.resolve({
       success: true,
-      data: data,
+      data: data.filter((item) => {
+        if (ip && !model) {
+          return item.ip === ip;
+        }
+
+        if (!ip && model) {
+          return item.model === model;
+        }
+
+        if (ip && model) {
+          return item.model === model && item.ip === ip;
+        }
+
+        return true;
+      }),
     });
   };
 
@@ -61,7 +77,7 @@ const HandOverEgmDetail = () => {
       className="handover-detail-table"
       columns={columns}
       debounceTime={300}
-      rowKey="id"
+      rowKey="ip"
       dateFormatter="string"
       headerTitle="Handover Detail"
       request={requestPromise}

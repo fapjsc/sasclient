@@ -27,6 +27,7 @@ const CashierRecord = () => {
   // Ref
   const printRef = useRef();
   const searchRef = useRef();
+
   const requestPromise = async (params) => {
     if (!isSort) {
       data = await GetCashierRecord(params);
@@ -56,6 +57,17 @@ const CashierRecord = () => {
     printQueryEl.remove();
   };
 
+  const beforeSearchSubmitHandler = (params) => {
+    const { operationCode } = params || {};
+    if (operationCode) {
+      const lan = localStorage.getItem('locale');
+      const item = data?.find((el) => el[lan || 'zh_TW'] === operationCode);
+      if (item) params.operationCode = item?.operation_code || 0;
+    }
+    searchRef.current = params;
+    return params;
+  };
+
   return (
     <ProTable
       className="operator-history-table"
@@ -65,10 +77,7 @@ const CashierRecord = () => {
       dateFormatter="string"
       headerTitle="Operator History"
       request={requestPromise}
-      beforeSearchSubmit={(params) => {
-        searchRef.current = params;
-        return params;
-      }}
+      beforeSearchSubmit={beforeSearchSubmitHandler}
       onChange={(pagination, filters, sorter, extra) => {
         if (extra.action === 'sort') setIsSort(true);
       }}

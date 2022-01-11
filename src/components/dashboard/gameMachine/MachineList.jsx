@@ -74,7 +74,7 @@ const MachineList = () => {
 
   // Ref
   const toastRef = useRef(null);
-  const ref = useRef(null);
+  const egmDashboardRef = useRef(null);
 
   // Redux
   const dispatch = useDispatch();
@@ -120,8 +120,8 @@ const MachineList = () => {
 
   useEffect(() => {
     const tl = gsap.timeline();
-    tl.to(ref.current, { transform: 'scale(0.85)', duration: 0.1, ease: 'ease.out' })
-      .to(ref.current, { transform: 'scale(1)', duration: 0.6, ease: 'bounce.out' });
+    tl.to(egmDashboardRef.current, { transform: 'scale(0.85)', duration: 0.1, ease: 'ease.out' })
+      .to(egmDashboardRef.current, { transform: 'scale(1)', duration: 0.6, ease: 'bounce.out' });
   }, [selectType]);
 
   return (
@@ -134,7 +134,7 @@ const MachineList = () => {
 
       <EgmStatisticCard onFilterHandler={onFilterHandler} />
 
-      <div ref={ref}>
+      <div ref={egmDashboardRef}>
         <Space size={[36, 24]} wrap>
           {dropEl}
         </Space>

@@ -32,7 +32,8 @@ export {
 
 // Handover
 export {
-  getHandOverDetail,
+  getHandOverEgmDetail,
+  handoverRecord,
 } from './handover/handover';
 
 // Operator

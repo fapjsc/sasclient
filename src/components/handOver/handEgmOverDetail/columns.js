@@ -1,120 +1,148 @@
-import moment from 'moment';
+import { thousandsFormat } from '../../../lib/helper';
 
 const columns = [
   {
-    title: 'ID',
-    key: 'id',
-    dataIndex: 'id',
+    title: 'EGM',
+    key: 'number',
+    dataIndex: 'number',
     hideInSearch: true,
+    sorter: (a, b) => a.number - b.number,
   },
   {
-    title: 'Egm',
-    key: 'egm',
-    dataIndex: 'egm',
-    hideInSearch: true,
+    title: 'IP',
+    key: 'ip',
+    dataIndex: 'ip',
+    copyable: true,
   },
   {
     title: 'Model',
     key: 'model',
     dataIndex: 'model',
-    hideInSearch: true,
   },
   {
     title: 'Bill_in',
-    key: 'billIn',
-    dataIndex: 'billIn',
+    key: 'bill_in',
+    dataIndex: 'bill_in',
     hideInSearch: true,
+    sorter: (a, b) => a.bill_in - b.bill_in,
+    render: (text) => [`$${thousandsFormat(text)}`],
   },
   {
     title: 'Tick_in',
-    key: 'tickIn',
-    dataIndex: 'tickIn',
+    key: 'ticket_in',
+    dataIndex: 'ticket_in',
     hideInSearch: true,
+    sorter: (a, b) => a.ticket_in - b.ticket_in,
+    render: (text) => [`$${thousandsFormat(text)}`],
+
   },
   {
     title: 'Tick_out',
-    key: 'tickOut',
-    dataIndex: 'tickOut',
+    key: 'ticket_out',
+    dataIndex: 'ticket_out',
     hideInSearch: true,
+    sorter: (a, b) => a.ticket_out - b.ticket_out,
+    render: (text) => [`$${thousandsFormat(text)}`],
+
   },
   {
     title: 'Credit_in',
-    key: 'creditIn',
-    dataIndex: 'creditIn',
+    key: 'key_credit_in',
+    dataIndex: 'key_credit_in',
     hideInSearch: true,
+    sorter: (a, b) => a.key_credit_in - b.key_credit_in,
+    render: (text) => [`$${thousandsFormat(text)}`],
+
   },
   {
     title: 'Credit_out',
-    key: 'creditOut',
-    dataIndex: 'creditOut',
+    key: 'key_credit_out',
+    dataIndex: 'key_credit_out',
     hideInSearch: true,
+    sorter: (a, b) => a.key_credit_out - b.key_credit_out,
+    render: (text) => [`$${thousandsFormat(text)}`],
+
   },
   {
     title: 'Card_in',
-    key: 'cardIn',
-    dataIndex: 'cardIn',
+    key: 'card_in',
+    dataIndex: 'card_in',
     hideInSearch: true,
+    sorter: (a, b) => a.card_in - b.card_in,
+    render: (text) => [`$${thousandsFormat(text)}`],
+
   },
   {
     title: 'Card_out',
-    key: 'cardOut',
-    dataIndex: 'cardOut',
+    key: 'card_out',
+    dataIndex: 'card_out',
     hideInSearch: true,
+    sorter: (a, b) => a.card_out - b.card_out,
+    render: (text) => [`$${thousandsFormat(text)}`],
+
   },
   {
     title: 'Cashier_in',
-    key: 'cashierIn',
-    dataIndex: 'cashierIn',
+    key: 'cashier_in',
+    dataIndex: 'cashier_in',
     hideInSearch: true,
+    sorter: (a, b) => a.cashier_in - b.cashier_in,
+    render: (text) => [`$${thousandsFormat(text)}`],
+
   },
   {
     title: 'Cashier_out',
-    key: 'cashierOut',
-    dataIndex: 'cashierOut',
+    key: 'cashier_out',
+    dataIndex: 'cashier_out',
     hideInSearch: true,
+    sorter: (a, b) => a.cashier_out - b.cashier_out,
+    render: (text) => [`$${thousandsFormat(text)}`],
+
   },
   {
     title: 'Hand_pay',
-    key: 'handPay',
-    dataIndex: 'handPay',
+    key: 'handpay',
+    dataIndex: 'handpay',
     hideInSearch: true,
+    sorter: (a, b) => a.handpay - b.handpay,
+    render: (text) => [`$${thousandsFormat(text)}`],
+
   },
   {
     title: 'Jackpot',
     key: 'jackpot',
     dataIndex: 'jackpot',
     hideInSearch: true,
+    sorter: (a, b) => a.jackpot - b.jackpot,
+    render: (text) => [`$${thousandsFormat(text)}`],
+
   },
   {
     title: 'Total_in',
-    key: 'totalIn',
-    dataIndex: 'totalIn',
+    key: 'total_in',
+    dataIndex: 'total_in',
     hideInSearch: true,
+    sorter: (a, b) => a.total_in - b.total_in,
+    render: (text) => [`$${thousandsFormat(text)}`],
+
   },
   {
     title: 'Total_out',
-    key: 'totalOut',
-    dataIndex: 'totalOut',
+    key: 'total_out',
+    dataIndex: 'total_out',
     hideInSearch: true,
+    sorter: (a, b) => a.total_out - b.total_out,
+    render: (text) => [`$${thousandsFormat(text)}`],
+
   },
   {
     title: 'Net_win',
-    key: 'netWin',
-    dataIndex: 'netWin',
+    key: 'netwin',
+    dataIndex: 'netwin',
     hideInSearch: true,
-  },
-  {
-    title: 'Time',
-    key: 'created',
-    dataIndex: 'created',
-    sorter: (a, b) => {
-      const aTime = new Date(a.created).getTime();
-      const bTime = new Date(b.created).getTime();
-      return aTime - bTime;
-    },
-    valueType: 'dateTimeRange',
-    className: 'cancel-icon',
-    render: (e) => moment(e.props.text).format('YYYY-MM-DD HH:mm:ss'),
+    sorter: (a, b) => a.netwin - b.netwin,
+    render: (text) => [`$${thousandsFormat(text)}`],
+
   },
 ];
 

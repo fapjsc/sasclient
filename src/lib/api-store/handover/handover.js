@@ -1,22 +1,22 @@
 import {
-  HAND_OVER_DETAIL,
   AGENT_URL,
   getHeaders,
+  HAND_OVER_RECORD,
+  HAND_OVER_EGM_DETAIL,
 } from '../utils';
 
-export const getHandOverDetail = async (params) => {
-  console.log(params);
+export const getHandOverEgmDetail = async () => {
   try {
-    const { created } = params || {};
-    const createdStr = created ? `startTime=${created[0]}&endTime=${created[1]}&` : '';
-    const url = `${AGENT_URL}/${HAND_OVER_DETAIL}?${createdStr}`;
+    // const { created } = params || {};
+    // const createdStr = created ? `startTime=${created[0]}&endTime=${created[1]}&` : '';
+    const url = `${AGENT_URL}/${HAND_OVER_EGM_DETAIL}?`;
     const headers = getHeaders();
     const response = await fetch(url, { headers });
     const data = await response.json();
-    // console.log(data);
+
     if (!response.ok) throw new Error(data.message || 'Could not fetch handover detail');
     if (data.status !== 200) throw new Error(data.message || 'Fetch handover fail.');
-    return data;
+    return data.result;
   } catch (error) {
     return {
       status: 400,
@@ -25,4 +25,20 @@ export const getHandOverDetail = async (params) => {
   }
 };
 
-export const temp = () => {};
+export const handoverRecord = async (params) => {
+  console.log(params);
+  try {
+    const headers = getHeaders();
+    const url = `${AGENT_URL}/${HAND_OVER_RECORD}`;
+
+    const response = await fetch(url, { headers });
+    const data = await response.json();
+
+    if (!response.ok) throw new Error(data.message || 'Could not fetch handover record');
+
+    if (data.status !== 200) throw new Error(data.message || 'Fetch handover record fail');
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+};

@@ -34,7 +34,7 @@ import { systemLogin, getCryptKey } from '../lib/api-store';
 import { _setToken, _removeLocalStorageExLocale } from '../lib/helper';
 
 // Config
-import { authorizedRoutes } from '../config/routerRole';
+import { AuthorizedRoutes } from '../config/routerRole';
 
 // Styles
 import styles from './Login.module.scss';
@@ -118,7 +118,8 @@ const Login = () => {
       dispatch(setUserInfo(loginData));
 
       _setToken('token', loginData);
-      history.push(authorizedRoutes[0].path);
+      const authRouter = AuthorizedRoutes();
+      history.push(authRouter[0].path);
     }
   }, [loginError, loginData, loginStatus, dispatch, history]);
 

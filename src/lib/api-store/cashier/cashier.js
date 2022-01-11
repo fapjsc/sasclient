@@ -43,15 +43,23 @@ export const cashierOperator = async (value) => {
   }
 };
 
-export const GetCashierRecord = async () => {
+export const GetCashierRecord = async (params) => {
+  console.log(params);
   try {
-    const url = `${AGENT_URL}/${GET_CASHIER_RECORD}`;
+    const {
+      charactor, operationCode, target, created,
+    } = params || {};
+
+    const charactorStr = charactor ? `charactor=${charactor}&` : '';
+    const operationStr = operationCode ? `operation_code=${operationCode}&` : '';
+    const targetStr = target ? `target=${target}&` : '';
+    const createdStr = created ? `startTime=${created[0]}&endTime=${created[1]}&` : '';
+    const url = `${AGENT_URL}/${GET_CASHIER_RECORD}?${charactorStr}${operationStr}${targetStr}${createdStr}`;
     const headers = getHeaders();
 
     const response = await fetch(url, { headers });
 
     const data = await response.json();
-
     console.log(data);
 
     if (!response.ok) throw new Error(data.message || 'Could not set counter');

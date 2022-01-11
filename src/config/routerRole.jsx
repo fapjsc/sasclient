@@ -30,112 +30,119 @@ import HistoryRecordScreen from '../pages/admin/historyRecordScreen';
 import Login from '../pages/Login';
 import AccessDenied from '../pages/AccessDenied';
 
-export const authorizedRoutes = [
-  {
-    path: '/dashboard',
-    exact: true,
-    permissions: ['admin', 'op'],
-    redirect: '/access-denied',
-    component: DashboardScreen,
-    alias: 'dashboard',
-    name: '儀錶板',
-    icon: <DashboardOutlined />,
-    isMain: true,
-  },
-  {
-    path: '/member',
-    exact: true,
-    permissions: ['admin', 'op'],
-    redirect: '/access-denied',
-    component: MemberScreen,
-    alias: 'member',
-    name: '會員',
-    icon: <UserOutlined />,
-    isMain: true,
+// Hooks
+import { useI18n } from '../i18n';
 
-  },
-  {
-    path: '/operator',
-    exact: true,
-    permissions: ['admin', 'op'],
-    redirect: '/access-denied',
-    component: CashierScreen,
-    alias: 'operator',
-    name: '櫃檯值班',
-    icon: <DesktopOutlined />,
-    isMain: true,
+export const AuthorizedRoutes = () => {
+  const { t } = useI18n();
 
-  },
-  {
-    path: '/cashier',
-    exact: true,
-    permissions: ['admin', 'op'],
-    redirect: '/access-denied',
-    component: HandOverScreen,
-    alias: 'cashier',
-    name: '櫃檯接班明細',
-    icon: <FileTextOutlined />,
-    isMain: true,
+  return [
+    {
+      path: '/dashboard',
+      exact: true,
+      permissions: ['admin', 'op'],
+      redirect: '/access-denied',
+      component: DashboardScreen,
+      alias: 'dashboard',
+      name: t('side_nav_dashboard'),
+      icon: <DashboardOutlined />,
+      isMain: true,
+    },
+    {
+      path: '/member',
+      exact: true,
+      permissions: ['admin', 'op'],
+      redirect: '/access-denied',
+      component: MemberScreen,
+      alias: 'member',
+      name: t('side_nav_member'),
+      icon: <UserOutlined />,
+      isMain: true,
 
-  },
+    },
+    {
+      path: '/operator',
+      exact: true,
+      permissions: ['admin', 'op'],
+      redirect: '/access-denied',
+      component: CashierScreen,
+      alias: 'operator',
+      name: t('side_nav_shift'),
+      icon: <DesktopOutlined />,
+      isMain: true,
 
-  {
-    path: '/admin',
-    exact: true,
-    permissions: ['admin'],
-    redirect: '/access-denied',
-    // component: AdminScreen,
-    alias: 'admin',
-    name: '管理介面',
-    icon: <SettingOutlined />,
-    isMain: true,
+    },
+    {
+      path: '/cashier',
+      exact: true,
+      permissions: ['admin', 'op'],
+      redirect: '/access-denied',
+      component: HandOverScreen,
+      alias: 'cashier',
+      name: t('side_nav_shift_detail'),
+      icon: <FileTextOutlined />,
+      isMain: true,
 
-    subRoutes: [
-      {
-        path: '/admin/egm-setting',
-        alias: 'egm-setting',
-        name: 'EGM系統',
-      },
-      {
-        path: '/admin/jackpot-setting',
-        alias: 'jackpot',
-        name: '彩金系統',
-      },
-      {
-        path: '/admin/history-record',
-        alias: 'history-record',
-        name: '歷史紀錄',
-      },
+    },
 
-    ],
-  },
-  {
-    path: '/admin/egm-setting',
-    exact: true,
-    permissions: ['admin'],
-    redirect: '/access-denied',
-    component: EgmSettingScreen,
-    isMain: false,
-  },
-  {
-    path: '/admin/jackpot-setting',
-    exact: true,
-    permissions: ['admin'],
-    redirect: '/access-denied',
-    component: JackpotSettingScreen,
-    isMain: false,
-    alias: 'jackpot',
-  },
-  {
-    path: '/admin/history-record',
-    exact: true,
-    permissions: ['admin'],
-    redirect: '/access-denied',
-    component: HistoryRecordScreen,
-    isMain: false,
-  },
+    {
+      path: '/admin',
+      exact: true,
+      permissions: ['admin'],
+      redirect: '/access-denied',
+      // component: AdminScreen,
+      alias: 'admin',
+      name: t('side_nav_admin'),
+      icon: <SettingOutlined />,
+      isMain: true,
 
-];
+      subRoutes: [
+        {
+          path: '/admin/egm-setting',
+          alias: 'egm-setting',
+          name: t('side_nav_egm_system'),
+        },
+        {
+          path: '/admin/jackpot-setting',
+          alias: 'jackpot',
+          name: t('side_nav_jackpot_system'),
+        },
+        {
+          path: '/admin/history-record',
+          alias: 'history-record',
+          name: t('side_nav_history'),
+        },
+
+      ],
+    },
+    {
+      path: '/admin/egm-setting',
+      exact: true,
+      permissions: ['admin'],
+      redirect: '/access-denied',
+      component: EgmSettingScreen,
+      isMain: false,
+    },
+    {
+      path: '/admin/jackpot-setting',
+      exact: true,
+      permissions: ['admin'],
+      redirect: '/access-denied',
+      component: JackpotSettingScreen,
+      isMain: false,
+      alias: 'jackpot',
+    },
+    {
+      path: '/admin/history-record',
+      exact: true,
+      permissions: ['admin'],
+      redirect: '/access-denied',
+      component: HistoryRecordScreen,
+      isMain: false,
+    },
+
+  ];
+};
 
 export const unAuthorizedRoutes = [
   {

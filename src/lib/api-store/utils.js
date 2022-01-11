@@ -29,7 +29,8 @@ export const CASHIER_OPERATOR = 'sasClient/cashier';
 export const GET_CASHIER_RECORD = 'sasClient/cashierOperationRecord';
 
 // Handover api
-export const HAND_OVER_DETAIL = 'https://jsonplaceholder.typicode.com/posts/1/comments';
+export const HAND_OVER_EGM_DETAIL = 'sasClient/handoverEgmList';
+export const HAND_OVER_RECORD = 'https://jsonplaceholder.typicode.com/posts/1/comments';
 
 // Get Headers
 export const getHeaders = (token = null) => {

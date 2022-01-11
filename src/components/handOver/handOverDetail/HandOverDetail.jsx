@@ -99,7 +99,6 @@ const HandOverDetail = () => {
 
   const onFinishHandler = async (value) => {
     await waitTime(2000);
-    console.log(value);
   };
 
   return (

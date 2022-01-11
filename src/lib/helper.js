@@ -183,7 +183,7 @@ export const getQueryEl = (searchRef) => {
   const searchEl = document.createElement('p');
 
   searchEl.innerText = `
-  adminId: ${adminId || '未填寫'} | IP：${egmIP || meterIP || eventIP || '未填寫'} | Number: ${name || '未填寫'} | 開始時間：${created ? created[0] : '未填寫'} | 結束時間：${created ? created[1] : '未填寫'}
+  ID: ${adminId || '未填寫'} | IP：${egmIP || meterIP || eventIP || '未填寫'} | Number: ${name || '未填寫'} | 開始時間：${created ? created[0] : '未填寫'} | 結束時間：${created ? created[1] : '未填寫'}
   `;
 
   return searchEl;
@@ -195,19 +195,9 @@ export const egmIsDisconnect = (connectTime) => {
   return (new Date() - new Date(connectTime)) > (1 * 1000 * 60);
 };
 
-// 防抖
-// export const debounce = (fn, wait) => {
-//   let timeout = null;
-//   return function (input) {
-//     input.persist();
-//     if (timeout !== null) clearTimeout(timeout);
-//     timeout = setTimeout(fn, wait, input);
-//   };
-// };
-
 //** for test */
 export const waitTime = (time) => new Promise((resolve) => {
   setTimeout(() => {
     resolve(true);
-  }, time);
+  }, time * 1000);
 });

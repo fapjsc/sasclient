@@ -17,14 +17,12 @@ import { _checkTokenExpire } from '../lib/helper';
 const { Header, Content } = Layout;
 
 const TheLayout = ({ children }) => {
-  console.log('auth layout');
   const [tokenIsExpires, setTokenIsExpires] = useState(false);
 
   useEffect(() => {
     const result = _checkTokenExpire();
 
     if (!result || result?.status === 401) {
-      console.log(result);
       setTokenIsExpires(true);
     }
   }, [setTokenIsExpires]);

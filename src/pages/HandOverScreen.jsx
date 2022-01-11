@@ -7,6 +7,7 @@ import { CoffeeOutlined } from '@ant-design/icons';
 // Components
 import HandOverDetail from '../components/handOver/handOverDetail/HandOverDetail';
 import HandOverEgmDetail from '../components/handOver/handEgmOverDetail/HandOverEgmDetail';
+import HandOverRecord from '../components/handOver/handOverRecord/HandOverRecord';
 import ModalConfirm from '../components/ModalConfirm';
 
 const { TabPane } = Tabs;
@@ -19,7 +20,6 @@ const CashierScreen = () => {
   };
 
   const handoverClickHandler = () => {
-    console.log('click');
     setShowModalConfirm(true);
   };
 
@@ -46,7 +46,7 @@ const CashierScreen = () => {
         </TabPane>
 
         <TabPane tab="交班記錄" key="handover-history">
-          交班記錄
+          <HandOverRecord />
         </TabPane>
       </Tabs>
     </>
