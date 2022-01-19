@@ -162,7 +162,7 @@ const CashierInOut = () => {
     <Card
       title="櫃檯"
       extra={descriptionExtra}
-      border={false}
+      // border={false}
       style={{ maxWidth: '35rem' }}
     >
       <Space>

@@ -103,13 +103,19 @@ const CashForm = ({ setVisible, setCurrent, current }) => {
         return;
       }
 
-      if (cashInOutData.result === 'atfIn success') message.success('開分成功');
-      if (cashInOutData.result === 'promoIn success') { message.success('招分成功'); }
+      if (cashInOutData.result === 'atfIn success') {
+        message.success('開分成功');
+      }
+      if (cashInOutData.result === 'promoIn success') {
+        message.success('招分成功');
+      }
 
       if (
         cashInOutData.result === 'aftOut success'
         || cashInOutData.result === 'aftOutDigit success'
-      ) { message.success('洗分成功'); }
+      ) {
+        message.success('洗分成功');
+      }
     }
   }, [
     cashInOutStatus,
@@ -303,7 +309,10 @@ const CashForm = ({ setVisible, setCurrent, current }) => {
 
         <Card
           bordered={false}
-          style={{ backgroundColor: '#141414', color: 'rgba(0,0,0,.85)' }}
+          style={{
+            backgroundColor: '#141414',
+            color: 'rgba(0,0,0,.85)',
+          }}
         >
           <StepsForm
             current={current}
@@ -342,7 +351,9 @@ const CashForm = ({ setVisible, setCurrent, current }) => {
           >
             {/* =======  Step-1  ======== */}
             <StepsForm.StepForm
-              style={{ marginTop: '1.5rem' }}
+              style={{
+                marginTop: '1.5rem',
+              }}
               formRef={formRef}
               title="設定"
               onFinish={(values) => {
@@ -352,7 +363,11 @@ const CashForm = ({ setVisible, setCurrent, current }) => {
             >
               {current === 0 && (
                 <>
-                  <ProForm.Group style={{ marginTop: '2rem' }}>
+                  <ProForm.Group
+                    style={{
+                      marginTop: '2rem',
+                    }}
+                  >
                     <ProFormRadio.Group
                       name="action"
                       label="操作項目"
@@ -401,7 +416,11 @@ const CashForm = ({ setVisible, setCurrent, current }) => {
                     />
                   </ProForm.Group>
 
-                  <ProForm.Group style={{ margin: '1.2rem 0px' }}>
+                  <ProForm.Group
+                    style={{
+                      margin: '1.2rem 0px',
+                    }}
+                  >
                     <ProFormText
                       label="操作人員"
                       width="md"
@@ -456,7 +475,11 @@ CashForm.propTypes = {
   setVisible: PropTypes.func.isRequired,
   setCurrent: PropTypes.func.isRequired,
   current: PropTypes.number.isRequired,
-  step: PropTypes.number.isRequired,
+  step: PropTypes.number,
+};
+
+CashForm.defaultProps = {
+  step: 0,
 };
 
 export default CashForm;

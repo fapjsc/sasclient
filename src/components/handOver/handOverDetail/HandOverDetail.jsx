@@ -1,26 +1,31 @@
-import React, { useRef } from 'react';
-import { Divider } from 'antd';
+import React, { useRef, useState } from 'react';
+
+// Redux
+import { useDispatch, useSelector } from 'react-redux';
 
 // Antd
-import ProDescriptions from '@ant-design/pro-descriptions';
-import ProForm, { ProFormText, ProFormGroup } from '@ant-design/pro-form';
-
-// Columns
 import {
-  totalColumns, settlementColumns, payColumns, handoverAmountColumns,
+  Descriptions, Typography, Button, Row, Col,
+} from 'antd';
+import ProDescriptions from '@ant-design/pro-descriptions';
+import ProForm, { ProFormDigit, ProFormGroup } from '@ant-design/pro-form';
+import { CoffeeOutlined } from '@ant-design/icons';
+
+import {
+  totalColumns,
 } from './columns';
 
-// Helpers
-import { waitTime } from '../../../lib/helper';
+// Apis
+import { handoverStatistics } from '../../../lib/api-store/handover/handover';
+
+// Actions
+import {
+  setHandoverInput,
+  handoverInputReset,
+} from '../../../store/actions/handoverInputActions';
 
 // Styles
 import variable from '../../../sass/variable.module.scss';
-
-let data;
-
-const dividerStyle = {
-  color: variable['grey-dark'],
-};
 
 const contentStyle = {
   color: variable['grey-light'],
@@ -30,87 +35,85 @@ const labelStyle = {
   color: variable['grey-light'],
 };
 
-const HandOverDetail = () => {
+const colorRed = {
+  color: variable['red-5'],
+};
+
+const colorBlue = {
+  color: variable['blue-md'],
+};
+
+const { Text } = Typography;
+
+let data;
+
+// eslint-disable-next-line
+const HandOverDetail = ({onShow}) => {
+  // Redux
+  const dispatch = useDispatch();
+  const { inputData } = useSelector((state) => state.handoverInput);
+  // eslint-disable-next-line
+  const { inputTotal, totalClose, balance } = inputData || {};
+
+  // Init State
+  const [amountTotal, setAmountTotal] = useState({
+    amountInput: 0,
+    amountOutput: 0,
+    amountMinus: 0,
+  });
+
+  // Ref
   const actionRef = useRef();
+  // const dataRef = useRef();
 
   //** 總計  */
   const requestPromiseTotal = async () => {
-    // data = await getMeterRecord(params);
-    data = {
-      account: '23523212',
-      cashierIn: '20200730',
-      tickIn: '-12121',
-      tickOut: '124323',
-      cardIn: '124323',
-      cardOut: '124323',
-      aftIn: '124323',
-      aftOut: '124323',
-      aftInEgm: '124323',
-      aftOutEgm: '124323',
-      totalIn: '124323',
-      totalOut: '124323',
-      jackpot: '124323',
-    };
+    data = await handoverStatistics();
+
+    setAmountTotal({
+      amountInput: data.totalInput, // 1
+      amountOutput: data.totalOutput, // 2
+      amountMinus: data.totalInput - data.totalOutput, // 3
+    });
+
     return Promise.resolve({
       success: true,
       data: data,
     });
   };
 
-  //** 勞動報酬 */
-  const requestPromisePay = async () => {
-    // data = await getMeterRecord(params);
-    data = {
-      settlementAmount: '235232',
-      totalRevenue: '20200730',
+  const onFinishHandler = (value) => {
+    const currentTotal = (value?.inputHandover || 0) + (value?.inputOther || 0); // 3 + 4
+    const getTotalClose = amountTotal.amountOutput + currentTotal; // 2 + 3 + 4
+    const getBalance = getTotalClose - amountTotal.amountInput; // 5 - 1
+
+    const formatInputData = {
+      inputHandover: value?.inputHandover || 0,
+      inputOther: value?.inputOther || 0,
+      inputTotal: currentTotal,
+      totalClose: getTotalClose,
+      balance: getBalance,
     };
-    return Promise.resolve({
-      success: true,
-      data: data,
-    });
+    dispatch(setHandoverInput(formatInputData));
   };
 
-  //** 交班金額 */
-  const requestPromiseHandoverAmount = async () => {
-    // data = await getMeterRecord(params);
-    data = {
-      counterAmount: '235232',
-      egmIn: '20200730',
-      total: '0',
-    };
-    return Promise.resolve({
-      success: true,
-      data: data,
-    });
-  };
-
-  //** 結算查詢 */
-  const requestPromiseTotalSettlement = async () => {
-    // data = await getMeterRecord(params);
-    data = {
-      totalClose: '235232',
-      balance: '20200730',
-    };
-    return Promise.resolve({
-      success: true,
-      data: data,
-    });
-  };
-
-  const onFinishHandler = async (value) => {
-    await waitTime(2000);
+  const onResetHandler = () => {
+    dispatch(handoverInputReset());
   };
 
   return (
     <>
-      <Divider
-        dashed
-        plain
-        style={dividerStyle}
-        orientation="left"
-      >
-        總計
-      </Divider>
+      <Row justify="end">
+        <Col>
+          <Button
+            onClick={onShow}
+            type="danger"
+            icon={<CoffeeOutlined />}
+          >
+            交班
+          </Button>
+        </Col>
+      </Row>
       <ProDescriptions
         request={requestPromiseTotal}
         columns={totalColumns}
@@ -119,67 +122,79 @@ const HandOverDetail = () => {
         contentStyle={contentStyle}
       />
       <br />
-
-      <Divider
-        dashed
-        plain
-        style={dividerStyle}
-        orientation="left"
-      >
-        勞動報酬
-      </Divider>
-      <ProDescriptions
-        request={requestPromisePay}
-        columns={payColumns}
-        labelStyle={labelStyle}
-        contentStyle={contentStyle}
-      />
       <br />
 
-      <Divider
-        dashed
-        plain
-        style={dividerStyle}
-        orientation="left"
-      >
-        交班金額
-      </Divider>
-      <ProDescriptions
-        request={requestPromiseHandoverAmount}
-        columns={handoverAmountColumns}
-        labelStyle={labelStyle}
+      <Descriptions
+        title=" 勞動報酬"
         contentStyle={contentStyle}
-      />
+        labelStyle={labelStyle}
+        bordered
+      >
+        <Descriptions.Item label="結算金額 (1-2)">
+          <Text style={amountTotal.amountMinus < 0 && colorRed}>
+            {`$${amountTotal.amountMinus}`}
+          </Text>
+        </Descriptions.Item>
+        <Descriptions.Item label="淨收益 (1-2-5-6)">
+          <Text style={amountTotal.amountMinus - totalClose - balance < 0 && colorRed}>
+            {`$${amountTotal.amountMinus - totalClose - balance || 0}`}
+          </Text>
+        </Descriptions.Item>
+      </Descriptions>
+      <br />
       <br />
 
-      <Divider
-        dashed
-        plain
-        style={dividerStyle}
-        orientation="left"
-      >
-        結算查詢
-      </Divider>
-      <ProDescriptions
-        request={requestPromiseTotalSettlement}
-        columns={settlementColumns}
-        labelStyle={labelStyle}
+      <Descriptions
+        title="交班金額"
         contentStyle={contentStyle}
-      />
-      <br />
-      <ProForm
-        onFinish={onFinishHandler}
+        labelStyle={labelStyle}
+        bordered
       >
+        <Descriptions.Item label="櫃檯金額 (1-2)">
+          <Text style={amountTotal.amountMinus < 0 && colorRed}>
+            {`$${amountTotal.amountMinus}`}
+          </Text>
+        </Descriptions.Item>
+        <Descriptions.Item label="機器鈔入(7)">$0</Descriptions.Item>
+        <Descriptions.Item label="總計 (1-2+7)">{`$${amountTotal.amountMinus + 0}`}</Descriptions.Item>
+      </Descriptions>
+      <br />
+      <br />
+
+      <Descriptions
+        title="結算查詢"
+        contentStyle={colorBlue}
+        labelStyle={colorBlue}
+        bordered
+      >
+        <Descriptions.Item label="總關閉(5)(2+3+4)">
+          <Text style={totalClose >= 0 ? colorBlue : colorRed}>
+            {`$${totalClose || amountTotal.amountOutput || 0}`}
+          </Text>
+        </Descriptions.Item>
+
+        <Descriptions.Item label="結算差額(6)(5-1)">
+          <Text style={totalClose >= 0 ? colorBlue : colorRed}>
+            {`$${balance || 0}`}
+          </Text>
+        </Descriptions.Item>
+      </Descriptions>
+      <br />
+      <br />
+
+      <ProForm onFinish={onFinishHandler} onReset={onResetHandler}>
         <ProFormGroup>
-          <ProFormText
-            width="sm"
-            name="handover"
+          <ProFormDigit
             label="交班餘額(3)"
+            min={1}
+            width="100%"
+            name="inputHandover"
           />
-          <ProFormText
-            width="sm"
-            name="other"
+          <ProFormDigit
             label="其他收入(4)"
+            min={1}
+            width="100%"
+            name="inputOther"
           />
         </ProFormGroup>
       </ProForm>

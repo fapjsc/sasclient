@@ -14,6 +14,17 @@ module.exports = {
   },
   plugins: ['react', 'html'],
   rules: {
+    'operator-linebreak': [
+      'error',
+      'after',
+      {
+        overrides: {
+          ':': 'before',
+          '&&': 'before',
+          '||': 'before',
+        },
+      },
+    ],
     'spaced-comment': 'off',
     'no-console': 'warn',
     'consistent-return': 'off',
@@ -26,6 +37,13 @@ module.exports = {
     'class-methods-use-this': 'off',
     'prefer-destructuring': ['error', { object: true, array: false }],
     'no-unused-vars': ['error', { argsIgnorePattern: 'req|res|next|val' }],
-    'import/no-extraneous-dependencies': ['error', { devDependencies: true, optionalDependencies: true, peerDependencies: true }],
+    'import/no-extraneous-dependencies': [
+      'error',
+      {
+        devDependencies: true,
+        optionalDependencies: true,
+        peerDependencies: true,
+      },
+    ],
   },
 };

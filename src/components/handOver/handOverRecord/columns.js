@@ -1,0 +1,146 @@
+import moment from 'moment';
+
+import { thousandsFormat } from '../../../lib/helper';
+
+const columns = [
+  {
+    title: 'ID',
+    key: 'id',
+    dataIndex: 'id',
+    hideInSearch: true,
+
+  },
+  {
+    title: 'initial_cash',
+    key: 'initial_cash',
+    dataIndex: 'initial_cash',
+    hideInSearch: true,
+    render: (text) => [`$${thousandsFormat(text)}`],
+    sorter: (a, b) => a.initial_cash - b.initial_cash,
+
+  },
+  {
+    title: 'cash_recharges',
+    key: 'cash_recharges',
+    dataIndex: 'cash_recharges',
+    hideInSearch: true,
+    render: (text) => [`$${thousandsFormat(text)}`],
+    sorter: (a, b) => a.cash_recharges - b.cash_recharges,
+
+  },
+  {
+    title: 'printed_tickets',
+    key: 'printed_tickets',
+    dataIndex: 'printed_tickets',
+    hideInSearch: true,
+    render: (text) => [`$${thousandsFormat(text)}`],
+    sorter: (a, b) => a.printed_tickets - b.printed_tickets,
+  },
+  {
+    title: 'sales_customer_card',
+    key: 'sales_customer_card',
+    dataIndex: 'sales_customer_card',
+    hideInSearch: true,
+    render: (text) => [`$${thousandsFormat(text)}`],
+    sorter: (a, b) => a.sales_customer_card - b.sales_customer_card,
+  },
+  {
+    title: 'cashier_in',
+    key: 'cashier_in',
+    dataIndex: 'cashier_in',
+    hideInSearch: true,
+    render: (text) => [`$${thousandsFormat(text)}`],
+    sorter: (a, b) => a.cashier_in - b.cashier_in,
+  },
+  {
+    title: 'g_credit_box_in',
+    key: 'g_credit_box_in',
+    dataIndex: 'g_credit_box_in',
+    hideInSearch: true,
+    render: (text) => [`$${thousandsFormat(text)}`],
+    sorter: (a, b) => a.g_credit_box_in - b.g_credit_box_in,
+  },
+  {
+    title: 'total_input',
+    key: 'total__input',
+    dataIndex: 'total__input',
+    hideInSearch: true,
+    render: (text) => [`$${thousandsFormat(text)}`],
+    sorter: (a, b) => a.total__input - b.total__input,
+  },
+  {
+    title: 'tickets_paid_by_cashier',
+    key: 'tickets_paid_by_cashier',
+    dataIndex: 'tickets_paid_by_cashier',
+    hideInSearch: true,
+    render: (text) => [`$${thousandsFormat(text)}`],
+    sorter: (a, b) => a.tickets_paid_by_cashier - b.tickets_paid_by_cashier,
+  },
+  {
+    title: 'payments_customer_card',
+    key: 'payments_customer_card',
+    dataIndex: 'payments_customer_card',
+    hideInSearch: true,
+    render: (text) => [`$${thousandsFormat(text)}`],
+    sorter: (a, b) => a.payments_customer_card - b.payments_customer_card,
+  },
+  {
+    title: 'cashier_out',
+    key: 'cashier_out',
+    dataIndex: 'cashier_out',
+    hideInSearch: true,
+    render: (text) => [`$${thousandsFormat(text)}`],
+    sorter: (a, b) => a.cashier_out - b.cashier_out,
+  },
+  {
+    title: 'g_credit_box_out',
+    key: 'g_credit_box_out',
+    dataIndex: 'g_credit_box_out',
+    hideInSearch: true,
+    render: (text) => [`$${thousandsFormat(text)}`],
+    sorter: (a, b) => a.g_credit_box_out - b.g_credit_box_out,
+  },
+  {
+    title: 'jackpot_payment',
+    key: 'jackpot_payment',
+    dataIndex: 'jackpot_payment',
+    hideInSearch: true,
+    render: (text) => [`$${thousandsFormat(text)}`],
+    sorter: (a, b) => a.jackpot_payment - b.jackpot_payment,
+  },
+  {
+    title: 'total_output',
+    key: 'total_output',
+    dataIndex: 'total_output',
+    hideInSearch: true,
+    render: (text) => [`$${thousandsFormat(text)}`],
+    sorter: (a, b) => a.total_output - b.total_output,
+  },
+  {
+    title: 'declared_cash',
+    key: 'declared_cash',
+    dataIndex: 'declared_cash',
+    hideInSearch: true,
+    render: (text) => [`$${thousandsFormat(text)}`],
+    sorter: (a, b) => a.declared_cash - b.declared_cash,
+  },
+  {
+    title: 'other_money_output',
+    key: 'other_money_output',
+    dataIndex: 'other_money_output',
+    hideInSearch: true,
+    render: (text) => [`$${thousandsFormat(text)}`],
+    sorter: (a, b) => a.other_money_output - b.other_money_output,
+  },
+  {
+    title: 'record_created_time',
+    key: 'created',
+    dataIndex: 'created',
+    render: (e) => moment(e.props.text).format('YYYY-MM-DD HH:mm'),
+    valueType: 'dateTimeRange',
+    sorter: (a, b) => moment(a.created).format('X') - moment(b.created).format('X'),
+    colSize: 2,
+  },
+];
+
+export default columns;

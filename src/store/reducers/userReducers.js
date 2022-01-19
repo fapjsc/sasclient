@@ -12,7 +12,6 @@ const initialState = {
   name: null,
 };
 
-// eslint-disable-next-line
 export const userReducer = (state = initialState, action) => {
   switch (action.type) {
     case SET_USER_INFO:
@@ -21,7 +20,7 @@ export const userReducer = (state = initialState, action) => {
         token: action.userInfo.token,
         permission: action.userInfo.permission,
         name: action.userInfo.name,
-        account: null,
+        account: action.userInfo.account,
       };
 
     case SYSTEM_LOG_OUT:
@@ -44,3 +43,5 @@ export const userReducer = (state = initialState, action) => {
       return state;
   }
 };
+
+export const temp = () => {};

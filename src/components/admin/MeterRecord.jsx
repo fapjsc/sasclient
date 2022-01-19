@@ -41,6 +41,7 @@ const MeterRecord = () => {
       key: 'ip',
       dataIndex: 'ip',
       copyable: true,
+
     },
     {
       title: 'Session',
@@ -94,6 +95,7 @@ const MeterRecord = () => {
       valueType: 'dateTimeRange',
       className: 'cancel-icon',
       render: (e) => moment(e.props.text).format('YYYY-MM-DD HH:mm:ss'),
+      colSize: 2,
     },
   ];
 

@@ -1,13 +1,12 @@
 import {
   AGENT_URL,
-  USER_LOGIN,
+  // USER_LOGIN,
   SYSTEM_LOGIN,
   GET_CRYPT_KEY,
   getHeaders,
 } from '../utils';
 
 //** Auth */
-// eslint-disable-next-line
 export const systemLogin = async (loginData) => {
   const url = `${AGENT_URL}/${SYSTEM_LOGIN}`;
   const headers = getHeaders();
@@ -22,12 +21,11 @@ export const systemLogin = async (loginData) => {
 
   //   console.log(data);
   if (!response.ok) throw new Error(data.message || 'Could not fetch login api.');
-
   if (data.status !== 200) throw new Error(data.message || 'Login fail');
 
   return {
     token: data.token,
-    permission: data.auth,
+    permission: data.permission,
     account: data.account,
     name: data.name,
   };
@@ -46,31 +44,30 @@ export const getCryptKey = async () => {
   return data.key;
 };
 
-export const userLogin = async (reqData) => {
-  console.log(reqData);
-  try {
-    // const url = `${AGENT_URL}/${USER_LOGIN}`;
-    // const headers = getHeaders();
-    // const response = await fetch(url, {
-    //   method: 'POST',
-    //   headers,
-    //   body: JSON.stringify(reqData),
-    // });
+// export const userLogin = async (reqData) => {
+//   try {
+//     // const url = `${AGENT_URL}/${USER_LOGIN}`;
+//     // const headers = getHeaders();
+//     // const response = await fetch(url, {
+//     //   method: 'POST',
+//     //   headers,
+//     //   body: JSON.stringify(reqData),
+//     // });
 
-    const url = `${USER_LOGIN}`;
-    const response = await fetch(url);
-    const data = await response.json();
-    if (!response.ok) throw new Error(data.message || 'Count not fetch login api');
-    // if (data.status !== 200) throw new Error(data.message || 'Login fail');
+//     const url = `${USER_LOGIN}`;
+//     const response = await fetch(url);
+//     const data = await response.json();
+//     if (!response.ok) throw new Error(data.message || 'Count not fetch login api');
+//     // if (data.status !== 200)   throw new Error(data.message || 'Login fail');
 
-    return {
-      status: 200,
-      result: reqData.username,
-    };
-  } catch (error) {
-    return {
-      status: 400,
-      message: error.message,
-    };
-  }
-};
+//     return {
+//       status: 200,
+//       result: reqData.username,
+//     };
+//   } catch (error) {
+//     return {
+//       status: 400,
+//       message: error.message,
+//     };
+//   }
+// };

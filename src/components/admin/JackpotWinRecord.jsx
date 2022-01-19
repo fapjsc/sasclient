@@ -145,6 +145,7 @@ const JackpotWinRecord = () => {
       valueType: 'dateTimeRange',
       className: 'cancel-icon',
       render: (e) => moment(e.props.text).format('YYYY-MM-DD HH:mm:ss'),
+      colSize: 2,
     },
   ];
 
@@ -152,8 +153,6 @@ const JackpotWinRecord = () => {
     if (!isSort) {
       data = await getJackpotWinRecord(params);
     }
-
-    console.log(data);
 
     setTimeout(() => {
       if (isSort) setIsSort(false);

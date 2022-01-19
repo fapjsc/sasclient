@@ -1,4 +1,5 @@
 import CryptoJS from 'crypto-js';
+import moment from 'moment';
 import store from '../store/store';
 
 // Actions
@@ -194,6 +195,10 @@ export const egmIsDisconnect = (connectTime) => {
 
   return (new Date() - new Date(connectTime)) > (1 * 1000 * 60);
 };
+
+export const transToTimestamp = (time) => moment(time).format('X');
+
+export const transToTimeString = (time) => moment(time).format('YYYY-MM-DD HH:mm:ss');
 
 //** for test */
 export const waitTime = (time) => new Promise((resolve) => {

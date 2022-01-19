@@ -6,8 +6,6 @@ import { AGENT_URL } from './api-store/utils';
 // Actions
 import { setEgmStatus } from '../store/actions/egmActions';
 
-// const SERVER = 'http://192.168.10.200:3030';
-
 let socket;
 
 let egmStatusTmp;

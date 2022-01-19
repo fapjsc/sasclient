@@ -14,7 +14,7 @@ import { restEgmCashInOut } from '../../../store/actions/egmActions';
 // Components
 import CashForm from './CashForm';
 
-const CashInAndOut = ({ visible, setVisible, selectMachine }) => {
+const CashInAndOut = ({ visible, setVisible }) => {
   const dispatch = useDispatch();
 
   const [current, setCurrent] = useState(0);
@@ -28,7 +28,7 @@ const CashInAndOut = ({ visible, setVisible, selectMachine }) => {
     <Modal title="設定" visible={visible} onCancel={handleCancel} width={800} footer={null}>
       <CashForm
         setVisible={setVisible}
-        selectMachine={selectMachine}
+        // selectMachine={selectMachine}
         handleCancel={handleCancel}
         current={current}
         setCurrent={setCurrent}
@@ -40,7 +40,7 @@ const CashInAndOut = ({ visible, setVisible, selectMachine }) => {
 CashInAndOut.propTypes = {
   visible: PropTypes.bool.isRequired,
   setVisible: PropTypes.func.isRequired,
-  selectMachine: PropTypes.func.isRequired,
+  // selectMachine: PropTypes.func.isRequired,
 };
 
 export default CashInAndOut;

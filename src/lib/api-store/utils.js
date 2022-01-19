@@ -19,9 +19,12 @@ export const JACKPOT_SETTING = 'sasClient/jackpotSetting';
 export const EGM_LIST = 'sasClient/egmList';
 export const AFT = 'sasClient/aft';
 
+// Staff
+export const CREATE_STAFF = 'login/register';
+
 // Auth api
 export const SYSTEM_LOGIN = 'login/sasClient';
-export const USER_LOGIN = 'https://jsonplaceholder.typicode.com/posts/1/comments';
+
 export const GET_CRYPT_KEY = 'login/getKey';
 
 // Cashiers api
@@ -29,8 +32,10 @@ export const CASHIER_OPERATOR = 'sasClient/cashier';
 export const GET_CASHIER_RECORD = 'sasClient/cashierOperationRecord';
 
 // Handover api
-export const HAND_OVER_EGM_DETAIL = 'sasClient/handoverEgmList';
-export const HAND_OVER_RECORD = 'https://jsonplaceholder.typicode.com/posts/1/comments';
+// export const HAND_OVER_EGM_DETAIL = 'sasClient/handoverEgmList';
+export const HAND_OVER_STATISTICS_DETAIL = 'sasClient/handoverStatistics';
+export const HAND_OVER_RECORD = 'sasClient/handoverRecord';
+export const HAND_OVER_LOGIN = 'sasClient/handover';
 
 // Get Headers
 export const getHeaders = (token = null) => {

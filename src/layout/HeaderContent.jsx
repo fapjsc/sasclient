@@ -1,13 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 
 // Redux
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 // Antd
 import {
-  Space, Menu, Dropdown, Avatar, Button,
+  Space, Menu, Dropdown, Avatar,
 } from 'antd';
-import { LogoutOutlined, GlobalOutlined } from '@ant-design/icons';
 
 // Hooks
 import { useI18n } from '../i18n';
@@ -21,49 +20,14 @@ import {
 // Components
 import AutoLogout from '../components/AutoLogout';
 import Clock from '../components/Clock';
-import ModalUserLogin from '../components/modal/ModalUserLogin';
-
-// Actions
-import { userLogoutAction } from '../store/actions/userActions';
-
-// Config
-import { i18nTypes } from '../config/config';
 
 const HeaderContent = () => {
-  // Init State
-  const [showLoginModel, setShowLoginModel] = useState(false);
-
   // Redux
   const { account } = useSelector((state) => state.user);
-  const dispatch = useDispatch();
 
   // Hooks
+  // eslint-disable-next-line
   const { setLocale, getLocale } = useI18n();
-
-  const handleSelectLanguage = (item) => {
-    setLocale(item.key);
-  };
-
-  const i18nMenu = (
-    <Menu
-      onClick={(e) => {
-        handleSelectLanguage(e);
-      }}
-    >
-      {i18nTypes.map((el) => (
-        <Menu.Item key={el.key}>
-          <Space>
-            <p>{el.icon}</p>
-            <p>{el.lan}</p>
-          </Space>
-        </Menu.Item>
-      ))}
-    </Menu>
-  );
-
-  const userLogoutHandler = () => {
-    dispatch(userLogoutAction());
-  };
 
   useEffect(() => {
     connectWithSocket();
@@ -75,12 +39,12 @@ const HeaderContent = () => {
 
   const avatarMenu = (
     <Menu>
-      <Menu.Item key="logout" onClick={userLogoutHandler}>
+      <Menu.Item key="logout">
         <Space>
-          <p>
+          {/* <p>
             <LogoutOutlined />
-          </p>
-          <p>登出</p>
+          </p> */}
+          {/* <p>登出</p> */}
         </Space>
       </Menu.Item>
     </Menu>
@@ -92,14 +56,8 @@ const HeaderContent = () => {
     localStorage.setItem('locale', locale);
   });
 
-  const onCancelHandler = () => {
-    setShowLoginModel(false);
-  };
-
   return (
     <>
-      <ModalUserLogin onVisible={showLoginModel} onCancel={onCancelHandler} />
-
       <Space>
         <Clock />
       </Space>
@@ -130,22 +88,6 @@ const HeaderContent = () => {
           </Space>
         )}
 
-        {!account && (
-          <div style={{ marginRight: '1rem' }}>
-            <Button onClick={() => setShowLoginModel(true)}>LOGIN</Button>
-          </div>
-        )}
-
-        <Dropdown overlay={i18nMenu}>
-          <Space style={{ cursor: 'pointer', marginBottom: '1px' }}>
-            <Avatar
-              icon={<GlobalOutlined />}
-              size="small"
-              menu={avatarMenu}
-              style={{ fontSize: '1.5rem', color: '#91d5ff' }}
-            />
-          </Space>
-        </Dropdown>
       </Space>
 
       <AutoLogout />

@@ -40,7 +40,7 @@ const HandOverEgmDetail = () => {
 
     return Promise.resolve({
       success: true,
-      data: data.filter((item) => {
+      data: data?.filter((item) => {
         if (ip && !model) {
           return item.ip === ip;
         }
@@ -54,7 +54,7 @@ const HandOverEgmDetail = () => {
         }
 
         return true;
-      }),
+      }) || [],
     });
   };
 

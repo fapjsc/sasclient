@@ -17,11 +17,9 @@ const EgmSettingScreen = () => {
 
   return (
     <Tabs tabBarGutter={60} defaultActiveKey="egm-setting" onChange={callback}>
-
       <TabPane tab="EGM設定" key="egm-setting">
         <EgmSetting />
       </TabPane>
-
     </Tabs>
   );
 };

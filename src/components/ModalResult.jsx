@@ -5,30 +5,23 @@ import { useHistory } from 'react-router-dom';
 
 const ModalResult = ({ isModalVisible = true }) => {
   const history = useHistory();
+
+  const btn = (
+    <Button type="primary" key="console" onClick={() => history.replace('/login')}>
+      重新登入
+    </Button>
+  );
   return (
     <>
-      <Modal
-        visible={isModalVisible}
-        closable={false}
-        footer={false}
-      >
-        <Result
-          status="warning"
-          title="Token Invalid"
-          extra={(
-            <Button type="primary" key="console" onClick={() => history.replace('/login')}>
-              重新登入
-            </Button>
-    )}
-        />
-
+      <Modal visible={isModalVisible} closable={false} footer={false}>
+        <Result status="warning" title="Token Invalid" extra={btn} />
       </Modal>
     </>
   );
 };
 
 ModalResult.propTypes = {
-  isModalVisible: PropTypes.func.isRequired,
+  isModalVisible: PropTypes.bool.isRequired,
 };
 
 export default ModalResult;

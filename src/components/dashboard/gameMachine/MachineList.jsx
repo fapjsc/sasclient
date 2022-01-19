@@ -145,14 +145,25 @@ const MachineList = () => {
 
 AllMenu.propTypes = {
   item: PropTypes.shape({
-    number: PropTypes.number.isRequired,
-    creditInCent: PropTypes.number.isRequired,
-    status: PropTypes.string.isRequired,
+    number: PropTypes.number,
+    creditInCent: PropTypes.number,
+    status: PropTypes.string,
     signalConnectionTime: PropTypes.string,
     ip: PropTypes.string,
     model: PropTypes.string,
-  }).isRequired,
+  }),
   isDisconnect: PropTypes.bool.isRequired,
+};
+
+AllMenu.defaultProps = {
+  item: {
+    number: null,
+    creditInCent: null,
+    status: null,
+    signalConnectionTime: '',
+    ip: '',
+    model: '',
+  },
 };
 
 export default MachineList;

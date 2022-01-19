@@ -12,7 +12,6 @@ import { useDispatch } from 'react-redux';
 
 // Antd
 import {
-  // eslint-disable-next-line
   Form,
   Input,
   Button,
@@ -66,7 +65,6 @@ const Login = () => {
   } = useHttp(systemLogin);
 
   const {
-    // eslint-disable-next-line
     sendRequest: getCryptKeyReq,
     status: getCryptKeyStatus,
     data: cryptKey,
@@ -188,8 +186,8 @@ const Login = () => {
                   loginStatus === 'pending' || getCryptKeyStatus === 'pending'
                 }
               >
-                {loginStatus === 'pending' || getCryptKeyStatus === 'pending'
-                  ? 'loading'
+                {loginStatus === 'pending' || getCryptKeyStatus === 'pending' ?
+                  'loading'
                   : '確定'}
               </Button>
             </Form.Item>

@@ -32,8 +32,7 @@ const EgmStatisticCard = ({ onFilterHandler }) => {
         && Object.values(sections).map((item) => {
           const statisticStyle = {
             width: 120,
-            borderRight: item.total
-              ? `1px solid ${variable['grey-dark']}`
+            borderRight: item.total ? `1px solid ${variable['grey-dark']}`
               : undefined,
           };
 

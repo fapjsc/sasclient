@@ -87,6 +87,7 @@ const SystemLog = () => {
       valueType: 'dateTimeRange',
       className: 'cancel-icon',
       render: (e) => moment(e.props.text).format('YYYY-MM-DD HH:mm:ss'),
+      colSize: 2,
     },
   ];
 
@@ -128,8 +129,6 @@ const SystemLog = () => {
       headerTitle="System Log"
       request={requestPromise}
       beforeSearchSubmit={(params) => {
-        console.log(params);
-
         searchRef.current = params;
         return params;
       }}

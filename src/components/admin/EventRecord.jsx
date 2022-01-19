@@ -64,6 +64,7 @@ const EventRecord = () => {
       valueType: 'dateTimeRange',
       className: 'cancel-icon',
       render: (e) => moment(e.props.text).format('YYYY-MM-DD HH:mm:ss'),
+      colSize: 2,
     },
   ];
 

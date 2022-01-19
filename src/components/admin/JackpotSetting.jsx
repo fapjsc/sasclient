@@ -201,18 +201,17 @@ export default () => {
         name="table"
         columns={columns}
         request={requestPromise}
-        recordCreatorProps={position !== 'hidden'
-          ? {
-            position: position,
-            creatorButtonText: '新增層數 (最多6層)',
-            record: (index) => (
-              {
-                level: index + 1,
-                id: uuid(),
-                // key: uuid(),
-              })
-            ,
-          }
+        recordCreatorProps={position !== 'hidden' ? {
+          position: position,
+          creatorButtonText: '新增層數 (最多6層)',
+          record: (index) => (
+            {
+              level: index + 1,
+              id: uuid(),
+              // key: uuid(),
+            })
+          ,
+        }
           : false}
         toolBarRender={() => [
           <ProFormRadio.Group

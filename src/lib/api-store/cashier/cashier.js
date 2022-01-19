@@ -44,7 +44,6 @@ export const cashierOperator = async (value) => {
 };
 
 export const GetCashierRecord = async (params) => {
-  console.log(params);
   try {
     const {
       charactor, operationCode, target, created,
@@ -60,7 +59,6 @@ export const GetCashierRecord = async (params) => {
     const response = await fetch(url, { headers });
 
     const data = await response.json();
-    console.log(data);
 
     if (!response.ok) throw new Error(data.message || 'Could not set counter');
     if (data.status !== 200) throw new Error(data.message || 'set counter amount fail');

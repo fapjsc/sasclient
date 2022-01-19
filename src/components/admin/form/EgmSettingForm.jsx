@@ -49,8 +49,8 @@ const EgmUpdateForm = (props) => {
       modalProps={{
         onCancel: () => onDone(),
         destroyOnClose: true,
-        bodyStyle: done
-          ? {
+        bodyStyle: done ?
+          {
             padding: '72px 0',
           }
           : {},
