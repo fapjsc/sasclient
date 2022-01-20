@@ -46,9 +46,9 @@ const gold5 = {
   color: variable['gold-5'],
 };
 
-const red5 = {
-  color: variable['red-5'],
-};
+// const red5 = {
+//   color: variable['red-5'],
+// };
 
 const CashierInOut = () => {
   // Ref
@@ -109,19 +109,19 @@ const CashierInOut = () => {
     return <span className={styles['fade-in']} style={totalAmountStyle}>-</span>;
   };
 
-  const moneyBalanceRender = (dom) => {
-    // const domIsNum = _.isNumber(dom);
-    if (dom) {
-      return (
-        <Space className={styles['fade-in']}>
-          <span style={{ ...totalAmountStyle, ...red5 }}>$</span>
-          <span style={{ ...totalAmountStyle, ...red5 }}>{thousandsFormat(dom)}</span>
-        </Space>
-      );
-    }
+  // const moneyBalanceRender = (dom) => {
+  //   // const domIsNum = _.isNumber(dom);
+  //   if (dom) {
+  //     return (
+  //       <Space className={styles['fade-in']}>
+  //         <span style={{ ...totalAmountStyle, ...red5 }}>$</span>
+  //         <span style={{ ...totalAmountStyle, ...red5 }}>{thousandsFormat(dom)}</span>
+  //       </Space>
+  //     );
+  //   }
 
-    return <span className={styles['fade-in']} style={totalAmountStyle}>-</span>;
-  };
+  //   return <span className={styles['fade-in']} style={totalAmountStyle}>-</span>;
+  // };
 
   useEffect(() => {
     if (getAmountError) message.error(getAmountError);
@@ -162,7 +162,7 @@ const CashierInOut = () => {
     <Card
       title="櫃檯"
       extra={descriptionExtra}
-      // border={false}
+      border={false}
       style={{ maxWidth: '35rem' }}
     >
       <Space>
@@ -174,12 +174,12 @@ const CashierInOut = () => {
           <ProDescriptions.Item render={moneyAmountRender} dataIndex="amount" />
         </ProDescriptions>
 
-        <ProDescriptions
+        {/* <ProDescriptions
           title="差額"
           dataSource={{ balance: 1113 }}
         >
           <ProDescriptions.Item render={moneyBalanceRender} dataIndex="balance" />
-        </ProDescriptions>
+        </ProDescriptions> */}
       </Space>
 
       <Divider style={{ color: variable['grey-dark'] }} orientation="left">設定</Divider>

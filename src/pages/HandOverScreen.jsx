@@ -1,14 +1,12 @@
 import React, { useState } from 'react';
 
 // Antd
-import { Tabs } from 'antd';
-// import { CoffeeOutlined } from '@ant-design/icons';
+import { Tabs, Tag, Space } from 'antd';
 
 // Components
 import HandOverDetail from '../components/handOver/handOverDetail/HandOverDetail';
 import HandOverEgmDetail from '../components/handOver/handEgmOverDetail/HandOverEgmDetail';
 import HandOverRecord from '../components/handOver/handOverRecord/HandOverRecord';
-// import ModalConfirm from '../components/ModalConfirm';
 import ModalUerLogin from '../components/modal/ModalUserLogin';
 
 const { TabPane } = Tabs;
@@ -16,9 +14,15 @@ const { TabPane } = Tabs;
 const CashierScreen = () => {
   // Init State
   const [showModal, setShowModal] = useState(false);
-  // const callback = (key) => {
-  //   console.log(key);
-  // };
+  const [showTag, setShowTag] = useState(true);
+
+  const callback = (key) => {
+    if (key === 'handover-detail') {
+      setShowTag(false);
+    } else {
+      setShowTag(true);
+    }
+  };
 
   const onShow = () => {
     setShowModal(true);
@@ -30,7 +34,7 @@ const CashierScreen = () => {
 
   // const OperationsSlot = {
   //   right: (
-  //     <Button onClick={onShow} type="danger" icon={<CoffeeOutlined />}>
+  //     <Button onClick={onShow} type="danger">
   //       交班
   //     </Button>
   //   ),
@@ -41,20 +45,36 @@ const CashierScreen = () => {
       <ModalUerLogin onVisible={showModal} onCancel={onHide} />
       <Tabs
         defaultActiveKey="handover-egm-detail"
-        // onChange={callback}
+        onChange={callback}
         tabBarGutter={60}
         size="lg"
         // tabBarExtraContent={OperationsSlot}
       >
-        <TabPane tab="EGM明細" key="handover-egm-detail">
+        <TabPane
+          key="handover-egm-detail"
+          tab="EGM明細"
+        >
           <HandOverEgmDetail />
         </TabPane>
 
-        <TabPane tab="統計明細" key="handover-detail">
+        <TabPane
+          key="handover-detail"
+          tab={(
+            <Space>
+              <span>統計明細</span>
+              {
+                showTag && <Tag color="lime">交班</Tag>
+              }
+            </Space>
+        )}
+        >
           <HandOverDetail onShow={onShow} />
         </TabPane>
 
-        <TabPane tab="交班記錄" key="handover-history">
+        <TabPane
+          key="handover-history"
+          tab="交班記錄"
+        >
           <HandOverRecord />
         </TabPane>
       </Tabs>

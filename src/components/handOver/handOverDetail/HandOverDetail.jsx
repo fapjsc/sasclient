@@ -52,8 +52,10 @@ const HandOverDetail = ({onShow}) => {
   // Redux
   const dispatch = useDispatch();
   const { inputData } = useSelector((state) => state.handoverInput);
-  // eslint-disable-next-line
-  const { inputTotal, totalClose, balance } = inputData || {};
+
+  const {
+    totalClose, balance, inputHandover, inputOther,
+  } = inputData || {};
 
   // Init State
   const [amountTotal, setAmountTotal] = useState({
@@ -64,6 +66,7 @@ const HandOverDetail = ({onShow}) => {
 
   // Ref
   const actionRef = useRef();
+  const buttonRef = useRef();
   // const dataRef = useRef();
 
   //** 總計  */
@@ -106,6 +109,7 @@ const HandOverDetail = ({onShow}) => {
       <Row justify="end">
         <Col>
           <Button
+            ref={buttonRef}
             onClick={onShow}
             type="danger"
             icon={<CoffeeOutlined />}
@@ -114,6 +118,7 @@ const HandOverDetail = ({onShow}) => {
           </Button>
         </Col>
       </Row>
+
       <ProDescriptions
         request={requestPromiseTotal}
         columns={totalColumns}
@@ -189,12 +194,14 @@ const HandOverDetail = ({onShow}) => {
             min={1}
             width="100%"
             name="inputHandover"
+            placeholder={inputHandover && `上次輸入${inputHandover}`}
           />
           <ProFormDigit
             label="其他收入(4)"
             min={1}
             width="100%"
             name="inputOther"
+            placeholder={inputOther && `上次輸入${inputOther}`}
           />
         </ProFormGroup>
       </ProForm>

@@ -7,10 +7,6 @@ import {
   SettingOutlined,
   FileTextOutlined,
   DashboardOutlined,
-  // DollarOutlined,
-  // HomeOutlined,
-  // ToolOutlined,
-  // FileZipOutlined,
 } from '@ant-design/icons';
 
 //** Authorized Pages */
