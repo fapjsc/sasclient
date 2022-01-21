@@ -1,61 +1,50 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
+
+import PropTypes from 'prop-types';
 
 // Redux
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 // Antd
 import {
-  Descriptions, Typography, Button, Row, Col,
+  Descriptions, Typography, Button,
 } from 'antd';
-import ProDescriptions from '@ant-design/pro-descriptions';
-import ProForm, { ProFormDigit, ProFormGroup } from '@ant-design/pro-form';
-import { CoffeeOutlined } from '@ant-design/icons';
 
-import {
-  totalColumns,
-} from './columns';
+import ProDescriptions from '@ant-design/pro-descriptions';
+
+import { CoffeeOutlined, ReloadOutlined } from '@ant-design/icons';
 
 // Apis
 import { handoverStatistics } from '../../../lib/api-store/handover/handover';
 
-// Actions
-import {
-  setHandoverInput,
-  handoverInputReset,
-} from '../../../store/actions/handoverInputActions';
+// Helpers
+import { thousandsFormat, transToTimeString } from '../../../lib/helper';
+
+// Columns
+import { totalColumns } from './columns';
 
 // Styles
 import variable from '../../../sass/variable.module.scss';
 
 const contentStyle = {
   color: variable['grey-light'],
+  textAlign: 'right',
 };
 
 const labelStyle = {
   color: variable['grey-light'],
 };
 
-const colorRed = {
-  color: variable['red-5'],
-};
-
-const colorBlue = {
-  color: variable['blue-md'],
-};
-
-const { Text } = Typography;
+const { Title } = Typography;
 
 let data;
 
-// eslint-disable-next-line
-const HandOverDetail = ({onShow}) => {
-  // Redux
-  const dispatch = useDispatch();
-  const { inputData } = useSelector((state) => state.handoverInput);
-
+const HandOverDetail = ({ onShow }) => {
   const {
-    totalClose, balance, inputHandover, inputOther,
-  } = inputData || {};
+    data: loginData,
+    loading: loginLading,
+    error: loginError,
+  } = useSelector((state) => state.handoverLogin);
 
   // Init State
   const [amountTotal, setAmountTotal] = useState({
@@ -69,7 +58,6 @@ const HandOverDetail = ({onShow}) => {
   const buttonRef = useRef();
   // const dataRef = useRef();
 
-  //** 總計  */
   const requestPromiseTotal = async () => {
     data = await handoverStatistics();
 
@@ -85,41 +73,38 @@ const HandOverDetail = ({onShow}) => {
     });
   };
 
-  const onFinishHandler = (value) => {
-    const currentTotal = (value?.inputHandover || 0) + (value?.inputOther || 0); // 3 + 4
-    const getTotalClose = amountTotal.amountOutput + currentTotal; // 2 + 3 + 4
-    const getBalance = getTotalClose - amountTotal.amountInput; // 5 - 1
-
-    const formatInputData = {
-      inputHandover: value?.inputHandover || 0,
-      inputOther: value?.inputOther || 0,
-      inputTotal: currentTotal,
-      totalClose: getTotalClose,
-      balance: getBalance,
-    };
-    dispatch(setHandoverInput(formatInputData));
-  };
-
-  const onResetHandler = () => {
-    dispatch(handoverInputReset());
-  };
+  useEffect(() => {
+    if (!loginData || loginError || loginLading) return;
+    actionRef.current?.reload();
+  }, [loginData, loginLading, loginError]);
 
   return (
     <>
-      <Row justify="end">
-        <Col>
-          <Button
-            ref={buttonRef}
-            onClick={onShow}
-            type="danger"
-            icon={<CoffeeOutlined />}
-          >
-            交班
-          </Button>
-        </Col>
-      </Row>
-
       <ProDescriptions
+        column={2}
+        tooltip={`更新時間: ${transToTimeString(new Date())}`}
+        extra={(
+          <>
+            <Button
+              ref={buttonRef}
+              onClick={onShow}
+              type="danger"
+              icon={<CoffeeOutlined />}
+            >
+              交班
+            </Button>
+            <Button
+              ref={buttonRef}
+              onClick={() => actionRef.current?.reload()}
+              type="ghost"
+              icon={<ReloadOutlined />}
+            >
+              刷新
+            </Button>
+          </>
+        )}
+        title="報表"
+        bordered
         request={requestPromiseTotal}
         columns={totalColumns}
         actionRef={actionRef}
@@ -130,83 +115,24 @@ const HandOverDetail = ({onShow}) => {
       <br />
 
       <Descriptions
-        title=" 勞動報酬"
         contentStyle={contentStyle}
         labelStyle={labelStyle}
-        bordered
       >
         <Descriptions.Item label="結算金額 (1-2)">
-          <Text style={amountTotal.amountMinus < 0 && colorRed}>
-            {`$${amountTotal.amountMinus}`}
-          </Text>
-        </Descriptions.Item>
-        <Descriptions.Item label="淨收益 (1-2-5-6)">
-          <Text style={amountTotal.amountMinus - totalClose - balance < 0 && colorRed}>
-            {`$${amountTotal.amountMinus - totalClose - balance || 0}`}
-          </Text>
+          <Title
+            type={amountTotal.amountMinus < 0 ? 'danger' : 'success'}
+            level={2}
+          >
+            {`$${thousandsFormat(amountTotal.amountMinus)}`}
+          </Title>
         </Descriptions.Item>
       </Descriptions>
-      <br />
-      <br />
-
-      <Descriptions
-        title="交班金額"
-        contentStyle={contentStyle}
-        labelStyle={labelStyle}
-        bordered
-      >
-        <Descriptions.Item label="櫃檯金額 (1-2)">
-          <Text style={amountTotal.amountMinus < 0 && colorRed}>
-            {`$${amountTotal.amountMinus}`}
-          </Text>
-        </Descriptions.Item>
-        <Descriptions.Item label="機器鈔入(7)">$0</Descriptions.Item>
-        <Descriptions.Item label="總計 (1-2+7)">{`$${amountTotal.amountMinus + 0}`}</Descriptions.Item>
-      </Descriptions>
-      <br />
-      <br />
-
-      <Descriptions
-        title="結算查詢"
-        contentStyle={colorBlue}
-        labelStyle={colorBlue}
-        bordered
-      >
-        <Descriptions.Item label="總關閉(5)(2+3+4)">
-          <Text style={totalClose >= 0 ? colorBlue : colorRed}>
-            {`$${totalClose || amountTotal.amountOutput || 0}`}
-          </Text>
-        </Descriptions.Item>
-
-        <Descriptions.Item label="結算差額(6)(5-1)">
-          <Text style={totalClose >= 0 ? colorBlue : colorRed}>
-            {`$${balance || 0}`}
-          </Text>
-        </Descriptions.Item>
-      </Descriptions>
-      <br />
-      <br />
-
-      <ProForm onFinish={onFinishHandler} onReset={onResetHandler}>
-        <ProFormGroup>
-          <ProFormDigit
-            label="交班餘額(3)"
-            min={1}
-            width="100%"
-            name="inputHandover"
-            placeholder={inputHandover && `上次輸入${inputHandover}`}
-          />
-          <ProFormDigit
-            label="其他收入(4)"
-            min={1}
-            width="100%"
-            name="inputOther"
-            placeholder={inputOther && `上次輸入${inputOther}`}
-          />
-        </ProFormGroup>
-      </ProForm>
     </>
   );
+};
+
+HandOverDetail.propTypes = {
+  onShow: PropTypes.func.isRequired,
 };
 
 export default HandOverDetail;

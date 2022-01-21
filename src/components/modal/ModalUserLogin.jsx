@@ -6,7 +6,7 @@ import crypto from 'crypto';
 import { useDispatch, useSelector } from 'react-redux';
 
 // Antd
-import ProForm, { ModalForm, ProFormText, ProFormDigit } from '@ant-design/pro-form';
+import ProForm, { ModalForm, ProFormText, ProFormMoney } from '@ant-design/pro-form';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { message, Button } from 'antd';
 
@@ -33,8 +33,6 @@ const ModalUserLogin = ({ onVisible, onCancel }) => {
 
   // Redux
   const dispatch = useDispatch();
-  const { inputData } = useSelector((state) => state.handoverInput);
-  const { inputHandover, inputOther } = inputData || {};
 
   const {
     data: loginData,
@@ -50,14 +48,11 @@ const ModalUserLogin = ({ onVisible, onCancel }) => {
   } = useHttp(getCryptKey);
 
   const onFinishHandler = (values) => {
-    getCryptKeyReq();
+    if (!values?.declaredCash) values.declaredCash = 0;
+    if (!values?.otherMoneyOutput) values.otherMoneyOutput = 0;
 
-    const data = {
-      ...values,
-      declaredCash: inputHandover,
-      otherMoneyOutput: inputOther,
-    };
-    setFormData(data);
+    getCryptKeyReq();
+    setFormData(values);
   };
 
   // Get CryptKey 監聽
@@ -166,8 +161,14 @@ const ModalUserLogin = ({ onVisible, onCancel }) => {
       />
 
       <ProForm.Group>
-        <ProFormDigit label="交班餘額" name="handover" value={inputHandover} disabled />
-        <ProFormDigit label="其他收入" name="other" value={inputOther} disabled />
+        <ProFormMoney
+          label="交班餘額"
+          name="declaredCash"
+        />
+        <ProFormMoney
+          label="其他收入"
+          name="otherMoneyOutput"
+        />
       </ProForm.Group>
     </ModalForm>
   );

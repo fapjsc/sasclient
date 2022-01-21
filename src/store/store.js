@@ -8,13 +8,13 @@ import thunk from 'redux-thunk';
 // Reducer
 import { userReducer } from './reducers/userReducers';
 import { egmCashInOutReducer, egmStatus } from './reducers/egmReducer';
-import { handoverInputReducers, handoverLoginReducers } from './reducers/handoverReducers';
+import { handoverLoginReducers } from './reducers/handoverReducers';
 
 const reducer = combineReducers({
   user: userReducer,
   egmCashInOutData: egmCashInOutReducer,
   egmStatus,
-  handoverInput: handoverInputReducers,
+  // handoverInput: handoverInputReducers,
   handoverLogin: handoverLoginReducers,
 });
 

@@ -1,14 +1,14 @@
 import handoverActionTypes from '../types/handoverTypes';
 
-const handoverInputInitialState = {
-  inputData: {
-    inputHandover: 0,
-    inputOther: 0,
-    inputTotal: 0,
-    totalClose: 0,
-    balance: 0,
-  },
-};
+// const handoverInputInitialState = {
+//   inputData: {
+//     inputHandover: 0,
+//     inputOther: 0,
+//     inputTotal: 0,
+//     totalClose: 0,
+//     balance: 0,
+//   },
+// };
 
 const handoverLoginInitialState = {
   loading: false,
@@ -16,21 +16,21 @@ const handoverLoginInitialState = {
   error: '',
 };
 
-export const handoverInputReducers = (state = handoverInputInitialState, action) => {
-  switch (action.type) {
-    case handoverActionTypes.HANDOVER_INPUT: {
-      return {
-        inputData: action.payload,
-      };
-    }
+// export const handoverInputReducers = (state = handoverInputInitialState, action) => {
+//   switch (action.type) {
+//     case handoverActionTypes.HANDOVER_INPUT: {
+//       return {
+//         inputData: action.payload,
+//       };
+//     }
 
-    case handoverActionTypes.HANDOVER_INPUT_RESET:
-      return handoverInputInitialState;
+//     case handoverActionTypes.HANDOVER_INPUT_RESET:
+//       return handoverInputInitialState;
 
-    default:
-      return state;
-  }
-};
+//     default:
+//       return state;
+//   }
+// };
 
 export const handoverLoginReducers = (state = handoverLoginInitialState, action) => {
   switch (action.type) {
@@ -61,3 +61,5 @@ export const handoverLoginReducers = (state = handoverLoginInitialState, action)
       return state;
   }
 };
+
+export const tmp = () => {};

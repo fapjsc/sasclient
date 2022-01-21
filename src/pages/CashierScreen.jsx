@@ -6,6 +6,7 @@ import { Tabs } from 'antd';
 // Components
 import CashierRecord from '../components/cashier/cashier-record/CashierRecord';
 import CashierInOut from '../components/cashier/cashier-cash-in-out/CashierInOut';
+import Ticket from '../components/cashier/ticket/Ticket';
 
 const { TabPane } = Tabs;
 
@@ -19,14 +20,11 @@ const CashierScreen = () => (
   >
     <TabPane tab="櫃檯金額" key="1">
       <CashierInOut />
-      {/* <ul>
-          <li>開班週轉金</li>
-          <li>櫃檯抽屜現金補入或提取</li>
-        </ul> */}
     </TabPane>
 
     <TabPane tab="票務" key="2">
-      <p>開票</p>
+      <Ticket />
+      {/* <p>開票</p>
       <ul>
         <li>一般</li>
         <li>Po</li>
@@ -47,7 +45,7 @@ const CashierScreen = () => (
         <li>票號有效，但原票卷無法使用</li>
       </ul>
 
-      <p>票據查詢</p>
+      <p>票據查詢</p> */}
     </TabPane>
 
     <TabPane tab="清箱" key="3">
