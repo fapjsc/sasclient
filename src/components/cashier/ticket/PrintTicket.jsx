@@ -5,7 +5,7 @@ const PrintTicket = () => (
   <div>
     <h1>Print Ticket</h1>
     <ProCard direction="column" ghost gutter={[0, 8]}>
-      <ProCard colSpan={8} layout="center" bordered>
+      <ProCard colSpan={12} layout="center" bordered>
         colSpan - 12
       </ProCard>
     </ProCard>

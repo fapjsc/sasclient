@@ -1,4 +1,3 @@
-// eslint-disable-next-line
 import React, { useState } from 'react';
 // import Barcode from 'react-barcode';
 // import BarcodeScannerComponent from 'react-qr-barcode-scanner';
