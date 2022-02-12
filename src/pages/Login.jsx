@@ -1,8 +1,13 @@
 import React, { useEffect, useState, useRef } from 'react';
 
+// Gsap
 import { gsap } from 'gsap';
 
+// Crypto
 import crypto from 'crypto';
+
+// Toast
+import { toast } from 'react-toastify';
 
 // Router props
 import { useHistory } from 'react-router-dom';
@@ -15,7 +20,7 @@ import {
   Form,
   Input,
   Button,
-  message,
+  // message,
 } from 'antd';
 
 import { CloseCircleOutlined } from '@ant-design/icons';
@@ -81,7 +86,8 @@ const Login = () => {
     if (getCryptKeyStatus === 'pending') return;
 
     if (getCryptKeyError) {
-      message.error(getCryptKeyError);
+      // message.error(getCryptKeyError);
+      toast.error(getCryptKeyError);
     }
 
     if (cryptKey) {
@@ -108,7 +114,8 @@ const Login = () => {
     if (loginStatus === 'pending') return;
 
     if (loginError) {
-      message.error(loginError);
+      // message.error(loginError);
+      toast.error(loginError);
       return;
     }
 
@@ -162,6 +169,7 @@ const Login = () => {
             <Form.Item
               name="account"
               rules={[{ required: true, message: '*請輸入帳號!' }]}
+              autoComplete="off"
             >
               <Input
                 placeholder="帳號"

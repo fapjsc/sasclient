@@ -1,7 +1,11 @@
 import React from 'react';
 
-// Antd
+// Components
 import { Tabs } from 'antd';
+import AddMemberForm from '../components/member/AddMemberForm';
+import MemberAuth from '../components/member/member-operation/MemberAuth';
+
+// Antd
 
 const { TabPane } = Tabs;
 
@@ -19,14 +23,14 @@ const MemberScreen = () => {
       style={{ padding: '12px' }}
     >
       <TabPane tab="新增會員" key="1">
-        新增會員
+        <AddMemberForm />
       </TabPane>
 
-      <TabPane tab="儲值" key="2">
-        儲值
+      <TabPane tab="會員操作" key="2">
+        <MemberAuth />
       </TabPane>
 
-      <TabPane tab="提領" key="3">
+      {/* <TabPane tab="提領" key="3">
         提領
       </TabPane>
 
@@ -36,7 +40,7 @@ const MemberScreen = () => {
 
       <TabPane tab="會員明細" key="5">
         會員明細
-      </TabPane>
+      </TabPane> */}
     </Tabs>
   );
 };

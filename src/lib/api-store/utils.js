@@ -1,10 +1,17 @@
 import { _getUserToken } from '../helper';
 
-// Local Server
-// export const localServer = 'http://192.168.10.60/api';
-// export const AGENT_URL = 'http://192.168.10.119:3030';
-
 export { AGENT_URL } from '../../config/config';
+
+// Get Headers
+export const getHeaders = (token = null) => {
+  const headers = new Headers();
+  if (!token) token = _getUserToken();
+
+  if (token) headers.append('Authorization', `bearer ${token}`);
+  headers.append('Content-Type', 'application/json');
+
+  return headers;
+};
 
 // History api
 export const METER_RECORD = 'sasClient/meterRecord';
@@ -32,18 +39,12 @@ export const CASHIER_OPERATOR = 'sasClient/cashier';
 export const GET_CASHIER_RECORD = 'sasClient/cashierOperationRecord';
 
 // Handover api
-// export const HAND_OVER_EGM_DETAIL = 'sasClient/handoverEgmList';
 export const HAND_OVER_STATISTICS_DETAIL = 'sasClient/handoverStatistics';
 export const HAND_OVER_RECORD = 'sasClient/handoverRecord';
 export const HAND_OVER_LOGIN = 'sasClient/handover';
 
-// Get Headers
-export const getHeaders = (token = null) => {
-  const headers = new Headers();
-  if (!token) token = _getUserToken();
-
-  if (token) headers.append('Authorization', `bearer ${token}`);
-  headers.append('Content-Type', 'application/json');
-
-  return headers;
-};
+// Member api
+export const GET_FORM_SELECT_OPTION = 'sasClient/getCreateData';
+export const CREATE_MEMBER = 'sasClient/createMember';
+export const UPDATE_MEMBER_PICTURE = 'sasClient/updateMemberPicture';
+export const MEMBER_LOGIN = 'sasClient/loginMember';

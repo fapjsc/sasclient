@@ -140,7 +140,7 @@ export const _logOutHandler = (clearStorage = null) => {
 };
 
 // 判斷是否為空物件
-export const isEmptyObj = (obj) => (Object.keys(obj).length === 0);
+export const isEmptyObj = (obj) => Object.keys(obj).length === 0;
 
 // 千分位加上小數點
 export const thousandsFormat = (text) => (text * 1).toFixed(0).replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',');
@@ -184,7 +184,11 @@ export const getQueryEl = (searchRef) => {
   const searchEl = document.createElement('p');
 
   searchEl.innerText = `
-  ID: ${adminId || '未填寫'} | IP：${egmIP || meterIP || eventIP || '未填寫'} | Number: ${name || '未填寫'} | 開始時間：${created ? created[0] : '未填寫'} | 結束時間：${created ? created[1] : '未填寫'}
+  ID: ${adminId || '未填寫'} | IP：${
+  egmIP || meterIP || eventIP || '未填寫'
+} | Number: ${name || '未填寫'} | 開始時間：${
+  created ? created[0] : '未填寫'
+} | 結束時間：${created ? created[1] : '未填寫'}
   `;
 
   return searchEl;
@@ -193,7 +197,7 @@ export const getQueryEl = (searchRef) => {
 export const egmIsDisconnect = (connectTime) => {
   if (!connectTime) return true;
 
-  return (new Date() - new Date(connectTime)) > (1 * 1000 * 60);
+  return new Date() - new Date(connectTime) > 1 * 1000 * 60;
 };
 
 export const transToTimestamp = (time) => moment(time).format('X');
@@ -206,3 +210,6 @@ export const waitTime = (time) => new Promise((resolve) => {
     resolve(true);
   }, time * 1000);
 });
+
+// Blob轉 base64
+export const convertBlobToBase64 = (blob) => String.fromCharCode(...new Uint8Array(blob));

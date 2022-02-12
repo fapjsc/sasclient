@@ -43,3 +43,11 @@ export {
   GetCashierAmounts,
   GetCashierRecord,
 } from './cashier/cashier';
+
+// Member
+export {
+  getFormSelectOption,
+  createMember,
+  updateMemberPicture,
+  memberAuth,
+} from './member/addMember';

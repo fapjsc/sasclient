@@ -1,8 +1,5 @@
 import {
-  AGENT_URL,
-  EGM_LIST,
-  AFT,
-  getHeaders,
+  AGENT_URL, EGM_LIST, AFT, getHeaders,
 } from '../utils';
 
 /*
@@ -21,7 +18,9 @@ export const adminGetEgmList = async (params) => {
   const modelStr = model ? `model=${model}&` : '';
   const numberStr = number ? `number=${number}&` : '';
   const denominationStr = denomination ? `denomination=${denomination}&` : '';
-  const createdStr = created ? `startTime=${created[0]}&endTime=${created[1]}&` : '';
+  const createdStr = created ?
+    `startTime=${created[0]}&endTime=${created[1]}&`
+    : '';
 
   const url = `${AGENT_URL}/${EGM_LIST}?${idStr}${modelStr}${ipStr}${numberStr}${denominationStr}${createdStr}`;
 
@@ -32,8 +31,12 @@ export const adminGetEgmList = async (params) => {
 
     const data = await response.json();
 
-    if (!response.ok) throw new Error(data.message || 'Could not fetch egm list');
-    if (data.status !== 200) throw new Error(data.message || 'Fetch egm list fail');
+    if (!response.ok) {
+      throw new Error(data.message || 'Could not fetch egm list');
+    }
+    if (data.status !== 200) {
+      throw new Error(data.message || 'Fetch egm list fail');
+    }
 
     return data.result;
   } catch (error) {
@@ -99,15 +102,12 @@ export const adminEgmDelete = async (id) => {
 };
 
 //** Cash in out */
-// {"ip": "192.168.10.73", "cashAmount": 2000
 export const egmCashInOut = async (params) => {
   if (!params) return;
   const url = `${AGENT_URL}/${AFT}`;
 
   if (Array.isArray(params)) {
-    if (params[1] === 'percentile'
-    || params[1] === 'thousands'
-    ) {
+    if (params[1] === 'percentile' || params[1] === 'thousands') {
       let digit;
       if (params[1] === 'percentile') digit = 100;
       if (params[1] === 'thousands') digit = 1000;
@@ -116,6 +116,7 @@ export const egmCashInOut = async (params) => {
         ip: params[2],
         quick: true,
         digit,
+        cardID: params[3] && params[3],
       };
     } else {
       params = {
@@ -123,6 +124,7 @@ export const egmCashInOut = async (params) => {
         ip: params[2],
         quick: true,
         cashAmount: params[1],
+        cardID: params[3] && params[3],
       };
     }
   }
@@ -130,7 +132,7 @@ export const egmCashInOut = async (params) => {
   const headers = getHeaders();
 
   const {
-    ip, cashAmount, action, digit, quick,
+    ip, cashAmount, action, digit, quick, cardID,
   } = params || {};
 
   const response = await fetch(url, {
@@ -141,13 +143,18 @@ export const egmCashInOut = async (params) => {
       digit,
       ip,
       cashAmount,
+      cardID: cardID && cardID,
     }),
   });
 
   const data = await response.json();
 
-  if (!response.ok) throw new Error(data.message || 'Could not operation cash in or cash out');
-  if (data.status !== 200) throw new Error(data.message || 'cash in or cash out fail');
+  if (!response.ok) {
+    throw new Error(data.message || 'Could not operation cash in or cash out');
+  }
+  if (data.status !== 200) {
+    throw new Error(data.message || 'cash in or cash out fail');
+  }
 
   return { ...data, quick };
 };

@@ -1,0 +1,10 @@
+.move-up-animation {
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    transform: translateY(-8px) scale(1.05);
+    background-color: #1890ff;
+    box-shadow: 0 0 8px #bae7ff;
+  }
+}

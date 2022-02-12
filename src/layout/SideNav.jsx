@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useHistory } from 'react-router-dom';
 
 // Redux
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 // Antd
 import { LogoutOutlined } from '@ant-design/icons';
@@ -19,6 +19,9 @@ import { removeOwn } from '../config/config';
 // Helpers
 import { _logOutHandler } from '../lib/helper';
 
+// Actions
+import { clearMemberData } from '../store/actions/memberActions';
+
 const { Sider } = Layout;
 const { SubMenu } = Menu;
 
@@ -26,6 +29,8 @@ const SideNav = () => {
   // Init State
   const [collapsed, setCollapsed] = useState(false);
   const [currentPath, setCurrentPath] = useState('');
+
+  const dispatch = useDispatch();
 
   // Router
   const location = useLocation();
@@ -48,6 +53,12 @@ const SideNav = () => {
     history.replace('/login');
   };
 
+  const clearMemberDataHandler = (alias) => {
+    if (alias !== 'member') {
+      dispatch(clearMemberData());
+    }
+  };
+
   const menuItem = AuthorizedRoutes()
     .filter((el) => !removeOwn.includes(el.alias))
     .filter((menu) => menu.permissions.includes(permission) && menu.isMain)
@@ -60,7 +71,11 @@ const SideNav = () => {
         ))}
       </SubMenu>
     ) : (
-      <Menu.Item key={menu.alias} icon={menu.icon}>
+      <Menu.Item
+        key={menu.alias}
+        icon={menu.icon}
+        onClick={() => clearMemberDataHandler(menu.alias)}
+      >
         <Link to={menu.path}>{menu.name}</Link>
       </Menu.Item>
     )));

@@ -13,6 +13,7 @@ const DashboardScreen = () => {
     // eslint-disable-next-line
     console.log(key);
   };
+
   return (
     <Tabs
       defaultActiveKey="egm"
@@ -21,7 +22,6 @@ const DashboardScreen = () => {
       size="lg"
       style={{ padding: '12px' }}
     >
-
       <TabPane tab="EGM狀態" key="egm">
         <MachineList />
       </TabPane>
@@ -29,7 +29,6 @@ const DashboardScreen = () => {
       <TabPane tab="統計圖表" key="charts">
         統計圖表
       </TabPane>
-
     </Tabs>
   );
 };

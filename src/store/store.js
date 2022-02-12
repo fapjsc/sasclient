@@ -9,6 +9,8 @@ import thunk from 'redux-thunk';
 import { userReducer } from './reducers/userReducers';
 import { egmCashInOutReducer, egmStatus } from './reducers/egmReducer';
 import { handoverLoginReducers } from './reducers/handoverReducers';
+// eslint-disable-next-line
+import { memberReducer } from './reducers/memberReducer';
 
 const reducer = combineReducers({
   user: userReducer,
@@ -16,10 +18,14 @@ const reducer = combineReducers({
   egmStatus,
   // handoverInput: handoverInputReducers,
   handoverLogin: handoverLoginReducers,
+  member: memberReducer,
 });
 
 const middleware = [thunk];
 
-const store = createStore(reducer, composeWithDevTools(applyMiddleware(...middleware)));
+const store = createStore(
+  reducer,
+  composeWithDevTools(applyMiddleware(...middleware)),
+);
 
 export default store;

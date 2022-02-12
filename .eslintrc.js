@@ -14,6 +14,7 @@ module.exports = {
   },
   plugins: ['react', 'html'],
   rules: {
+    'react/jsx-props-no-spreading': 'off',
     'operator-linebreak': [
       'error',
       'after',

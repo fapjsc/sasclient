@@ -34,6 +34,8 @@ import reportWebVitals from './reportWebVitals';
 
 // Styles
 import 'react-toastify/dist/ReactToastify.css';
+import './sass/animation.scss';
+import './sass/utils-style.scss';
 
 import { i18nTypes } from './config/config';
 

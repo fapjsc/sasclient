@@ -47,6 +47,8 @@ import useHttp from '../../../hooks/useHttp';
 // import classes from './CashForm.module.scss';
 
 const CashForm = ({ setVisible, setCurrent, current }) => {
+  // const [cardID, setCardID] = useState(null);
+
   // Redux
   const dispatch = useDispatch();
   const { egmCashInOutData } = useSelector((state) => state);
@@ -54,6 +56,11 @@ const CashForm = ({ setVisible, setCurrent, current }) => {
   const {
     ip, opName, amount, action,
   } = egmCashInOutData;
+
+  const { memberData } = useSelector((state) => state.member);
+  const { cards } = memberData || {};
+
+  const { card_id: cardID } = cards?.length ? cards[0] : {};
 
   // Ref
   const formRef = useRef();
@@ -125,10 +132,23 @@ const CashForm = ({ setVisible, setCurrent, current }) => {
     cashInOutData,
   ]);
 
-  //==== 發送請求 ====//
+  // 開分請求
   const sendReqHandler = () => {
-    const formData = egmCashInOutData;
+    let formData = egmCashInOutData;
+    if (cardID) {
+      formData = { ...formData, cardID };
+    }
+
     cashInOutReq(formData);
+  };
+
+  // 快速開分
+  const cascaderOnChange = (value) => {
+    if (!value) return;
+    if (cardID) {
+      value = [...value, cardID];
+    }
+    cashInOutReq(value);
   };
 
   const options = [
@@ -274,11 +294,6 @@ const CashForm = ({ setVisible, setCurrent, current }) => {
       ],
     },
   ];
-
-  const cascaderOnChange = (value) => {
-    if (!value) return;
-    cashInOutReq(value);
-  };
 
   return (
     <>
