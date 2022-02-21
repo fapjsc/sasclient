@@ -9,4 +9,9 @@ export const clearMemberData = () => ({
   type: memberActionTypes.CLEAR_MEMBER_DATA,
 });
 
+export const setCurrentMemberCard = (cardID) => ({
+  type: memberActionTypes.SET_CURRENT_MEMBER_CARD,
+  payload: cardID,
+});
+
 export const temp = () => {};

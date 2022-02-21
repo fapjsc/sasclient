@@ -135,6 +135,8 @@ export const egmCashInOut = async (params) => {
     ip, cashAmount, action, digit, quick, cardID,
   } = params || {};
 
+  console.log(cardID);
+
   const response = await fetch(url, {
     method: 'POST',
     headers,
@@ -143,7 +145,7 @@ export const egmCashInOut = async (params) => {
       digit,
       ip,
       cashAmount,
-      cardID: cardID && cardID,
+      cardId: cardID && cardID,
     }),
   });
 

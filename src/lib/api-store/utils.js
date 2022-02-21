@@ -48,3 +48,6 @@ export const GET_FORM_SELECT_OPTION = 'sasClient/getCreateData';
 export const CREATE_MEMBER = 'sasClient/createMember';
 export const UPDATE_MEMBER_PICTURE = 'sasClient/updateMemberPicture';
 export const MEMBER_LOGIN = 'sasClient/loginMember';
+export const MEMBER_DEPOSIT = 'sasClient/deposit';
+export const GET_MEMBER = 'sasClient/getMember';
+export const MEMBER_WITHDRAWAL = 'sasClient/withdrawal';

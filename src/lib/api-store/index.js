@@ -50,4 +50,6 @@ export {
   createMember,
   updateMemberPicture,
   memberAuth,
+  memberDepositAndWithdrawal,
+  getMember,
 } from './member/addMember';

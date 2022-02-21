@@ -1,6 +1,9 @@
 import memberActionTypes from '../types/memberTypes';
 
-const initialState = {};
+const initialState = {
+  currentCard: '',
+  memberData: {},
+};
 
 export const temp = () => {};
 
@@ -18,6 +21,12 @@ export const memberReducer = (state = initialState, action) => {
         ...state,
         memberData: {},
         showInfo: false,
+      };
+
+    case memberActionTypes.SET_CURRENT_MEMBER_CARD:
+      return {
+        ...state,
+        currentCard: action.payload,
       };
     default:
       return state;

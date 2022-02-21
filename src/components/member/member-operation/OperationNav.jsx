@@ -13,9 +13,8 @@ const textStyle = {
 
 // eslint-disable-next-line
 const OperationNav = ({ navClickHandler }) => {
-
   return (
-    <Row justify="space-between">
+    <Row justify="start" style={{ display: 'flex', gap: ['3rem'] }}>
       <Card
         className="move-up-animation"
         style={cardStyle}
@@ -30,7 +29,7 @@ const OperationNav = ({ navClickHandler }) => {
         className="move-up-animation"
         style={cardStyle}
         onClick={() => {
-          navClickHandler('top-up');
+          navClickHandler('deposit');
         }}
       >
         <h4 style={textStyle}>儲值</h4>
@@ -46,7 +45,17 @@ const OperationNav = ({ navClickHandler }) => {
         <h4 style={textStyle}>提領</h4>
       </Card>
 
-      <Card
+      {/* <Card
+        className="move-up-animation"
+        style={cardStyle}
+        onClick={() => {
+          navClickHandler('update-member');
+        }}
+      >
+        <h4 style={textStyle}>更新資料</h4>
+      </Card> */}
+
+      {/* <Card
         className="move-up-animation"
         style={cardStyle}
         onClick={() => {
@@ -54,7 +63,7 @@ const OperationNav = ({ navClickHandler }) => {
         }}
       >
         <h4 style={textStyle}>積分兌換</h4>
-      </Card>
+      </Card> */}
     </Row>
   );
 };

@@ -57,11 +57,11 @@ const CashForm = ({ setVisible, setCurrent, current }) => {
     ip, opName, amount, action,
   } = egmCashInOutData;
 
-  const { memberData } = useSelector((state) => state.member);
-  const { cards } = memberData || {};
+  const { currentCard: cardID } = useSelector((state) => state.member);
+  // const { cards,  } = memberData || {};
 
-  const { card_id: cardID } = cards?.length ? cards[0] : {};
-
+  // const { card_id: cardID } = cards?.length ? cards[0] : {};
+  //
   // Ref
   const formRef = useRef();
   const cascaderRef = useRef();
@@ -144,6 +144,7 @@ const CashForm = ({ setVisible, setCurrent, current }) => {
 
   // 快速開分
   const cascaderOnChange = (value) => {
+    // console.log(currentCard);
     if (!value) return;
     if (cardID) {
       value = [...value, cardID];

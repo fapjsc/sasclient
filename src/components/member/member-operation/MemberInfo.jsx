@@ -5,7 +5,13 @@ import { useSelector, useDispatch } from 'react-redux';
 
 // Antd
 import {
-  Descriptions, Image, Space, Collapse, Tag, Button,
+  Descriptions,
+  Image,
+  Space,
+  Collapse,
+  Tag,
+  Button,
+  Select,
 } from 'antd';
 
 // Moment
@@ -15,14 +21,21 @@ import moment from 'moment';
 import { convertBlobToBase64 } from '../../../lib/helper';
 
 // Actions
-import { clearMemberData } from '../../../store/actions/memberActions';
+import {
+  clearMemberData,
+  setCurrentMemberCard,
+} from '../../../store/actions/memberActions';
 
 const { Panel } = Collapse;
+const { Option } = Select;
 
-const MemberInfo = () => {
+// eslint-disable-next-line
+const MemberInfo = ({setShowForm}) => {
   // Redux
   const dispatch = useDispatch();
   const { memberData } = useSelector((state) => state.member);
+
+  const { cards } = memberData || {};
 
   const [imgSrc, setImgSrc] = useState('');
   const {
@@ -48,46 +61,83 @@ const MemberInfo = () => {
     setImgSrc(imgBase64);
   }, [picture]);
 
+  const onChange = (value) => {
+    dispatch(setCurrentMemberCard(value));
+  };
+
   return (
     <Collapse defaultActiveKey={['1']} bordered={false}>
       <Panel header={<Tag color="magenta">會員資訊</Tag>} key="1">
         <Space size="large" style={{}} align="">
           <Image width={200} src={imgSrc} />
           <Descriptions
-            title="MEMBER INFO"
-            style={{ backgroundColor: '', paddingTop: 0 }}
-            extra={(
-              <Button
-                key="primary"
-                type="primary"
-                onClick={() => {
-                  dispatch(clearMemberData());
-                }}
+            title={(
+              <Select
+                style={{ width: 180 }}
+                placeholder="選擇會員卡"
+                onChange={onChange}
               >
-                離開
-              </Button>
+                {cards.map((card) => (
+                  <Option value={card.card_id}>{card.card_id}</Option>
+                ))}
+              </Select>
+            )}
+            style={{ backgroundColor: '', paddingTop: 0 }}
+            labelStyle={{}}
+            extra={(
+              <Space>
+                <Button
+                  key="primary"
+                  type="primary"
+                  onClick={() => {
+                    console.log('update');
+                    setShowForm({
+                      isShow: true,
+                      type: 'update-member',
+                    });
+                  }}
+                >
+                  更新
+                </Button>
+                <Button
+                  key="danger"
+                  type="danger"
+                  onClick={() => {
+                    dispatch(clearMemberData());
+                  }}
+                >
+                  離開
+                </Button>
+              </Space>
+
             )}
           >
             <Descriptions.Item label="ID">{id}</Descriptions.Item>
-            <Descriptions.Item label="Account">{account}</Descriptions.Item>
-            <Descriptions.Item label="Identity-type">
+            <Descriptions.Item label="帳號">{account}</Descriptions.Item>
+            <Descriptions.Item label="證件類別">
               {identifyType}
             </Descriptions.Item>
-            <Descriptions.Item label="Identity-Number">
+            <Descriptions.Item label="證件號碼">
               {identifyCard}
             </Descriptions.Item>
-            <Descriptions.Item label="Level">{level}</Descriptions.Item>
-            <Descriptions.Item label="Name">{name}</Descriptions.Item>
-            <Descriptions.Item label="Birthday">
+            <Descriptions.Item label="會員等級">
+              {level || '無卡'}
+            </Descriptions.Item>
+            <Descriptions.Item label="會員姓名">{name}</Descriptions.Item>
+            <Descriptions.Item label="生日">
               {moment(birthday).format('YYYY-MM-DD')}
             </Descriptions.Item>
-            <Descriptions.Item label="gender">{gender}</Descriptions.Item>
-            <Descriptions.Item label="phone">{phone}</Descriptions.Item>
-            <Descriptions.Item label="mail">{email}</Descriptions.Item>
-            <Descriptions.Item label="Address">{address}</Descriptions.Item>
-            <Descriptions.Item label="Note">{note}</Descriptions.Item>
-            <Descriptions.Item label="Created">
+            <Descriptions.Item label="性別">{gender}</Descriptions.Item>
+            <Descriptions.Item label="手機號碼">{phone}</Descriptions.Item>
+            <Descriptions.Item label="Email">{email}</Descriptions.Item>
+            <Descriptions.Item label="加入入期">
               {moment(created).format('YYYY-MM-DD')}
+            </Descriptions.Item>
+            <Descriptions.Item style={{}} span={3} label="Address">
+              {address}
+            </Descriptions.Item>
+            <Descriptions.Item style={{}} span={3} label="備註">
+              {note}
             </Descriptions.Item>
           </Descriptions>
         </Space>
