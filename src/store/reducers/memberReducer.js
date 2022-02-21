@@ -21,6 +21,7 @@ export const memberReducer = (state = initialState, action) => {
         ...state,
         memberData: {},
         showInfo: false,
+        currentCard: '',
       };
 
     case memberActionTypes.SET_CURRENT_MEMBER_CARD:
