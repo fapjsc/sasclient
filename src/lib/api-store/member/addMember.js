@@ -39,11 +39,15 @@ export const createMember = async (memberData) => {
     headers,
     body: JSON.stringify(memberData),
   });
+
   const data = await response.json();
 
-  if (!response.ok) throw new Error(data.message || 'Could not fetch api');
+  if (!response.ok) {
+    throw new Error(data.message || data.error || 'Could not fetch api');
+  }
+
   if (data.status !== 200) {
-    throw new Error(data.message || 'Fetch select option fail.');
+    throw new Error(data.message || data.error || 'Fetch select option fail.');
   }
 
   return data.result;
@@ -59,13 +63,14 @@ export const updateMemberPicture = async (params) => {
     headers,
     body: JSON.stringify({ member_id: id, picture }),
   });
+
   const data = await response.json();
 
   if (!response.ok) {
-    throw new Error(data.message || 'Could not fetch upload picture api');
+    throw new Error(data.message || data.error || 'Could not fetch upload picture api');
   }
   if (data.status !== 200) {
-    throw new Error(data.message || 'Upload picture fail.');
+    throw new Error(data.message || data.error || 'Upload picture fail.');
   }
 
   return data.result;
@@ -73,6 +78,7 @@ export const updateMemberPicture = async (params) => {
 
 export const memberAuth = async (params) => {
   const headers = getHeaders();
+
   const url = `${AGENT_URL}/${MEMBER_LOGIN}`;
 
   const response = await fetch(url, {
@@ -83,10 +89,11 @@ export const memberAuth = async (params) => {
   const data = await response.json();
 
   if (!response.ok) {
-    throw new Error(data.message || 'Could not fetch login api');
+    throw new Error(data.message || data.error || 'Could not fetch login api');
   }
+
   if (data.status !== 200) {
-    throw new Error(data.message || 'Login fail.');
+    throw new Error(data.message || data.error || 'Login fail.');
   }
 
   return data.result;
@@ -119,10 +126,10 @@ export const memberDepositAndWithdrawal = async ({
     const data = await response.json();
 
     if (!response.ok) {
-      throw new Error(data.message || 'Could not fetch login api');
+      throw new Error(data.message || data.error || 'Could not fetch login api');
     }
     if (data.status !== 200) {
-      throw new Error(data.message || 'Login fail.');
+      throw new Error(data.message || data.error || 'Login fail.');
     }
     return data;
   } catch (error) {
@@ -137,13 +144,14 @@ export const getMember = async (params) => {
   const response = await fetch(url, {
     headers,
   });
+
   const data = await response.json();
 
   if (!response.ok) {
-    throw new Error(data.message || 'Could not fetch login api');
+    throw new Error(data.message || data.error || 'Could not fetch login api');
   }
   if (data.status !== 200) {
-    throw new Error(data.message || 'Login fail.');
+    throw new Error(data.message || data.error || 'Login fail.');
   }
 
   store.dispatch(setMemberData(data.result));
@@ -163,11 +171,15 @@ export const updateMember = async (params) => {
   const data = await response.json();
 
   if (!response.ok) {
-    throw new Error(data.message || 'Could not fetch login api');
+    throw new Error(data.error || data.message || 'Could not fetch login api');
   }
 
   if (data.status !== 200) {
-    throw new Error(data.message || 'Login fail.');
+    throw new Error(data.error || data.message || 'Login fail.');
+  }
+
+  if (data.status === 200) {
+    store.dispatch(setMemberData(data.result));
   }
 
   return data.status;

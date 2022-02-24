@@ -31,6 +31,8 @@ export const getJackpotList = async () => {
       key: uuid(),
     }));
 
+    console.log(formatData);
+
     return formatData;
   } catch (error) {
     return error.message || 'Something went wrong';
@@ -115,8 +117,6 @@ export const jackpotSetting = async (reqData) => {
   if (!response.ok) throw new Error(data.message || 'Could not setting jackpot');
 
   if (data.status !== 200) throw new Error(data.message || 'jackpot set fail');
-
-  console.log(data);
 
   return data.status;
 };

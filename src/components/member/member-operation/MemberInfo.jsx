@@ -77,7 +77,7 @@ const MemberInfo = ({setShowForm}) => {
                 placeholder="選擇虛擬卡"
                 onChange={onChange}
               >
-                {cards.map((card) => (
+                {cards?.map((card) => (
                   <Option value={card.card_id}>{card.card_id}</Option>
                 ))}
               </Select>
@@ -90,7 +90,6 @@ const MemberInfo = ({setShowForm}) => {
                   key="primary"
                   type="primary"
                   onClick={() => {
-                    console.log('update');
                     setShowForm({
                       isShow: true,
                       type: 'update-member',

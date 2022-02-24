@@ -1,5 +1,7 @@
 import React, { useEffect } from 'react';
 
+import PropTypes from 'prop-types';
+
 import { useSelector } from 'react-redux';
 
 import { message } from 'antd';
@@ -14,11 +16,12 @@ import useHttp from '../../../hooks/useHttp';
 // Apis
 import { updateMember } from '../../../lib/api-store';
 
-// eslint-disable-next-line
 const MemberUpdateForm = ({ isShow, setShowForm }) => {
-
-  // eslint-disable-next-line
-  const { sendRequest: updateMemberReq, data: updateMemberData, error: updateMemberError } = useHttp(updateMember);
+  const {
+    sendRequest: updateMemberReq,
+    data: updateMemberData,
+    error: updateMemberError,
+  } = useHttp(updateMember);
 
   const { memberData } = useSelector((state) => state.member);
   const {
@@ -31,15 +34,20 @@ const MemberUpdateForm = ({ isShow, setShowForm }) => {
   } = memberData || {};
 
   useEffect(() => {
-    console.log(updateMemberData, updateMemberError);
     if (updateMemberError) {
-      message.error('更新失敗');
+      message.error(updateMemberError);
+      return;
     }
 
     if (updateMemberData === 200) {
       message.success('更新成功');
+      setShowForm({
+        isShow: false,
+        type: '',
+      });
     }
-  }, [updateMemberData, updateMemberError]);
+  }, [updateMemberData, updateMemberError, setShowForm]);
+
   return (
     <ModalForm
       title="會員資料更新"
@@ -69,6 +77,7 @@ const MemberUpdateForm = ({ isShow, setShowForm }) => {
           note: memberNote,
           phoneNumber,
         };
+
         await updateMemberReq(formData);
         return true;
       }}
@@ -119,6 +128,11 @@ const MemberUpdateForm = ({ isShow, setShowForm }) => {
       />
     </ModalForm>
   );
+};
+
+MemberUpdateForm.propTypes = {
+  isShow: PropTypes.bool.isRequired,
+  setShowForm: PropTypes.func.isRequired,
 };
 
 export default MemberUpdateForm;

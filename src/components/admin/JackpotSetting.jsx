@@ -67,11 +67,17 @@ const JackpotSetting = () => {
       dataIndex: 'level',
       valueType: 'digit',
       tip: '＊彩金層數，最大6層',
+      formItemProps: () => ({
+        rules: [{ required: true }],
+      }),
     },
     {
       title: 'Group',
       key: 'group_id',
       dataIndex: 'group_id',
+      formItemProps: () => ({
+        rules: [{ required: true }],
+      }),
     },
     {
       title: 'Min Value',
@@ -219,9 +225,7 @@ const JackpotSetting = () => {
           </Button>,
           <Button
             key="add-data"
-            style={{
-              cursor: dataSource.length === 6 && 'not-allowed',
-            }}
+            style={{ cursor: dataSource.length === 6 && 'not-allowed' }}
             disabled={dataSource.length === 6}
             onClick={() => {
               actionRef.current?.addEditRecord?.({
