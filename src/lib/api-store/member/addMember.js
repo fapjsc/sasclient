@@ -12,6 +12,7 @@ import {
   MEMBER_DEPOSIT,
   GET_MEMBER,
   MEMBER_WITHDRAWAL,
+  MEMBER_UPDATE,
 } from '../utils';
 
 export const getFormSelectOption = async () => {
@@ -91,7 +92,11 @@ export const memberAuth = async (params) => {
   return data.result;
 };
 
-export const memberDepositAndWithdrawal = async ({ cardId, cashAmount, type }) => {
+export const memberDepositAndWithdrawal = async ({
+  cardId,
+  cashAmount,
+  type,
+}) => {
   const headers = getHeaders();
 
   let url;
@@ -144,4 +149,26 @@ export const getMember = async (params) => {
   store.dispatch(setMemberData(data.result));
 
   return data.result;
+};
+
+export const updateMember = async (params) => {
+  const headers = getHeaders();
+  const url = `${AGENT_URL}/${MEMBER_UPDATE}`;
+
+  const response = await fetch(url, {
+    method: 'POST',
+    headers,
+    body: JSON.stringify(params),
+  });
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.message || 'Could not fetch login api');
+  }
+
+  if (data.status !== 200) {
+    throw new Error(data.message || 'Login fail.');
+  }
+
+  return data.status;
 };

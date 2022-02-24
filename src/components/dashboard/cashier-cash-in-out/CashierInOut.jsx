@@ -145,7 +145,7 @@ const CashierInOut = () => {
     {
       validator: (rule, value) => {
         if (value <= 0) {
-          return Promise.reject(new Error('不能是負數'));
+          return Promise.reject(new Error('不能是負數或0'));
         }
 
         const isIntNum = _.isInteger(value);
@@ -192,7 +192,9 @@ const CashierInOut = () => {
           customSymbol="$"
           rules={fromRules}
           fieldProps={{
-            autoFocus: true,
+            // autoFocus: true,
+            formatter: (value) => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ','),
+
           }}
         />
         <ProFormRadio.Group name="action" options={options} />

@@ -38,9 +38,11 @@ const HandOverEgmDetail = () => {
 
     const { ip, model } = params || {};
 
+    console.log(data);
+
     return Promise.resolve({
       success: true,
-      data: data?.filter((item) => {
+      data: data?.sort((a, b) => a.number - b.number)?.filter((item) => {
         if (ip && !model) {
           return item.ip === ip;
         }

@@ -4,7 +4,7 @@ import React from 'react';
 import { Tabs } from 'antd';
 
 // Components
-import JackpotWinRecord from '../../components/admin/JackpotWinRecord';
+// import JackpotWinRecord from '../../components/admin/JackpotWinRecord';
 import MeterRecord from '../../components/admin/MeterRecord';
 import EventRecord from '../../components/admin/EventRecord';
 import SystemLog from '../../components/admin/SystemLog';
@@ -21,9 +21,9 @@ const historyRecord = () => {
   return (
     <Tabs tabBarGutter={60} defaultActiveKey="jackpot-win-record" onChange={callback}>
 
-      <TabPane tab="中獎紀錄" key="jackpot-win-record">
+      {/* <TabPane tab="中獎紀錄" key="jackpot-win-record">
         <JackpotWinRecord />
-      </TabPane>
+      </TabPane> */}
 
       <TabPane tab="Meter紀錄" key="meter-record">
         <MeterRecord />

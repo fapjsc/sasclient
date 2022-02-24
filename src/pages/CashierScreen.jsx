@@ -4,8 +4,8 @@ import React from 'react';
 import { Tabs } from 'antd';
 
 // Components
-import CashierRecord from '../components/cashier/cashier-record/CashierRecord';
-import CashierInOut from '../components/cashier/cashier-cash-in-out/CashierInOut';
+// import CashierRecord from '../components/cashier/cashier-record/CashierRecord';
+// import CashierInOut from '../components/cashier/cashier-cash-in-out/CashierInOut';
 import Ticket from '../components/cashier/ticket/Ticket';
 
 const { TabPane } = Tabs;
@@ -18,9 +18,9 @@ const CashierScreen = () => (
     size="lg"
     style={{ padding: '12px' }}
   >
-    <TabPane tab="櫃檯金額" key="1">
+    {/* <TabPane tab="櫃檯金額" key="1">
       <CashierInOut />
-    </TabPane>
+    </TabPane> */}
 
     <TabPane tab="票務" key="2">
       <Ticket />
@@ -52,9 +52,9 @@ const CashierScreen = () => (
       機台清鈔
     </TabPane>
 
-    <TabPane tab="操作記錄" key="4">
+    {/* <TabPane tab="操作記錄" key="4">
       <CashierRecord />
-    </TabPane>
+    </TabPane> */}
   </Tabs>
 );
 export default CashierScreen;

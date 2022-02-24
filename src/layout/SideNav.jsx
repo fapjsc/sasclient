@@ -1,23 +1,23 @@
 import React, { useState, useEffect } from 'react';
 
 // Router
-import { Link, useLocation, useHistory } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 // Redux
 import { useSelector, useDispatch } from 'react-redux';
 
 // Antd
-import { LogoutOutlined } from '@ant-design/icons';
+// import { LogoutOutlined } from '@ant-design/icons';
 import {
   Layout, Menu,
 } from 'antd';
 
 // Config
 import { AuthorizedRoutes } from '../config/routerRole';
-import { removeOwn } from '../config/config';
+// import { removeOwn } from '../config/config';
 
 // Helpers
-import { _logOutHandler } from '../lib/helper';
+// import { _logOutHandler } from '../lib/helper';
 
 // Actions
 import { clearMemberData } from '../store/actions/memberActions';
@@ -34,7 +34,7 @@ const SideNav = () => {
 
   // Router
   const location = useLocation();
-  const history = useHistory();
+  // const history = useHistory();
 
   // Redux
   const { permission } = useSelector((state) => state.user);
@@ -48,10 +48,10 @@ const SideNav = () => {
     setCurrentPath(path);
   }, [location.pathname]);
 
-  const logoutHandler = () => {
-    _logOutHandler(true);
-    history.replace('/login');
-  };
+  // const logoutHandler = () => {
+  //   _logOutHandler(true);
+  //   history.replace('/login');
+  // };
 
   const clearMemberDataHandler = (alias) => {
     if (alias !== 'member') {
@@ -60,11 +60,11 @@ const SideNav = () => {
   };
 
   const menuItem = AuthorizedRoutes()
-    .filter((el) => !removeOwn.includes(el.alias))
+    // .filter((el) => !removeOwn.includes(el.alias))
     .filter((menu) => menu.permissions.includes(permission) && menu.isMain)
     .map((menu) => (menu.alias === 'admin' ? (
       <SubMenu key={menu.alias} icon={menu.icon} title={menu.name}>
-        {menu.subRoutes.filter((el) => !removeOwn.includes(el.alias)).map((subMenu) => (
+        {menu.subRoutes.map((subMenu) => (
           <Menu.Item key={subMenu.alias}>
             <Link to={subMenu.path}>{subMenu.name}</Link>
           </Menu.Item>
@@ -90,7 +90,12 @@ const SideNav = () => {
         selectedKeys={[currentPath]}
       >
         {menuItem}
-        <Menu.Item onClick={logoutHandler} icon={<LogoutOutlined />} key="leave">離開系統</Menu.Item>
+
+        {/* <Menu.Item
+        onClick={logoutHandler}
+        icon={<LogoutOutlined />}
+        key="leave">離開系統</Menu.Item>
+        */}
       </Menu>
 
     </Sider>

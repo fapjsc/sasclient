@@ -78,7 +78,7 @@ const MachineList = () => {
 
   const onClickHandler = (ip, isDisconnect, number) => {
     if (isDisconnect) {
-      toastRef.current = toast.error(`${ip} 無法連線`);
+      toastRef.current = toast.error(`[${number}號機台] 無法連線`);
       return;
     }
 

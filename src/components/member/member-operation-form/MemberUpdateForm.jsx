@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { useSelector } from 'react-redux';
 
@@ -9,8 +9,17 @@ import ProForm, {
   ProFormTextArea,
 } from '@ant-design/pro-form';
 
+import useHttp from '../../../hooks/useHttp';
+
+// Apis
+import { updateMember } from '../../../lib/api-store';
+
 // eslint-disable-next-line
 const MemberUpdateForm = ({ isShow, setShowForm }) => {
+
+  // eslint-disable-next-line
+  const { sendRequest: updateMemberReq, data: updateMemberData, error: updateMemberError } = useHttp(updateMember);
+
   const { memberData } = useSelector((state) => state.member);
   const {
     member_account: account,
@@ -18,7 +27,19 @@ const MemberUpdateForm = ({ isShow, setShowForm }) => {
     address,
     mail_address: email,
     note,
+    member_id: memberID,
   } = memberData || {};
+
+  useEffect(() => {
+    console.log(updateMemberData, updateMemberError);
+    if (updateMemberError) {
+      message.error('更新失敗');
+    }
+
+    if (updateMemberData === 200) {
+      message.success('更新成功');
+    }
+  }, [updateMemberData, updateMemberError]);
   return (
     <ModalForm
       title="會員資料更新"
@@ -31,18 +52,44 @@ const MemberUpdateForm = ({ isShow, setShowForm }) => {
         }),
       }}
       onFinish={async (values) => {
-        console.log(values.name);
-        message.success('提交成功');
+        const {
+          member_id: memberId,
+          member_account: memberAccount,
+          mail_address: mailAddress,
+          address: memberAddress,
+          note: memberNote,
+          phone_number: phoneNumber,
+        } = values;
+
+        const formData = {
+          memberId,
+          memberAccount,
+          mailAddress,
+          address: memberAddress,
+          note: memberNote,
+          phoneNumber,
+        };
+        await updateMemberReq(formData);
         return true;
       }}
     >
       <ProForm.Group>
         <ProFormText
           width="md"
+          name="member_id"
+          label="會員ID"
+          initialValue={memberID}
+          disabled
+        />
+        <ProFormText
+          width="md"
           name="member_account"
           label="會員帳號"
           initialValue={account}
         />
+      </ProForm.Group>
+
+      <ProForm.Group>
         <ProFormText
           width="md"
           name="phone_number"

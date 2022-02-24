@@ -67,6 +67,8 @@ const HandOverDetail = ({ onShow }) => {
       amountMinus: data.totalInput - data.totalOutput, // 3
     });
 
+    console.log(data);
+
     return Promise.resolve({
       success: true,
       data: data,
@@ -83,6 +85,13 @@ const HandOverDetail = ({ onShow }) => {
       <ProDescriptions
         column={2}
         tooltip={`更新時間: ${transToTimeString(new Date())}`}
+        title="報表"
+        bordered
+        request={requestPromiseTotal}
+        columns={totalColumns}
+        actionRef={actionRef}
+        labelStyle={labelStyle}
+        contentStyle={contentStyle}
         extra={(
           <>
             <Button
@@ -103,13 +112,6 @@ const HandOverDetail = ({ onShow }) => {
             </Button>
           </>
         )}
-        title="報表"
-        bordered
-        request={requestPromiseTotal}
-        columns={totalColumns}
-        actionRef={actionRef}
-        labelStyle={labelStyle}
-        contentStyle={contentStyle}
       />
       <br />
       <br />

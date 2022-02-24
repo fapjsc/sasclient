@@ -51,3 +51,4 @@ export const MEMBER_LOGIN = 'sasClient/loginMember';
 export const MEMBER_DEPOSIT = 'sasClient/deposit';
 export const GET_MEMBER = 'sasClient/getMember';
 export const MEMBER_WITHDRAWAL = 'sasClient/withdrawal';
+export const MEMBER_UPDATE = 'sasClient/updateMember';

@@ -3,6 +3,7 @@ import memberActionTypes from '../types/memberTypes';
 const initialState = {
   currentCard: '',
   memberData: {},
+  showInfo: false,
 };
 
 export const temp = () => {};
@@ -18,10 +19,9 @@ export const memberReducer = (state = initialState, action) => {
 
     case memberActionTypes.CLEAR_MEMBER_DATA:
       return {
-        ...state,
+        currentCard: '',
         memberData: {},
         showInfo: false,
-        currentCard: '',
       };
 
     case memberActionTypes.SET_CURRENT_MEMBER_CARD:

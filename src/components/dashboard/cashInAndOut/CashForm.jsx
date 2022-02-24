@@ -415,20 +415,17 @@ const CashForm = ({ setVisible, setCurrent, current }) => {
                       label="操作金額"
                       name="cashAmount"
                       width="100%"
+                      fieldProps={{
+                        formatter: (value) => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ','),
+                      }}
                       rules={[
                         {
                           required: true,
-                          message: '金額不可以為空',
-                        },
-                        {
-                          pattern: /^(\d+)((?:\.\d+)?)$/,
-                          message: '請輸入有效的金額',
+                          pattern: new RegExp(/^[1-9]\d*$/),
+                          message: '请输入正整數',
                         },
                       ]}
                       placeholder=""
-                      fieldProps={{
-                        prefix: '＄',
-                      }}
                     />
                   </ProForm.Group>
 

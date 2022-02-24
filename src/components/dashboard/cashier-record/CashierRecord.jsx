@@ -6,7 +6,7 @@ import { useReactToPrint } from 'react-to-print';
 // Antd
 import ProTable from '@ant-design/pro-table';
 import { PrinterOutlined } from '@ant-design/icons';
-import { Button } from 'antd';
+import { Button, Table } from 'antd';
 
 // Helpers
 import {
@@ -36,6 +36,7 @@ const CashierRecord = () => {
       if (isSort) setIsSort(false);
     }, 0);
 
+    console.log(data);
     return Promise.resolve({
       success: true,
       data: data,
@@ -89,6 +90,11 @@ const CashierRecord = () => {
         defaultPageSize: 10,
         showQuickJumper: true,
       }}
+      rowSelection={{
+        selections: [Table.SELECTION_ALL, Table.SELECTION_INVERT],
+        defaultSelectedRowKeys: [],
+      }}
+      // tableAlertRender={false}
       toolBarRender={() => [
         <Button
           key="button"

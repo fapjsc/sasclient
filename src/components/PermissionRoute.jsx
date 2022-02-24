@@ -14,7 +14,7 @@ import NormalLayout from '../layout/NormalLayout';
 
 import NotFound from '../pages/NotFound';
 
-import { removeOwn } from '../config/config';
+// import { removeOwn } from '../config/config';
 
 const PermissionRoute = () => {
   const { permission } = useSelector((state) => state.user);
@@ -24,7 +24,7 @@ const PermissionRoute = () => {
   return (
     <AclRouter
       authorities={role}
-      authorizedRoutes={AuthorizedRoutes().filter((el) => !removeOwn.includes(el.alias))}
+      authorizedRoutes={AuthorizedRoutes()}
       authorizedLayout={AuthLayout}
       normalRoutes={unAuthorizedRoutes}
       normalLayout={NormalLayout}

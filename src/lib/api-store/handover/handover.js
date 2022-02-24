@@ -45,6 +45,7 @@ export const handoverStatistics = async () => {
     if (data.status !== 200) {
       throw new Error(data.message || 'Fetch handover record fail');
     }
+    console.log(data);
     return data.result.statistics;
   } catch (error) {
     return {

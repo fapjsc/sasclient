@@ -15,6 +15,7 @@ const { Statistic } = StatisticCard;
 
 const EgmStatisticCard = ({ onFilterHandler }) => {
   const { sections } = useSelector((state) => state.egmStatus);
+  const { account } = useSelector((state) => state.user);
   return (
     <ProCard
       ghost
@@ -40,6 +41,8 @@ const EgmStatisticCard = ({ onFilterHandler }) => {
           return (
             <ProCard.TabPane
               key={item.key}
+              defaultActiveKey=""
+              disabled={account === 'op'}
               cardProps={{ bodyStyle: { display: 'none' } }}
               tab={(
                 <Statistic

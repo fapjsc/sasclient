@@ -16,11 +16,7 @@ export {
 } from './admin/history';
 
 // Jackpot sys
-export {
-  getJackpotList,
-  jackpotSetting,
-  jackpotDelete,
-} from './admin/jackpot';
+export { getJackpotList, jackpotSetting, jackpotDelete } from './admin/jackpot';
 
 // EGM sys
 export {
@@ -52,4 +48,5 @@ export {
   memberAuth,
   memberDepositAndWithdrawal,
   getMember,
+  updateMember,
 } from './member/addMember';

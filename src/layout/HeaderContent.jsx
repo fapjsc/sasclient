@@ -1,12 +1,18 @@
 import React, { useEffect } from 'react';
 
+// Router
+import { useHistory } from 'react-router-dom';
+
 // Redux
 import { useSelector } from 'react-redux';
 
 // Antd
 import {
-  Space, Menu, Dropdown, Avatar,
+  Space, Menu, Dropdown, Avatar, Button,
 } from 'antd';
+
+// Antd Icon
+import { LogoutOutlined } from '@ant-design/icons';
 
 // Hooks
 import { useI18n } from '../i18n';
@@ -21,7 +27,13 @@ import {
 import AutoLogout from '../components/AutoLogout';
 import Clock from '../components/Clock';
 
+// Helpers
+import { _logOutHandler } from '../lib/helper';
+
 const HeaderContent = () => {
+  // Router
+  const history = useHistory();
+
   // Redux
   const { account } = useSelector((state) => state.user);
 
@@ -37,14 +49,17 @@ const HeaderContent = () => {
     };
   }, []);
 
+  const logoutHandler = () => {
+    _logOutHandler(true);
+    history.replace('/login');
+  };
+
   const avatarMenu = (
     <Menu>
       <Menu.Item key="logout">
-        <Space>
-          {/* <p>
-            <LogoutOutlined />
-          </p> */}
-          {/* <p>登出</p> */}
+        <Space direction="vertical">
+          <span>Name</span>
+          <span>Number</span>
         </Space>
       </Menu.Item>
     </Menu>
@@ -72,7 +87,12 @@ const HeaderContent = () => {
         }}
       >
         {account && (
-          <Space style={{ marginRight: '3rem' }}>
+          <Space size="large" style={{ marginRight: '3rem' }}>
+
+            <Space>
+              <Button type="danger">交班</Button>
+            </Space>
+
             <Dropdown overlay={avatarMenu}>
               <span style={{ cursor: 'pointer' }}>
                 <Avatar
@@ -85,6 +105,13 @@ const HeaderContent = () => {
                 <span style={{ marginLeft: '5px' }}>{account}</span>
               </span>
             </Dropdown>
+
+            <Space style={{ cursor: 'pointer' }} onClick={logoutHandler}>
+              <span>
+                <LogoutOutlined />
+              </span>
+              <span>離開系統</span>
+            </Space>
           </Space>
         )}
 

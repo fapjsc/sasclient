@@ -55,21 +55,15 @@ export const totalColumns = [
     render: (dom, entity, index) => renderHandler(totalColumns[index].dataIndex, dom, entity),
   },
   {
-    title: '積分卡兌換金額',
-    key: 'paymentsCustomerCard',
-    dataIndex: 'paymentsCustomerCard',
-    render: (dom, entity, index) => renderHandler(totalColumns[index].dataIndex, dom, entity),
-  },
-  {
     title: '積分卡儲值金額',
     key: 'salesCustomerCard',
     dataIndex: 'salesCustomerCard',
     render: (dom, entity, index) => renderHandler(totalColumns[index].dataIndex, dom, entity),
   },
   {
-    title: '櫃台洗分總額',
-    key: 'cashierOut',
-    dataIndex: 'cashierOut',
+    title: '積分卡兌換金額',
+    key: 'paymentsCustomerCard',
+    dataIndex: 'paymentsCustomerCard',
     render: (dom, entity, index) => renderHandler(totalColumns[index].dataIndex, dom, entity),
   },
   {
@@ -78,6 +72,14 @@ export const totalColumns = [
     dataIndex: 'cashierIn',
     render: (dom, entity, index) => renderHandler(totalColumns[index].dataIndex, dom, entity),
   },
+
+  {
+    title: '櫃台洗分總額',
+    key: 'cashierOut',
+    dataIndex: 'cashierOut',
+    render: (dom, entity, index) => renderHandler(totalColumns[index].dataIndex, dom, entity),
+  },
+
   {
     title: '彩金金額',
     key: 'jackpotPayment',

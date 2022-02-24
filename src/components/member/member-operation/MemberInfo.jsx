@@ -74,7 +74,7 @@ const MemberInfo = ({setShowForm}) => {
             title={(
               <Select
                 style={{ width: 180 }}
-                placeholder="選擇會員卡"
+                placeholder="選擇虛擬卡"
                 onChange={onChange}
               >
                 {cards.map((card) => (
@@ -97,7 +97,7 @@ const MemberInfo = ({setShowForm}) => {
                     });
                   }}
                 >
-                  更新
+                  更新會員資料
                 </Button>
                 <Button
                   key="danger"
@@ -133,7 +133,7 @@ const MemberInfo = ({setShowForm}) => {
             <Descriptions.Item label="加入入期">
               {moment(created).format('YYYY-MM-DD')}
             </Descriptions.Item>
-            <Descriptions.Item style={{}} span={3} label="Address">
+            <Descriptions.Item style={{}} span={3} label="地址">
               {address}
             </Descriptions.Item>
             <Descriptions.Item style={{}} span={3} label="備註">

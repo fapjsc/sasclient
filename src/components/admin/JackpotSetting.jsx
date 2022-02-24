@@ -1,58 +1,53 @@
-import React, { useRef, useState } from 'react';
+// eslint-disable-next-line
+import React, { useRef, useState , useEffect} from 'react';
 
 // uuid
+// eslint-disable-next-line
 import { v4 as uuid } from 'uuid';
-
 // Antd
-import { message, Modal, notification } from 'antd';
+// eslint-disable-next-line
+import { message, Modal, notification, Form, Button, Space } from 'antd';
 import { EditableProTable } from '@ant-design/pro-table';
+// eslint-disable-next-line
 import ProForm, { ProFormRadio, ProFormDependency, ProFormField } from '@ant-design/pro-form';
+// eslint-disable-next-line
 import ProCard from '@ant-design/pro-card';
-import { SmileOutlined } from '@ant-design/icons';
+// eslint-disable-next-line
+import { SmileOutlined, PlusOutlined } from '@ant-design/icons';
 
 // helpers
+// eslint-disable-next-line
 import { isEmptyObj } from '../../lib/helper';
 
+// Hooks
+import useHttp from '../../hooks/useHttp';
+
 // Apis
+// eslint-disable-next-line
 import { jackpotSetting, getJackpotList, jackpotDelete } from '../../lib/api-store';
 
 let data;
+const JackpotSetting = () => {
+  const [editableKeys, setEditableRowKeys] = useState([]);
+  const [dataSource, setDataSource] = useState([]);
+  const [showSaveBtn, setShowSaveBtn] = useState(false);
+  // const [editForm] = Form.useForm();
 
-message.config({
-  maxCount: 3,
-});
+  const actionRef = useRef();
 
-export default () => {
-  const [editableKeys, setEditableRowKeys] = useState(() => []);
-  const [position, setPosition] = useState('bottom');
+  const {
+    // eslint-disable-next-line
+    sendRequest: jackpotSetReq,
+    error: setJackpotErr,
+    status: setJackpotStatus,
+    data: setJackpotData,
+  } = useHttp(jackpotSetting);
 
-  const formRef = useRef();
-
-  const requestPromise = async () => {
-    data = await getJackpotList();
-
-    return Promise.resolve({
-      success: true,
-      data: data,
-    });
-  };
-
-  // 刪除
-  const deleteItem = async (level, id) => {
-    const result = await jackpotDelete(level);
-
-    if (result.status === 200) {
-      message.success(`Jackpot level ${level} 已經刪除`);
-      const currentData = formRef.current?.getFieldValue('table');
-      formRef.current?.setFieldsValue({
-        table: currentData.filter((item) => item.id !== id),
-      });
-
-      data = data.filter((el) => el.id !== id);
-    } else {
-      message.error(`Jackpot level ${level} 刪除失敗`);
-    }
-  };
+  const {
+    sendRequest: jackpotDeleteReq,
+    error: deleteJackpotErr,
+    data: deleteJackpotData,
+  } = useHttp(jackpotDelete);
 
   // Show delete egm modal
   const showDeleteModal = (level, id) => {
@@ -61,18 +56,8 @@ export default () => {
       content: `點擊确定會直接從系統Jackpot level-${level}`,
       okText: '確定',
       cancelText: '取消',
-      onOk: () => deleteItem(level, id),
+      onOk: () => jackpotDeleteReq(level, id),
     });
-  };
-
-  const handleOnFinish = async (values) => {
-    const result = await jackpotSetting(values.table);
-
-    if (result.status === 200) {
-      message.success(result.message);
-    } else {
-      message.error('update fail');
-    }
   };
 
   const columns = [
@@ -82,15 +67,6 @@ export default () => {
       dataIndex: 'level',
       valueType: 'digit',
       tip: '＊彩金層數，最大6層',
-
-      formItemProps: (form, { rowIndex }) => ({
-        rules: [{
-          type: 'number',
-          max: rowIndex + 1,
-          min: rowIndex + 1,
-          required: true,
-        }],
-      }),
     },
     {
       title: 'Group',
@@ -103,11 +79,10 @@ export default () => {
       dataIndex: 'min_value',
       valueType: 'digit',
       tip: '＊必須比max value小',
+      // eslint-disable-next-line
       formItemProps: (form, { rowIndex }) => {
-        const existsItem = isEmptyObj(form.getFieldsValue());
-        if (existsItem) return;
-
-        const max = form?.getFieldValue()?.table[rowIndex]?.max_value;
+        const currentRow = Object.values(form.getFieldsValue())[0];
+        const max = currentRow?.max_value;
         return ({
           rules: [{
             type: 'number',
@@ -123,11 +98,9 @@ export default () => {
       dataIndex: 'max_value',
       valueType: 'digit',
       tip: '＊必須比min value大',
-      formItemProps: (form, { rowIndex }) => {
-        const existsItem = isEmptyObj(form.getFieldsValue());
-        if (existsItem) return;
-
-        const min = form.getFieldsValue()?.table[rowIndex]?.min_value;
+      formItemProps: (form) => {
+        const currentRow = Object.values(form.getFieldsValue())[0];
+        const min = currentRow?.min_value;
         return ({
           rules: [{
             type: 'number',
@@ -136,6 +109,7 @@ export default () => {
           }],
         });
       },
+
     },
     {
       title: 'Ratio',
@@ -146,143 +120,127 @@ export default () => {
       formItemProps: () => ({
         rules: [{ required: true, message: '此項為必填' }],
       }),
-
     },
     {
       title: '操作',
       key: 'option',
-      dataIndex: 'option',
       valueType: 'option',
-      tip: '＊新增或編輯需要點擊提交按鈕才會生效，刪除則不需要點擊提交按鈕就會生效',
+      width: 250,
       render: (text, record, _, action) => [
-        <button
-          key="edit"
-          type="button"
-          style={{
-            border: 'none', backgroundColor: 'transparent', color: '#177ddc', cursor: 'pointer',
-          }}
+        <Button
+          type="link"
+          key="editable"
           onClick={() => {
             action?.startEditable?.(record.id);
           }}
         >
           编辑
-        </button>,
-        <button
-          key="delete"
-          type="button"
-          style={{
-            border: 'none',
-            backgroundColor: 'transparent',
-            color: '#177ddc',
-            cursor: 'pointer',
-            display: _ + 1 === formRef.current?.getFieldValue('table')?.length ? 'block' : 'none',
-          }}
+        </Button>,
+        <Button
+          type="link"
+          key="delete-btn"
           onClick={() => {
+            // setDataSource(dataSource.filter((item) => item.id !== record.id));
             showDeleteModal(record.level, record.id);
           }}
+          style={{
+            display: _ + 1 === dataSource.length ? 'block' : 'none',
+          }}
         >
-          删除
-        </button>,
-      ]
-      ,
+          刪除
+        </Button>,
+      ],
     },
   ];
 
+  const requestPromise = async () => {
+    data = await getJackpotList();
+
+    setDataSource(data);
+
+    return Promise.resolve({
+      success: true,
+      data: data,
+    });
+  };
+
+  useEffect(() => {
+    if (setJackpotErr) {
+      message.error('設定失敗');
+      return;
+    }
+
+    if (setJackpotData) {
+      message.success('設定成功');
+      requestPromise();
+    }
+  }, [setJackpotErr, setJackpotData]);
+
+  useEffect(() => {
+    if (deleteJackpotErr) {
+      message.error('刪除失敗');
+      return;
+    }
+
+    if (deleteJackpotData) {
+      message.success('刪除成功');
+      requestPromise();
+    }
+  }, [deleteJackpotErr, deleteJackpotData]);
+
   return (
-    <ProForm
-      formRef={formRef}
-      onFinish={handleOnFinish}
-      // onFinishFailed={(e) => console.log(e)}
-    >
+    <>
+      <Space />
       <EditableProTable
         rowKey="id"
-        headerTitle="Jackpot setting"
+        actionRef={actionRef}
+        headerTitle={<span style={{ color: '#f5222d' }}>*設定完成記得點擊[保存設定]</span>}
         maxLength={6}
-        name="table"
+        recordCreatorProps={false}
         columns={columns}
         request={requestPromise}
-        recordCreatorProps={position !== 'hidden' ? {
-          position: position,
-          creatorButtonText: '新增層數 (最多6層)',
-          record: (index) => (
-            {
-              level: index + 1,
-              id: uuid(),
-              // key: uuid(),
-            })
-          ,
-        }
-          : false}
+        value={dataSource}
+        onChange={(value) => {
+          setShowSaveBtn(true);
+          setDataSource(value);
+        }}
         toolBarRender={() => [
-          <ProFormRadio.Group
-            key="render"
-            fieldProps={{
-              value: position,
-              onChange: (e) => setPosition(e.target.value),
+          <Button
+            type={showSaveBtn ? 'primary' : 'secondary'}
+            key="save-data"
+            disabled={!showSaveBtn}
+            loading={setJackpotStatus === 'pending'}
+            onClick={() => {
+              jackpotSetReq(dataSource);
+              setShowSaveBtn(false);
             }}
-            options={[
-              {
-                label: '新增',
-                value: 'bottom',
-              },
-              {
-                label: '隐藏',
-                value: 'hidden',
-              },
-            ]}
-          />,
+          >
+            保存設定
+          </Button>,
+          <Button
+            key="add-data"
+            style={{
+              cursor: dataSource.length === 6 && 'not-allowed',
+            }}
+            disabled={dataSource.length === 6}
+            onClick={() => {
+              actionRef.current?.addEditRecord?.({
+                level: dataSource?.length + 1,
+              });
+            }}
+            icon={<PlusOutlined />}
+          >
+            {dataSource.length === 6 ? '已達最大層數' : '新增一層'}
+          </Button>,
         ]}
         editable={{
-          type: 'multiple',
           editableKeys,
           onChange: setEditableRowKeys,
-          actionRender: (row, config, defaultDom) => [defaultDom.save, defaultDom.cancel],
-          onSave: () => {
-            if (!localStorage.getItem('notify')) {
-              notification.open({
-                message: '操作提醒',
-                description:
-                  '新增或是更新必需點擊左下方提交按鈕才會生效',
-                icon: <SmileOutlined style={{ color: '#108ee9' }} />,
-              });
-
-              localStorage.setItem('notify', true);
-            }
-          },
+          actionRender: (row, config, dom) => [dom.save, dom.cancel],
         }}
       />
-
-      <ProForm.Item>
-        <ProCard
-          title="表格數據"
-          collapsible
-          defaultCollapsed
-          headerBordered
-        >
-          <ProFormDependency name={['table']}>
-            {({ table }) => {
-              const tableData = {
-                length: table?.length,
-                data: table,
-              };
-              return (
-                <ProFormField
-                  ignoreFormItem
-                  mode="read"
-                  valueType="jsonCode"
-                  text={JSON.stringify(tableData)}
-                  fieldProps={{
-                    style: {
-                      width: '100%',
-                      backgroundColor: '#272928',
-                    },
-                  }}
-                />
-              );
-            }}
-          </ProFormDependency>
-        </ProCard>
-      </ProForm.Item>
-    </ProForm>
+    </>
   );
 };
+
+export default JackpotSetting;
