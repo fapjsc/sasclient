@@ -50,13 +50,13 @@ const StepResult = ({ onFinish, requestErr, children }) => {
       title={
         // actionText(action) + titleResultText()
         `操作${titleResultText()}`
-        }
+      }
       subTitle=""
       extra={(
         <Button type="primary" onClick={onFinish}>
           關閉
         </Button>
-        )}
+      )}
       className={styles.result}
     >
       {children}

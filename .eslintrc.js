@@ -15,6 +15,14 @@ module.exports = {
   plugins: ['react', 'html'],
   rules: {
     'react/jsx-props-no-spreading': 'off',
+    'template-curly-spacing': ['off'],
+    indent: [
+      'error',
+      2,
+      {
+        ignoredNodes: ['TemplateLiteral'],
+      },
+    ],
     'operator-linebreak': [
       'error',
       'after',

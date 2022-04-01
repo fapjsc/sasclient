@@ -21,6 +21,8 @@ export const connectWithSocket = () => {
   });
 
   socket.on('status', (status) => {
+    // console.log(status);
+
     if (JSON.stringify(egmStatusTmp) === JSON.stringify(status)) return;
     egmStatusTmp = status;
     store.dispatch(setEgmStatus(status));
@@ -29,6 +31,7 @@ export const connectWithSocket = () => {
   socket.on('egmList', (data) => {
     if (egmDataTmp === JSON.stringify(data)) return;
     egmDataTmp = JSON.stringify(data);
+
     store.dispatch(setEgmStatus(data));
   });
 

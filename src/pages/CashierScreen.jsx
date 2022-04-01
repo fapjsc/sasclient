@@ -13,7 +13,7 @@ const { TabPane } = Tabs;
 const CashierScreen = () => (
   <Tabs
     defaultActiveKey="1"
-      // onChange={callback}
+    // onChange={callback}
     tabBarGutter={60}
     size="lg"
     style={{ padding: '12px' }}

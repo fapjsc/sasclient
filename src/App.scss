@@ -1,5 +1,5 @@
-@import "@ant-design/pro-card/dist/card.css";
-@import "~antd/dist/antd.dark.css";
+@import '@ant-design/pro-card/dist/card.css';
+@import '~antd/dist/antd.dark.css';
 
 /* Layout */
 .logo {
@@ -15,11 +15,11 @@
 }
 
 .logo-short {
-  background-image: url("./asset/logo-short.png");
+  background-image: url('./asset/logo-short.png');
 }
 
 .logo-rectangle {
-  background-image: url("./asset/logo.png");
+  background-image: url('./asset/logo.png');
 }
 
 .ant-page-header-content {
@@ -83,3 +83,17 @@
   background-color: #1890ff;
 }
 
+.site-tag-plus {
+  // background: #fff;
+  border-style: dashed;
+}
+
+.edit-tag {
+  user-select: none;
+}
+
+.tag-input {
+  width: 78px;
+  margin-right: 8px;
+  vertical-align: top;
+}

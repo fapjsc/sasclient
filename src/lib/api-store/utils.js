@@ -23,8 +23,11 @@ export const SYSTEM_LOG = 'sasClient/accountEventRecord';
 export const JACKPOT_SETTING = 'sasClient/jackpotSetting';
 
 // Egm api
-export const EGM_LIST = 'sasClient/egmList';
+// export const EGM_LIST = 'sasClient/egmList';
 export const AFT = 'sasClient/aft';
+export const EGM_ONLINE_SETTING = 'sasClient/egmOnlineSetting';
+export const EGM_LIST = 'sasClient/egmSettingList';
+export const EGM_SETTING = 'sasClient/egmSetting';
 
 // Staff
 export const CREATE_STAFF = 'login/register';

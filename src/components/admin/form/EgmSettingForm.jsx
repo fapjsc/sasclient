@@ -9,8 +9,6 @@ ProForm,
   ProFormText,
   ProFormCheckbox,
   ProFormSelect,
-  //   ProFormTextArea,
-  //   ProFormDateTimePicker,
 } from '@ant-design/pro-form';
 
 import {
@@ -18,7 +16,7 @@ import {
   Result,
 } from 'antd';
 
-const EgmUpdateForm = (props) => {
+const EgmSettingForm = (props) => {
   const {
     visible,
     done,
@@ -36,16 +34,13 @@ const EgmUpdateForm = (props) => {
       visible={visible}
       width={640}
       title={done ? null : `EGM${current ? `設定： Number ${current.number}` : '新增'}`}
-    //   className={styles.standardListForm}
       onFinish={async (values) => {
         await onSubmit(values);
-        // onSubmit(values);
       }}
       initialValues={current}
       submitter={{
         render: (_, dom) => (done ? null : dom),
       }}
-    //   trigger={<>{children}</>}
       modalProps={{
         onCancel: () => onDone(),
         destroyOnClose: true,
@@ -63,7 +58,6 @@ const EgmUpdateForm = (props) => {
               test="id"
               name="id"
               label="EGM Id"
-              disabled
               width="25%"
               className="test"
             />
@@ -73,6 +67,7 @@ const EgmUpdateForm = (props) => {
             <ProFormText
               name="ip"
               label="EGM IP"
+              disabled
               rules={[
                 {
                   required: true,
@@ -84,10 +79,34 @@ const EgmUpdateForm = (props) => {
             <ProFormText
               name="denomination"
               label="Denomination"
+              disabled
               rules={[
                 {
                   required: true,
                   message: '請輸入EGM denomination',
+                },
+              ]}
+            />
+          </ProForm.Group>
+
+          <ProForm.Group>
+            <ProFormText
+              name="model"
+              label="EGM Model"
+              rules={[
+                {
+                  required: true,
+                  message: '請輸入EGM Model',
+                },
+              ]}
+            />
+            <ProFormText
+              name="brand"
+              label="廠牌"
+              rules={[
+                {
+                  required: true,
+                  message: '請輸入EGM Name',
                 },
               ]}
             />
@@ -104,41 +123,39 @@ const EgmUpdateForm = (props) => {
                 },
               ]}
             />
-
             <ProFormText
-              name="model"
-              label="EGM Model"
+              name="name"
+              label="EGM Name"
               rules={[
                 {
                   required: true,
-                  message: '請輸入EGM Model',
+                  message: '請輸入EGM Name',
                 },
               ]}
             />
-
-            <ProFormSelect
-              width="xs"
-              name="type"
-              tooltip="非必填，默認為交換"
-              label="排列方式"
-              options={[
-                {
-                  value: 'insert',
-                  label: '插入',
-                },
-                {
-                  value: 'replace',
-                  label: '交換',
-                },
-              ]}
-            />
-
           </ProForm.Group>
+
+          <ProFormSelect
+            width="20%"
+            name="type"
+            tooltip="非必填，默認為交換"
+            label="排列方式"
+            options={[
+              {
+                value: 'insert',
+                label: '插入',
+              },
+              {
+                value: 'replace',
+                label: '交換',
+              },
+            ]}
+          />
 
           <ProFormCheckbox.Group
             name="labels"
             layout="vertical"
-            options={['jackpot', 'on-line']}
+            options={['jackpot', 'online']}
           />
         </>
       ) : (
@@ -150,7 +167,7 @@ const EgmUpdateForm = (props) => {
             <Button type="primary" onClick={onDone}>
               返回
             </Button>
-            )}
+          )}
         //   className={styles.formResult}
         />
       )}
@@ -158,7 +175,7 @@ const EgmUpdateForm = (props) => {
   );
 };
 
-EgmUpdateForm.propTypes = {
+EgmSettingForm.propTypes = {
   visible: PropTypes.bool.isRequired,
   done: PropTypes.bool.isRequired,
   onDone: PropTypes.func.isRequired,
@@ -166,15 +183,17 @@ EgmUpdateForm.propTypes = {
   current: PropTypes.shape({
     id: PropTypes.number,
     ip: PropTypes.string,
-    number: PropTypes.string,
-    denomination: PropTypes.number,
+    number: PropTypes.number,
+    denomination: PropTypes.string,
     labels: PropTypes.arrayOf(PropTypes.string),
     model: PropTypes.string,
+    // brandName: PropTypes.string,
+    // buttons: PropTypes.arrayOf(PropTypes.object),
   }),
 };
 
-EgmUpdateForm.defaultProps = {
+EgmSettingForm.defaultProps = {
   current: null,
 };
 
-export default EgmUpdateForm;
+export default EgmSettingForm;

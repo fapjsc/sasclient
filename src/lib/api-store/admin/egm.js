@@ -1,5 +1,10 @@
 import {
-  AGENT_URL, EGM_LIST, AFT, getHeaders,
+  AGENT_URL,
+  EGM_LIST,
+  AFT,
+  getHeaders,
+  EGM_ONLINE_SETTING,
+  EGM_SETTING,
 } from '../utils';
 
 /*
@@ -8,21 +13,8 @@ import {
 ===================
 */
 
-export const adminGetEgmList = async (params) => {
-  const {
-    id, ip, model, number, denomination, created,
-  } = params || {};
-
-  const idStr = id ? `id=${id}&` : '';
-  const ipStr = ip ? `ip=${ip}&` : '';
-  const modelStr = model ? `model=${model}&` : '';
-  const numberStr = number ? `number=${number}&` : '';
-  const denominationStr = denomination ? `denomination=${denomination}&` : '';
-  const createdStr = created ?
-    `startTime=${created[0]}&endTime=${created[1]}&`
-    : '';
-
-  const url = `${AGENT_URL}/${EGM_LIST}?${idStr}${modelStr}${ipStr}${numberStr}${denominationStr}${createdStr}`;
+export const adminGetEgmList = async () => {
+  const url = `${AGENT_URL}/${EGM_LIST}`;
 
   try {
     const headers = getHeaders();
@@ -49,7 +41,34 @@ export const adminGetEgmList = async (params) => {
 
 //** Egm Setting */
 export const adminEgmSetting = async (reqData) => {
-  const url = `${AGENT_URL}/${EGM_LIST}`;
+  const url = `${AGENT_URL}/${EGM_SETTING}`;
+  try {
+    const headers = getHeaders();
+
+    const response = await fetch(url, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify(reqData),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) throw new Error(data.message || 'Could not setting EGM');
+
+    if (data.status !== 200) throw new Error(data.message || 'EGM set fail');
+
+    return data;
+  } catch (error) {
+    return {
+      status: 400,
+      message: error.message || 'Something went wrong',
+    };
+  }
+};
+
+// Online setting
+export const onlineSetting = async (reqData) => {
+  const url = `${AGENT_URL}/${EGM_ONLINE_SETTING}`;
   try {
     const headers = getHeaders();
 
@@ -91,7 +110,6 @@ export const adminEgmDelete = async (id) => {
     if (!response.ok) throw new Error(data.message || 'Could not delete EGM');
 
     if (data.status !== 200) throw new Error(data.message || 'EGM delete fail');
-    // console.log(data, 'delete jackpot');
     return data;
   } catch (error) {
     return {
@@ -134,8 +152,6 @@ export const egmCashInOut = async (params) => {
   const {
     ip, cashAmount, action, digit, quick, cardID,
   } = params || {};
-
-  console.log(cardID);
 
   const response = await fetch(url, {
     method: 'POST',

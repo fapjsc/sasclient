@@ -34,31 +34,31 @@ const handoverLoginInitialState = {
 
 export const handoverLoginReducers = (state = handoverLoginInitialState, action) => {
   switch (action.type) {
-    case handoverActionTypes.HAND_OVER_LOGIN_REQUEST:
-      return {
-        ...state,
-        loading: true,
-      };
+  case handoverActionTypes.HAND_OVER_LOGIN_REQUEST:
+    return {
+      ...state,
+      loading: true,
+    };
 
-    case handoverActionTypes.HAND_OVER_LOGIN_SUCCESS:
-      return {
-        loading: false,
-        data: action.payload,
-        error: '',
-      };
+  case handoverActionTypes.HAND_OVER_LOGIN_SUCCESS:
+    return {
+      loading: false,
+      data: action.payload,
+      error: '',
+    };
 
-    case handoverActionTypes.HAND_OVER_LOGIN_FAIL:
-      return {
-        loading: false,
-        data: null,
-        error: action.payload,
-      };
+  case handoverActionTypes.HAND_OVER_LOGIN_FAIL:
+    return {
+      loading: false,
+      data: null,
+      error: action.payload,
+    };
 
-    case handoverActionTypes.HAND_OVER_LOGIN_STATUS_CLEAR:
-      return handoverLoginInitialState;
+  case handoverActionTypes.HAND_OVER_LOGIN_STATUS_CLEAR:
+    return handoverLoginInitialState;
 
-    default:
-      return state;
+  default:
+    return state;
   }
 };
 

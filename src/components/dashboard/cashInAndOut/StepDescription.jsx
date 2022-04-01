@@ -22,20 +22,20 @@ const StepDescriptions = ({ bordered }) => {
 
   const actionText = (actionType) => {
     switch (actionType) {
-      case 'atfIn':
-        return '開分';
+    case 'atfIn':
+      return '開分';
 
-      case 'aftOut':
-        return '洗分';
+    case 'aftOut':
+      return '洗分';
 
-      case 'aftOutDigit':
-        return '洗分';
+    case 'aftOutDigit':
+      return '洗分';
 
-      case 'promoIn':
-        return '招待分';
+    case 'promoIn':
+      return '招待分';
 
-      default:
-        return '未知';
+    default:
+      return '未知';
     }
   };
 
@@ -58,7 +58,7 @@ const StepDescriptions = ({ bordered }) => {
             <span style={{ fontSize: 14 }}>
               元
             </span>
-            )}
+          )}
           precision={0}
         />
       </Descriptions.Item>

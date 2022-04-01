@@ -11,7 +11,7 @@ const NotFound = () => (
       <Button type="primary">
         <Link to="/dashboard">Back Home</Link>
       </Button>
-)}
+    )}
   />
 );
 

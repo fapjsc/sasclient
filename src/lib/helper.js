@@ -213,3 +213,9 @@ export const waitTime = (time) => new Promise((resolve) => {
 
 // Blob轉 base64
 export const convertBlobToBase64 = (blob) => String.fromCharCode(...new Uint8Array(blob));
+
+export const asyncFilter = async (arr, predicate) => {
+  const results = await Promise.all(arr.map(predicate));
+
+  return arr.filter((_v, index) => results[index]);
+};

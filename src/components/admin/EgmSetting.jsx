@@ -1,7 +1,6 @@
 import React, { useRef, useState } from 'react';
 
-// Moment
-import moment from 'moment';
+import { v4 as uuidv4 } from 'uuid';
 
 // Antd
 import ProTable from '@ant-design/pro-table';
@@ -13,7 +12,8 @@ import {
 } from 'antd';
 
 // Components
-import EgmUpdateForm from './form/EgmSettingForm';
+import EgmSettingForm from './form/EgmSettingForm';
+import OnlineSettingForm from './form/OnlineSettingForm';
 
 // Apis
 import { adminGetEgmList, adminEgmSetting, adminEgmDelete } from '../../lib/api-store';
@@ -22,22 +22,54 @@ let data;
 
 const EgmSetting = () => {
   const actionRef = useRef();
-  const [isSort, setIsSort] = useState(false);
 
-  // Update/create
+  // Init State
   const [egmModalForm, setEgmModalForm] = useState(false);
   const [modalFormDone, setModalFormDone] = useState(false);
+  const [onlineModalForm, setOnlineModalForm] = useState(false);
   const [current, setCurrent] = useState(undefined);
+  // eslint-disable-next-line
+  const [modelEnum, setModelEnum] = useState({});
+  const [brandEnum, setBrandEnum] = useState({});
+  const [egmNameEnum, seEgmNameEnum] = useState({});
+  // const [statusEnum, setStateEnum] = useState({});
 
-  // eslint-disable-next-line no-unused-vars
-  const requestPromise = async (params, sort, filter) => {
-    if (!isSort) {
-      data = await adminGetEgmList(params);
+  const requestPromise = async (params) => {
+    const { ip } = params;
+
+    data = await adminGetEgmList(params);
+    console.log(data);
+
+    const modelObj = {};
+    const brandObj = {};
+    const egmNameObj = {};
+    // const StatusObj = {};
+
+    data.forEach((el) => {
+      // console.log(el);
+      if (el.model) {
+        modelObj[el.model] = { text: el.model };
+      }
+
+      if (el.brand_name) {
+        brandObj[el.brand_name] = { text: el.brand_name };
+      }
+
+      if (el.name) {
+        egmNameObj[el.name] = { text: el.name };
+      }
+    });
+
+    setBrandEnum(brandObj);
+    setModelEnum(modelObj);
+    seEgmNameEnum(egmNameObj);
+    // setStateEnum(StatusObj);
+
+    // console.log(StatusObj);
+
+    if (ip) {
+      data = data.filter((el) => el.ip === ip);
     }
-
-    setTimeout(() => {
-      if (isSort) setIsSort(false);
-    }, 0);
 
     return Promise.resolve({
       success: true,
@@ -73,6 +105,11 @@ const EgmSetting = () => {
     setEgmModalForm(true);
   };
 
+  const onlineEditModal = (item) => {
+    setCurrent(item);
+    setOnlineModalForm((prev) => !prev);
+  };
+
   // Show delete egm modal
   const showDeleteModal = (id, number) => {
     Modal.confirm({
@@ -99,16 +136,13 @@ const EgmSetting = () => {
   };
 
   const columns = [
-    // {
-    //   dataIndex: 'index',
-    //   valueType: 'indexBorder',
-    //   width: 48,
-    // },
-    // {
-    //   title: 'ID',
-    //   key: 'id',
-    //   dataIndex: 'id',
-    // },
+    {
+      title: 'ID',
+      key: 'id',
+      dataIndex: 'id',
+      search: false,
+    },
+
     {
       title: 'IP',
       key: 'ip',
@@ -120,11 +154,39 @@ const EgmSetting = () => {
       key: 'model',
       dataIndex: 'model',
       copyable: true,
+      tip: 'Online 圖片',
+      search: false,
+      filters: true,
+      onFilter: true,
+      valueEnum: modelEnum,
+    },
+    {
+      title: '廠牌',
+      key: 'brand',
+      dataIndex: 'brand_name',
+      copyable: true,
+      tip: 'Online 圖片',
+      search: false,
+      filters: true,
+      onFilter: true,
+      valueEnum: brandEnum,
+    },
+    {
+      title: '名稱',
+      key: 'name',
+      dataIndex: 'name',
+      copyable: true,
+      tip: '頁面顯示',
+      search: false,
+      filters: true,
+      onFilter: true,
+      valueEnum: egmNameEnum,
     },
     {
       title: 'Number',
       key: 'number',
       dataIndex: 'number',
+      search: false,
       sorter: (a, b) => a.number - b.number,
     },
     {
@@ -132,56 +194,47 @@ const EgmSetting = () => {
       key: 'denomination',
       dataIndex: 'denomination',
       copyable: true,
+      search: false,
     },
-    {
-      title: 'Updated',
-      key: 'updated',
-      dataIndex: 'updated',
-      hideInSearch: true,
-      sorter: (a, b) => {
-        const aTime = new Date(a.created).getTime();
-        const bTime = new Date(b.created).getTime();
-        return aTime - bTime;
-      },
-      valueType: 'dateTimeRange',
-      className: 'cancel-icon',
-      render: (e) => moment(e.props.text).format('YYYY-MM-DD HH:mm'),
-    },
-    {
-      title: 'Created',
-      key: 'created',
-      dataIndex: 'created',
-      hideInSearch: true,
-      sorter: (a, b) => {
-        const aTime = new Date(a.created).getTime();
-        const bTime = new Date(b.created).getTime();
-        return aTime - bTime;
-      },
-      valueType: 'dateTimeRange',
-      className: 'cancel-icon',
-      render: (e) => moment(e.props.text).format('YYYY-MM-DD HH:mm'),
-    },
+
     {
       title: '狀態',
       key: 'labels',
       dataIndex: 'labels',
       search: false,
+      tip: '點擊標籤後開始設定',
+      // filters: true,
+      // onFilter: true,
+      // valueEnum: statusEnum,
       renderFormItem: (_, { defaultRender }) => defaultRender(_),
-      render: (_, record) => (
-        <Space>
-          {record.labels?.length ? (
-            record.labels?.map((type) => (
-              <Tag color={type === 'jackpot' ? 'cyan' : 'magenta'} key={type}>
-                {type}
-              </Tag>
-            ))
-          ) : (
-            <Space key="none">
-              <span>-</span>
-            </Space>
-          )}
-        </Space>
-      ),
+      render: (_, record) => {
+        const { label } = record;
+        const element = Object.entries(label)
+          .map(([type, value]) => {
+            if (value === 1) {
+              return (
+                <Space key={uuidv4()} size="large">
+                  <Tag
+                    style={{ cursor: type === 'online' && 'pointer' }}
+                    onClick={() => {
+                      if (type === 'online') {
+                        onlineEditModal(record);
+                      }
+                    }}
+                    color={type === 'jackpot' ? 'cyan' : 'magenta'}
+                  >
+                    {type}
+                  </Tag>
+                </Space>
+              );
+            }
+            return (
+              null
+            );
+          });
+
+        return element;
+      },
     },
     {
       title: '操作',
@@ -199,14 +252,16 @@ const EgmSetting = () => {
           }}
           onClick={() => {
             const {
-              id, model, ip, number, labels, denomination,
+              id, model, ip, number, label, denomination, brand_name: brand, name,
             } = record;
 
             const formatLabels = [];
 
-            if (labels?.length) {
-              labels?.forEach((el) => formatLabels.push(el.name));
-            }
+            Object.entries(label).forEach(([key, value]) => {
+              if (value) {
+                formatLabels.push(key);
+              }
+            });
 
             showEditModal({
               id,
@@ -215,6 +270,8 @@ const EgmSetting = () => {
               model,
               labels: formatLabels,
               denomination,
+              brand,
+              name,
             });
           }}
         >
@@ -235,7 +292,6 @@ const EgmSetting = () => {
         >
           刪除
         </button>,
-
       ],
     },
   ];
@@ -247,7 +303,6 @@ const EgmSetting = () => {
         columns={columns}
         debounceTime={300}
         rowKey="id"
-        // dateFormatter="string"
         headerTitle="EGM設定"
         request={requestPromise}
         search={{
@@ -258,17 +313,24 @@ const EgmSetting = () => {
           defaultPageSize: 10,
           showQuickJumper: true,
         }}
-        onChange={(pagination, filters, sorter, extra) => {
-          if (extra.action === 'sort') setIsSort(true);
-        }}
+
       />
 
-      <EgmUpdateForm
+      <EgmSettingForm
         visible={egmModalForm}
         current={current}
         done={modalFormDone}
         onDone={handleDone}
         onSubmit={handleSubmit}
+      />
+
+      <OnlineSettingForm
+        visible={onlineModalForm}
+        setVisible={setOnlineModalForm}
+        onDone={handleDone}
+        currentID={current?.id}
+        currentStreamID={current?.ip?.split('.')[3]}
+        buttons={current?.buttons}
       />
     </>
   );

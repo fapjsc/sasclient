@@ -14,33 +14,33 @@ const initialState = {
 
 export const userReducer = (state = initialState, action) => {
   switch (action.type) {
-    case SET_USER_INFO:
-      return {
-        ...state,
-        token: action.userInfo.token,
-        permission: action.userInfo.permission,
-        name: action.userInfo.name,
-        account: action.userInfo.account,
-      };
+  case SET_USER_INFO:
+    return {
+      ...state,
+      token: action.userInfo.token,
+      permission: action.userInfo.permission,
+      name: action.userInfo.name,
+      account: action.userInfo.account,
+    };
 
-    case SYSTEM_LOG_OUT:
-      return initialState;
+  case SYSTEM_LOG_OUT:
+    return initialState;
 
-    case USER_LOG_OUT:
-      return {
-        ...state,
-        account: null,
-      };
+  case USER_LOG_OUT:
+    return {
+      ...state,
+      account: null,
+    };
 
-    case USER_LOGIN: {
-      return {
-        ...state,
-        account: action.user,
-      };
-    }
+  case USER_LOGIN: {
+    return {
+      ...state,
+      account: action.user,
+    };
+  }
 
-    default:
-      return state;
+  default:
+    return state;
   }
 };
 

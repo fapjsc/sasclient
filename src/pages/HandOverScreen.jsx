@@ -66,7 +66,7 @@ const CashierScreen = () => {
                 showTag && <Tag color="lime">交班</Tag>
               }
             </Space>
-        )}
+          )}
         >
           <HandOverDetail onShow={onShow} />
         </TabPane>

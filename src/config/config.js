@@ -1,5 +1,5 @@
 export const AGENT_URL = 'http://192.168.10.119:3030';
-// export const AGENT_URL = 'http://192.168.10.60:3030';
+export const STREAM_SERVER_EXTERNAL = '220.135.67.240';
 
 export const autoLogoutTime = 1000 * 1 * 60 * 60; // 一小時
 

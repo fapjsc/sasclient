@@ -23,15 +23,11 @@ export const getJackpotList = async () => {
 
     if (data.status !== 200) throw new Error(data.message || 'fetch jackpot list fail');
 
-    // console.log(data, 'get jackpot list');
-
     const formatData = data.result.map((el) => ({
       ...el,
       id: uuid(),
       key: uuid(),
     }));
-
-    console.log(formatData);
 
     return formatData;
   } catch (error) {
