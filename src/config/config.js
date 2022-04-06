@@ -1,5 +1,5 @@
 // Agent server ip
-export const AGENT_URL = 'http://192.168.10.200:3030';
+export const AGENT_URL = 'http://192.168.10.119:3030';
 
 // SRS server ip
 export const STREAM_SERVER_EXTERNAL = '220.135.67.240';
