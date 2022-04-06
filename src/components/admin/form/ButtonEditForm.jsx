@@ -1,19 +1,28 @@
 import React, { useState, useEffect } from 'react';
+
+// Drop
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
-// eslint-disable-next-line
-import { Tag, Input, Checkbox, Space , Cascader} from 'antd';
+
+// Prop types
+import PropTypes from 'prop-types';
+
+// Antd
+import {
+  Tag, Checkbox, Space, Cascader, AutoComplete,
+} from 'antd';
+
+// Config
+import { subBtnOptions } from '../../../config/config';
 
 //  data generator
 const getItems = (count) => Array.from({ length: count }, (v, k) => k).map((k) => ({
-  // id: `item-${k}`,
-  // buttonName: `item${k}`,
   value: k,
   label: k,
 }));
 
-// eslint-disable-next-line
-const ButtonEditForm = ({ getOnlineData, subBtnList }) => {
+//
 
+const ButtonEditForm = ({ getOnlineData, subBtnList, brand }) => {
   // eslint-disable-next-line
   const btnItems = subBtnList?.sort((a, b) => a.sequence - b.sequence)?.map((btn) => ({
     id: `${btn.id}`,
@@ -59,15 +68,19 @@ const ButtonEditForm = ({ getOnlineData, subBtnList }) => {
   const getItemStyle = (isDragging, draggableStyle) => ({
     userSelect: 'none',
     color: isDragging && '#a8071a',
+    border: isDragging ? '1px solid #a8071a' : '1px solid #262626',
+    // backgroundColor: isDragging ? 'red' : '#1f1f1f',
     ...draggableStyle,
   });
 
   // eslint-disable-next-line
   const getListStyle = (isDragging, isDraggingOver) => ({
     display: 'grid',
-    gap: '0.5rem',
-    gridTemplateColumns: 'repeat(5, 1fr)',
+    gap: '1rem',
+    gridTemplateColumns: 'repeat(10, 1fr)',
     overflow: 'auto',
+    backgroundColor: isDragging ? '#262626' : '#1f1f1f',
+    padding: '1rem',
   });
 
   // eslint-disable-next-line
@@ -77,15 +90,13 @@ const ButtonEditForm = ({ getOnlineData, subBtnList }) => {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: isDragging && '#a8071a',
-    borderColor: isDragging && '#a8071a',
-    color: isDragging && '#ff7875',
+    color: isDragging && '#a8071a',
   });
 
-  const handleEditInputChange = ({ target }) => {
+  const handleEditInputChange = (value) => {
     setState((prev) => ({
       ...prev,
-      editInputValue: target.value,
+      editInputValue: value,
     }));
   };
 
@@ -167,15 +178,17 @@ const ButtonEditForm = ({ getOnlineData, subBtnList }) => {
               const { editInputValue } = state;
               if (state.editInputIndex === index) {
                 return (
-                  <Input
+                  <AutoComplete
                     key={item.id}
                     size="small"
                     className="tag-input"
                     value={editInputValue}
-                    onChange={(e) => handleEditInputChange(e)}
+                    onChange={handleEditInputChange}
                     onBlur={handleEditInputConfirm}
-                    onPressEnter={handleEditInputConfirm}
+                    // onPressEnter={handleEditInputConfirm}
                     autoFocus
+                    style={{ width: '100%', margin: 'auto' }}
+                    options={subBtnOptions[brand]}
                   />
                 );
               }
@@ -204,25 +217,25 @@ const ButtonEditForm = ({ getOnlineData, subBtnList }) => {
                       <Tag
                         className="edit-tag"
                         key={item}
+                        onDoubleClick={(e) => {
+                          setState((prev) => ({
+                            ...prev,
+                            editInputIndex: index,
+                            editInputValue: item.buttonName,
+                          }));
+
+                          e.preventDefault();
+                        }}
                         style={btnStyle(
                           snapshot.isDragging,
                           provided.draggableProps.style,
                         )}
                       >
-                        <span
-                          onDoubleClick={(e) => {
-                            setState((prev) => ({
-                              ...prev,
-                              editInputIndex: index,
-                              editInputValue: item.buttonName,
-                            }));
-
-                            e.preventDefault();
-                          }}
-                        >
+                        <span>
                           {item.buttonName}
                         </span>
                       </Tag>
+
                       <Cascader
                         style={{ width: '100%' }}
                         options={getItems(10)}
@@ -241,6 +254,17 @@ const ButtonEditForm = ({ getOnlineData, subBtnList }) => {
       </Droppable>
     </DragDropContext>
   );
+};
+
+ButtonEditForm.propTypes = {
+  getOnlineData: PropTypes.func.isRequired,
+  subBtnList: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.object])),
+  brand: PropTypes.string,
+};
+
+ButtonEditForm.defaultProps = {
+  brand: '',
+  subBtnList: null,
 };
 
 export default ButtonEditForm;

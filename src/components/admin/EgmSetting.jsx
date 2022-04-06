@@ -28,7 +28,6 @@ const EgmSetting = () => {
   const [modalFormDone, setModalFormDone] = useState(false);
   const [onlineModalForm, setOnlineModalForm] = useState(false);
   const [current, setCurrent] = useState(undefined);
-  // eslint-disable-next-line
   const [modelEnum, setModelEnum] = useState({});
   const [brandEnum, setBrandEnum] = useState({});
   const [egmNameEnum, seEgmNameEnum] = useState({});
@@ -38,7 +37,6 @@ const EgmSetting = () => {
     const { ip } = params;
 
     data = await adminGetEgmList(params);
-    console.log(data);
 
     const modelObj = {};
     const brandObj = {};
@@ -203,9 +201,8 @@ const EgmSetting = () => {
       dataIndex: 'labels',
       search: false,
       tip: '點擊標籤後開始設定',
-      // filters: true,
-      // onFilter: true,
-      // valueEnum: statusEnum,
+      sorter: ((a, b) => (b.label.online + b.label.jackpot) - (a.label.online + a.label.jackpot)),
+
       renderFormItem: (_, { defaultRender }) => defaultRender(_),
       render: (_, record) => {
         const { label } = record;
@@ -296,6 +293,8 @@ const EgmSetting = () => {
     },
   ];
 
+  console.log(current);
+
   return (
     <>
       <ProTable
@@ -331,6 +330,7 @@ const EgmSetting = () => {
         currentID={current?.id}
         currentStreamID={current?.ip?.split('.')[3]}
         buttons={current?.buttons}
+        brand={current?.brand_name}
       />
     </>
   );
