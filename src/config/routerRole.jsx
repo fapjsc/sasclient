@@ -20,6 +20,7 @@ import EgmSettingScreen from '../pages/admin/EgmSettingScreen';
 import JackpotSettingScreen from '../pages/admin/JackpotSettingScreen';
 import HistoryRecordScreen from '../pages/admin/historyRecordScreen';
 import StaffManageScreen from '../pages/admin/StaffManagePage';
+import DevScreen from '../pages/admin/DevScreen';
 
 //** unAuthorized Pages */
 import Login from '../pages/Login';
@@ -114,6 +115,12 @@ export const AuthorizedRoutes = () => [
         // name: t('side_nav_history'),
         name: '歷史紀錄',
       },
+      {
+        path: '/admin/dev-screen',
+        alias: 'dev-screen',
+        // name: t('side_nav_history'),
+        name: '工程',
+      },
     ],
   },
   {
@@ -147,6 +154,14 @@ export const AuthorizedRoutes = () => [
     permissions: ['admin'],
     redirect: '/access-denied',
     component: StaffManageScreen,
+    isMain: false,
+  },
+  {
+    path: '/admin/dev-screen',
+    exact: true,
+    permissions: ['admin'],
+    redirect: '/access-denied',
+    component: DevScreen,
     isMain: false,
   },
 ];

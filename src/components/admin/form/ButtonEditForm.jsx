@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 
 // Antd
 import {
-  Tag, Checkbox, Space, Cascader, AutoComplete,
+  Tag, Checkbox, Space, Cascader, AutoComplete, Divider,
 } from 'antd';
 
 // Config
@@ -24,12 +24,14 @@ const getItems = (count) => Array.from({ length: count }, (v, k) => k).map((k) =
 
 const ButtonEditForm = ({ getOnlineData, subBtnList, brand }) => {
   // eslint-disable-next-line
-  const btnItems = subBtnList?.sort((a, b) => a.sequence - b.sequence)?.map((btn) => ({
-    id: `${btn.id}`,
-    buttonName: btn.button_name,
-    spin_effect: btn?.spin_effect || 0,
-    code: btn?.code || 0,
-  }));
+  const btnItems = subBtnList
+    ?.sort((a, b) => a.sequence - b.sequence)
+    ?.map((btn) => ({
+      id: `${btn.id}`,
+      buttonName: btn.button_name,
+      spin_effect: btn?.spin_effect || 0,
+      code: btn?.code || 0,
+    }));
 
   const [state, setState] = useState({
     buttons: btnItems,
@@ -166,93 +168,94 @@ const ButtonEditForm = ({ getOnlineData, subBtnList, brand }) => {
   }, [state]);
 
   return (
-    <DragDropContext onDragEnd={onDragEnd}>
-      <Droppable droppableId="droppable" direction="horizontal">
-        {(provided, snapshot) => (
-          <div
-            ref={provided.innerRef}
-            style={getListStyle(snapshot.isDraggingOver)}
-            {...provided.droppableProps}
-          >
-            {state.buttons.map((item, index) => {
-              const { editInputValue } = state;
-              if (state.editInputIndex === index) {
+    <>
+      <Divider orientation="left">按鈕</Divider>
+      <DragDropContext onDragEnd={onDragEnd}>
+        <Droppable droppableId="droppable" direction="horizontal">
+          {(provided, snapshot) => (
+            <div
+              ref={provided.innerRef}
+              style={getListStyle(snapshot.isDraggingOver)}
+              {...provided.droppableProps}
+            >
+              {state.buttons.map((item, index) => {
+                const { editInputValue } = state;
+                if (state.editInputIndex === index) {
+                  return (
+                    <AutoComplete
+                      key={item.id}
+                      size="small"
+                      className="tag-input"
+                      value={editInputValue}
+                      onChange={handleEditInputChange}
+                      onBlur={handleEditInputConfirm}
+                      // onPressEnter={handleEditInputConfirm}
+                      autoFocus
+                      style={{ width: '100%', margin: 'auto' }}
+                      options={subBtnOptions[brand]}
+                    />
+                  );
+                }
                 return (
-                  <AutoComplete
-                    key={item.id}
-                    size="small"
-                    className="tag-input"
-                    value={editInputValue}
-                    onChange={handleEditInputChange}
-                    onBlur={handleEditInputConfirm}
-                    // onPressEnter={handleEditInputConfirm}
-                    autoFocus
-                    style={{ width: '100%', margin: 'auto' }}
-                    options={subBtnOptions[brand]}
-                  />
-                );
-              }
-              return (
-                <Draggable key={item.id} draggableId={item.id} index={index}>
-                  {/* eslint-disable-next-line */}
-                  {(provided, snapshot) => (
-                    <div
-                      ref={provided.innerRef}
-                      {...provided.draggableProps}
-                      {...provided.dragHandleProps}
-                      style={getItemStyle(
-                        snapshot.isDragging,
-                        provided.draggableProps.style,
-                      )}
-                    >
-                      <Space>
-                        <span>{`#${index + 1}`}</span>
-                        <Checkbox
-                          checked={item.spin_effect === 1}
-                          id={index}
-                          onChange={spinEffectOnChange}
-                        />
-                      </Space>
-
-                      <Tag
-                        className="edit-tag"
-                        key={item}
-                        onDoubleClick={(e) => {
-                          setState((prev) => ({
-                            ...prev,
-                            editInputIndex: index,
-                            editInputValue: item.buttonName,
-                          }));
-
-                          e.preventDefault();
-                        }}
-                        style={btnStyle(
+                  <Draggable key={item.id} draggableId={item.id} index={index}>
+                    {/* eslint-disable-next-line */}
+                    {(provided, snapshot) => (
+                      <div
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                        style={getItemStyle(
                           snapshot.isDragging,
                           provided.draggableProps.style,
                         )}
                       >
-                        <span>
-                          {item.buttonName}
-                        </span>
-                      </Tag>
+                        <Space>
+                          <span>{`#${index + 1}`}</span>
+                          <Checkbox
+                            checked={item.spin_effect === 1}
+                            id={index}
+                            onChange={spinEffectOnChange}
+                          />
+                        </Space>
 
-                      <Cascader
-                        style={{ width: '100%' }}
-                        options={getItems(10)}
-                        onChange={(value) => spinCodeOnChange({ value, index })}
-                        placeholder="Please select"
-                        defaultValue={[item?.code || 0]}
-                      />
-                    </div>
-                  )}
-                </Draggable>
-              );
-            })}
-            {provided.placeholder}
-          </div>
-        )}
-      </Droppable>
-    </DragDropContext>
+                        <Tag
+                          className="edit-tag"
+                          key={item}
+                          onDoubleClick={(e) => {
+                            setState((prev) => ({
+                              ...prev,
+                              editInputIndex: index,
+                              editInputValue: item.buttonName,
+                            }));
+
+                            e.preventDefault();
+                          }}
+                          style={btnStyle(
+                            snapshot.isDragging,
+                            provided.draggableProps.style,
+                          )}
+                        >
+                          <span>{item.buttonName}</span>
+                        </Tag>
+
+                        <Cascader
+                          style={{ width: '100%' }}
+                          options={getItems(10)}
+                          onChange={(value) => spinCodeOnChange({ value, index })}
+                          placeholder="Please select"
+                          defaultValue={[item?.code || 0]}
+                        />
+                      </div>
+                    )}
+                  </Draggable>
+                );
+              })}
+              {provided.placeholder}
+            </div>
+          )}
+        </Droppable>
+      </DragDropContext>
+    </>
   );
 };
 

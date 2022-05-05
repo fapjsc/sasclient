@@ -25,6 +25,7 @@ export {
   adminEgmDelete,
   egmCashInOut,
   onlineSetting,
+  devGetEgmList,
 } from './admin/egm';
 
 // Handover

@@ -3,7 +3,7 @@ import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
 
 // Antd
-import { message } from 'antd';
+import { message, Divider } from 'antd';
 import ProForm, { ModalForm, ProFormText } from '@ant-design/pro-form';
 
 // Apis
@@ -78,6 +78,7 @@ const OnlineSettingForm = ({
 
       }}
     >
+      <Divider orientation="left">視訊</Divider>
       <ProForm.Group>
         <ProFormText width="sm" name="app" label="視訊APP" />
         <ProFormText width="sm" name="serverIP" label="Server IP" />

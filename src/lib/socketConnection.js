@@ -33,6 +33,7 @@ export const connectWithSocket = () => {
     egmDataTmp = JSON.stringify(data);
 
     store.dispatch(setEgmStatus(data));
+    // console.log(data);
   });
 
   socket.on('disconnect', () => {

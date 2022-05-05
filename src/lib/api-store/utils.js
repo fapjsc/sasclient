@@ -55,3 +55,6 @@ export const MEMBER_DEPOSIT = 'sasClient/deposit';
 export const GET_MEMBER = 'sasClient/getMember';
 export const MEMBER_WITHDRAWAL = 'sasClient/withdrawal';
 export const MEMBER_UPDATE = 'sasClient/updateMember';
+
+// For Dev
+export const DEV_EGM_LIST = '/test/egmList';

@@ -5,6 +5,7 @@ import {
   getHeaders,
   EGM_ONLINE_SETTING,
   EGM_SETTING,
+  DEV_EGM_LIST,
 } from '../utils';
 
 /*
@@ -175,4 +176,38 @@ export const egmCashInOut = async (params) => {
   }
 
   return { ...data, quick };
+};
+
+// For Dev
+export const devGetEgmList = async () => {
+  const url = `${AGENT_URL}${DEV_EGM_LIST}`;
+
+  try {
+    const headers = getHeaders();
+
+    const response = await fetch(url, { headers });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message || 'Could not fetch egm list');
+    }
+
+    // if (data.status !== 200) {
+    //   throw new Error(data.message || 'Fetch egm list fail');
+    // }
+
+    const formatData = [];
+
+    Object.values(data).forEach((value) => {
+      formatData.push(value);
+    });
+
+    return data;
+  } catch (error) {
+    return {
+      status: 400,
+      message: error.message || 'Something went wrong',
+    };
+  }
 };
