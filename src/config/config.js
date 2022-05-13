@@ -1,8 +1,8 @@
 // Agent server ip
-export const AGENT_URL = 'http://192.168.10.119:3030';
+export const AGENT_URL = process.env.REACT_APP_AGENT_SERVER || 'http://192.168.10.119:3030';
 
 // SRS server ip
-export const STREAM_SERVER_EXTERNAL = '220.135.67.240';
+export const STREAM_SERVER_EXTERNAL = process.env.REACT_APP_SRS_SERVER || '220.135.67.240';
 
 export const autoLogoutTime = 1000 * 1 * 60 * 60; // 一小時
 
