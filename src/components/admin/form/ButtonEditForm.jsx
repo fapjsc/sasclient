@@ -141,7 +141,7 @@ const ButtonEditForm = ({ getOnlineData, subBtnList, brand }) => {
     });
   };
 
-  const spinCodeOnChange = ({ value, index }) => {
+  const btnCodeOnChange = ({ value, index }) => {
     setState((prev) => {
       const { buttons } = prev || {};
       buttons[index].code = value[0];
@@ -241,9 +241,10 @@ const ButtonEditForm = ({ getOnlineData, subBtnList, brand }) => {
                         <Cascader
                           style={{ width: '100%' }}
                           options={getItems(10)}
-                          onChange={(value) => spinCodeOnChange({ value, index })}
+                          onChange={(value) => btnCodeOnChange({ value, index })}
                           placeholder="Please select"
                           defaultValue={[item?.code || 0]}
+                          allowClear={false}
                         />
                       </div>
                     )}

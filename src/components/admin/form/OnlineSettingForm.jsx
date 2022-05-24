@@ -21,7 +21,7 @@ const OnlineSettingForm = ({
   const buttonRef = useRef();
 
   // eslint-disable-next-line
-  const subBtnList = buttons?.filter((el) => el.button_name !== 'max' && el.button_name !== 'take-win')
+  const subBtnList = buttons?.filter((el) => el.button_name !== 'max' && el.button_name !== 'take-win' &&  el.button_name !== 'spin')
 
   const onFinish = async (values) => {
     const { serverIP, app, streamID } = values;
