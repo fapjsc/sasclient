@@ -17,7 +17,7 @@ export const connectWithSocket = () => {
   socket = io(AGENT_URL);
 
   socket.on('connect', () => {
-    console.log('connect agent with socket');
+    // console.log('connect agent with socket');
   });
 
   socket.on('status', (status) => {
