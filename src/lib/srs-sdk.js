@@ -190,7 +190,7 @@ export const SrsRtcPlayerAsync = () => {
             ret.port = 443;
           } else {
             // For WebRTC, SRS use 1985 as default API port.
-            ret.port = process.env.REACT_APP_AGENT_SRS_PORT || 1985;
+            ret.port = process.env.REACT_APP_SRS_PORT || 1985;
           }
         }
       }
