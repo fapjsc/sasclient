@@ -10,7 +10,7 @@ import crypto from 'crypto';
 import { toast } from 'react-toastify';
 
 // Router props
-import { useHistory } from 'react-router-dom';
+import { useHistory, Link } from 'react-router-dom';
 
 // // Redux
 import { useDispatch } from 'react-redux';
@@ -200,8 +200,16 @@ const Login = () => {
               </Button>
             </Form.Item>
           </Form>
+
         </div>
       )}
+
+      <div style={{
+        fontSize: '2rem', position: 'fixed', bottom: '1rem', right: '1rem',
+      }}
+      >
+        <Link to="show-live">主播聊天室</Link>
+      </div>
     </div>
   );
 };

@@ -52,3 +52,8 @@ export {
   getMember,
   updateMember,
 } from './member/addMember';
+
+// Online
+export {
+  getOnlineEgmList,
+} from './onLine/onLine';

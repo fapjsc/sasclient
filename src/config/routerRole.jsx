@@ -25,6 +25,7 @@ import DevScreen from '../pages/admin/DevScreen';
 //** unAuthorized Pages */
 import Login from '../pages/Login';
 import AccessDenied from '../pages/AccessDenied';
+import ShowLive from '../pages/ShowLive/ShowLive';
 
 // Hooks
 // import { useI18n } from '../i18n';
@@ -175,6 +176,11 @@ export const unAuthorizedRoutes = [
     path: '/login',
     exact: true,
     component: Login,
+  },
+  {
+    path: '/show-live',
+    exact: true,
+    component: ShowLive,
   },
   {
     path: '/access-denied',

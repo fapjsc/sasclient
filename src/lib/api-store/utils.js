@@ -58,3 +58,6 @@ export const MEMBER_UPDATE = 'sasClient/updateMember';
 
 // For Dev
 export const DEV_EGM_LIST = '/test/egmList';
+
+// Online
+export const ONLINE_EGM_LIST = '/online/egmList';

@@ -41,7 +41,7 @@ const DevScreen = () => {
       <Space direction="vertical">
         <div>
           <a
-            href="http://192.168.10.119:8080/console/ng_index.html#/streams?port=1985"
+            href={process.env.REACT_APP_SRS_SERVER}
             target="_blank"
             rel="noreferrer"
           >
