@@ -17,6 +17,8 @@ const StreamList = () => {
     console.log(playStatus);
   }, [playStatus]);
 
+  console.log(el.stream);
+
   return (
     <section className={styles['stream-list']}>
       {

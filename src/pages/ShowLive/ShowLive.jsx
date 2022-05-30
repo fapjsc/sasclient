@@ -46,6 +46,7 @@ const ShowLive = () => {
         <ShowLiveHeader />
         <div className={styles.content}>
           <UserList />
+
           {status === 'pending' && (
             <div
               style={{
