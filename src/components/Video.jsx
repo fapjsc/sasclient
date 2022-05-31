@@ -3,7 +3,7 @@ import React, { useRef, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { SrsRtcPlayerAsync } from '../lib/srs-sdk';
 
-let flag = true;
+// let flag = true;
 
 const Video = ({
   rtcUrl: url, close, play, setPlayStatus, getSdkRef,
@@ -13,8 +13,8 @@ const Video = ({
 
   const startPlay = useCallback(() => {
     console.log('start play');
-    if (!flag) return;
-    flag = false;
+    // if (!flag) return;
+    // flag = false;
     // if (!url) return;
 
     if (sdkRef.current) {
@@ -34,7 +34,7 @@ const Video = ({
         setPlayStatus('error!');
       })
       .finally(() => {
-        flag = true;
+        // flag = true;
       });
   }, [url, setPlayStatus]);
 
@@ -47,7 +47,8 @@ const Video = ({
     }
 
     return () => {
-      sdkRef.current.close();
+      console.log('unmount');
+      sdkRef?.current?.close();
     };
 
     // eslint-disable-next-line
@@ -138,7 +139,7 @@ const Video = ({
       ref={videoRef}
       id="video-webrtc"
       poster="../assets/bg.webp"
-      // controls
+      controls
       muted
       autoPlay="autoplay"
       playsInline

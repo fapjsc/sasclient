@@ -77,6 +77,8 @@ export const showLiveConnect = () => {
         stream: el.stream_url,
       }));
 
+      console.log(formatData);
+
       store.dispatch(setShowLiveEgmStatus(formatData));
 
       setTimeout(() => {

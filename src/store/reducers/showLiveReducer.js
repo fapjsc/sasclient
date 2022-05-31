@@ -3,6 +3,7 @@ import showLiveTypes from '../types/showLiveTypes';
 const initialState = {
   messages: [],
   egmStatus: [],
+  filterText: '',
 };
 
 const showLiveReducer = (state = initialState, action) => {
@@ -17,6 +18,12 @@ const showLiveReducer = (state = initialState, action) => {
     return {
       ...state,
       egmStatus: action.payload || [],
+    };
+
+  case showLiveTypes.FILTER_TEXT:
+    return {
+      ...state,
+      filterText: action.payload,
     };
 
   default:

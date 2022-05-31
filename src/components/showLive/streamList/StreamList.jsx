@@ -11,24 +11,49 @@ import styles from './StreamList.module.scss';
 
 const StreamList = () => {
   const [playStatus, setPlayStatus] = useState('loading');
-  const { egmStatus } = useSelector((state) => state.showLive);
+  const { egmStatus, filterText } = useSelector((state) => state.showLive);
+
+  const [filterEgm, setFilterEgm] = useState([]);
 
   useEffect(() => {
     console.log(playStatus);
   }, [playStatus]);
 
+  useEffect(() => {
+    if (filterText) {
+      const filterList = egmStatus.filter((el) => el.member.member_account.includes(filterText));
+      setFilterEgm(filterList);
+      return;
+    }
+
+    setFilterEgm(egmStatus);
+  }, [filterText, egmStatus]);
+
   return (
     <section className={styles['stream-list']}>
       {
-        egmStatus.map((el) => (
+        filterEgm.map((el) => (
           <div key={el.ip} className={styles.stream}>
-            <Video
-              rtcUrl={el.stream}
-              play
-              setPlayStatus={setPlayStatus}
-              egmStatus={egmStatus}
-            />
-            <span className={styles['member-name']}>{`帳號：${el.member.member_account}`}</span>
+            <div style={{ height: '80%', width: '100%' }}>
+              <Video
+                rtcUrl={el.stream}
+                play
+                setPlayStatus={setPlayStatus}
+                egmStatus={egmStatus}
+              />
+            </div>
+            <div className={styles['member-name']}>
+              <div>
+                玩家：
+                {el.member.member_account}
+              </div>
+
+              <div>
+                遊戲：
+                {el.name}
+              </div>
+
+            </div>
           </div>
         ))
       }
