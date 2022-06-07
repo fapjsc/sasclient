@@ -19,7 +19,7 @@ let egmStatusTmp;
 let egmDataTmp;
 
 // Show live
-let allowEgmListInComing = true;
+// const allowEgmListInComing = true;
 
 export const connectWithSocket = () => {
   socket = io(AGENT_URL);
@@ -63,8 +63,9 @@ export const showLiveConnect = () => {
 
     // Egm list
     socket.on('onlineEgmList', (data) => {
-      if (!allowEgmListInComing) return;
-      allowEgmListInComing = false;
+      console.log(data);
+      // if (!allowEgmListInComing) return;
+      // allowEgmListInComing = false;
 
       const filterData = Object.values(data).filter((el) => el.stream_url
       && !isEmptyObj(el.member));
@@ -81,9 +82,9 @@ export const showLiveConnect = () => {
 
       store.dispatch(setShowLiveEgmStatus(formatData));
 
-      setTimeout(() => {
-        allowEgmListInComing = true;
-      }, 3000);
+      // setTimeout(() => {
+      //   allowEgmListInComing = true;
+      // }, 3000);
     });
   });
 };
