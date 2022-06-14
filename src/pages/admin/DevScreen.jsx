@@ -41,7 +41,7 @@ const DevScreen = () => {
       <Space direction="vertical">
         <div>
           <a
-            href={process.env.REACT_APP_SRS_SERVER}
+            href={process.env.REACT_APP_SRS_WEB}
             target="_blank"
             rel="noreferrer"
           >
