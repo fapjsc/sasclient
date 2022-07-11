@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import ReactJson from 'react-json-view';
 
 import {
@@ -7,24 +7,27 @@ import {
 import useHttp from '../../hooks/useHttp';
 
 // Apis
-import { devGetEgmList } from '../../lib/api-store';
+import { devGetEgmList, devGetPlayerList } from '../../lib/api-store';
 
 const DevScreen = () => {
-  const [jsonData, setJsonData] = useState('');
-
   const {
     sendRequest, data, status, error,
   } = useHttp(devGetEgmList);
+
+  const {
+    sendRequest: playerListReq,
+    data: playerListData,
+    error: playerListError,
+    status: playerListStatus,
+  } = useHttp(devGetPlayerList);
 
   useEffect(() => {
     sendRequest();
   }, [sendRequest]);
 
   useEffect(() => {
-    if (data) {
-      setJsonData(data);
-    }
-  }, [data]);
+    playerListReq();
+  }, [playerListReq]);
 
   useEffect(() => {
     if (error) {
@@ -32,8 +35,18 @@ const DevScreen = () => {
     }
   }, [error]);
 
-  const onClick = () => {
+  useEffect(() => {
+    if (playerListError) {
+      alert(playerListError);
+    }
+  }, [playerListError]);
+
+  const onEmgListClick = () => {
     sendRequest();
+  };
+
+  const onPlayerListClick = () => {
+    playerListReq();
   };
 
   return (
@@ -51,14 +64,34 @@ const DevScreen = () => {
         <Divider />
         <Card style={{ width: '550px' }}>
           <Space direction="vertical">
-            <Button loading={status === 'pending'} onClick={onClick} style={{ marginBottom: '1rem' }} type="primary">更新</Button>
+            <Button loading={status === 'pending'} onClick={onEmgListClick} style={{ marginBottom: '1rem' }} type="primary">更新</Button>
             {
-              jsonData && (
+              data && (
                 <ReactJson
-                  src={jsonData}
+                  src={data}
+                  name="egmList"
                   displayDataTypes={false}
                   theme="monokai"
-                  shouldCollapse={(field) => field.namespace.includes('root') && true}
+                  collapsed={1}
+                  // shouldCollapse={(field) => field.namespace.includes('egmList') && true}
+                />
+              )
+            }
+          </Space>
+        </Card>
+
+        <Card style={{ width: '550px' }}>
+          <Space direction="vertical">
+            <Button loading={playerListStatus === 'pending'} onClick={onPlayerListClick} style={{ marginBottom: '1rem' }} type="primary">更新</Button>
+            {
+              playerListData && (
+                <ReactJson
+                  name="memberList"
+                  src={playerListData}
+                  displayDataTypes={false}
+                  theme="monokai"
+                  collapsed={1}
+                  // shouldCollapse={(field) => field.namespace.includes('memberList') && true}
                 />
               )
             }

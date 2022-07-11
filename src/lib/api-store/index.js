@@ -26,6 +26,7 @@ export {
   egmCashInOut,
   onlineSetting,
   devGetEgmList,
+  devGetPlayerList,
 } from './admin/egm';
 
 // Handover
